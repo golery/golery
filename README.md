@@ -12,4 +12,12 @@
    - yarn run build - Build client (client-renderning + server render) + babel server code to build/release
    - yarn run server.watch - Babel server code to build/dev/server
    - yarn run server.nodemon - Run server code in build/dev/server
-   - yarn run client.watch - Build client (client-renderning + server render) to build/dev 
+   - yarn run client.watch - Build client (client-renderning + server render) to build/dev
+  
+#AMAZON investigation and manual restart
+1. ssh to EC2 instance
+2. free -m : show memories
+3. docker exec -it containerId bash
+   pm2 kill
+   cd /softwares/GS/www
+   node server/server.js
