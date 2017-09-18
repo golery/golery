@@ -1,0 +1,27 @@
+.component {
+    padding: 1rem;
+    font-family: "Maison Neue Medium", Calibri, Arial, Roboto, sans-serif;
+}
+
+.groupHolder {
+    font-weight: bold;
+    color: blue;
+}
+
+.dialogAddMember {
+    border-top: 4px solid #7D1935;
+    margin: 1rem 0;
+    padding: 1rem;
+    line-height: 1.5;
+    background-color: #F5F3EE;
+}
+
+.memberHolder {
+    background-color: #F5F3EE;
+    margin: 0.2rem 0;
+    padding: 0.5rem;
+}
+.cell {
+    width: 30%;
+    display: inline-block;
+}

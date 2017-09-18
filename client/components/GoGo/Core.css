@@ -1,0 +1,88 @@
+@import "./Constants.css";
+@custom-media --large (width >= 500px);
+
+.body {
+  margin: 0 1rem;
+  @media (--large) {
+    max-width: 1110px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+a.button {
+  border: 1px solid orange;
+  background: darkorange;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-decoration: none;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.core {
+  & button {
+    display: inline-block;
+    background-color: #F7931E;
+    margin: 0 0.5rem;
+    padding: 1rem;
+    border-radius: 0.2rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+
+    &.disabled {
+      background-color: gray;
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  & .input {
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid lightgray;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  & h1 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--darkBlue);
+    margin-top: 2rem;
+  }
+
+  & h1:first-child {
+    margin-top: 0;
+  }
+
+  & .buttonsHolder {
+    text-align: center;
+  }
+
+  & .body {
+    text-align: left;
+
+    @media (--large) {
+      max-width: 1024px;
+      margin: auto;
+    }
+  }
+
+  & .main {
+    padding: 1rem;
+  }
+}

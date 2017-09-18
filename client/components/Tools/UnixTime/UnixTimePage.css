@@ -1,0 +1,45 @@
+.component {
+    text-align: center;
+    /*font-family: Roboto;*/
+}
+
+.body {
+    margin-top: 5rem;
+    text-align: left;
+    display: inline-block;
+    font-size: 2rem;
+    line-height: 4rem;
+
+}
+
+.input {
+    font-size: 4rem;
+    border: 3px solid orange;
+    width: 100%;
+    outline: none;
+    color: orangered;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.title {
+    font-size: 5rem;
+    color: #AD3F3A;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.now {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.nowMs {
+    font-size: 3rem;
+    color: #3E50B4;
+}

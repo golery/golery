@@ -1,0 +1,34 @@
+.backdrop {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, .4);
+    text-align: center;
+}
+
+.modal {
+    position: relative;
+    display: inline-block;
+    border-top: 8px solid #78b836;
+    border-radius: 0.2rem;
+    background: #f0f0f0;
+    padding: 1rem;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    color: #444;
+    text-align: left;
+    margin-top: 3rem;
+}
+
+.close {
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    right: 0;
+    padding: 0.8rem;
+    color: darkgrey;
+    font-size: 1.5rem;
+}
+

@@ -1,0 +1,11 @@
+.editCardView {
+    padding: 1rem;
+}
+.toolbar {
+    font-weight: bold;
+}
+.editContent {
+    margin-top: 1rem;
+    border: 1px solid dimgray;
+    padding: 1rem;
+}

@@ -1,0 +1,36 @@
+.component {
+    padding: 5px;
+}
+
+.button {
+    height: 25px;
+    cursor: default;
+    user-select: none;
+    color: #a9a9a9;
+    display: inline-block;
+    line-height: 25px;
+    vertical-align: middle;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    text-align: center;
+    width: 25px;
+    border-radius: 2px;
+    margin-right: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.button:hover {
+    border: 1px solid #dcdcdc;
+    color: darkgrey;
+}
+
+.themeLight .button {
+    color: #d3d3d3;
+}
+
+.themeLight .button:hover {
+    color: darkgrey;
+}

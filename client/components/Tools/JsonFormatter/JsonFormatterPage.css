@@ -1,0 +1,40 @@
+.component {
+    padding: 3rem;
+}
+
+.title {
+    font-size: 3rem;
+    color: #1b1464;
+    font-weight: bold;
+    margin-bottom: 3rem;
+}
+
+.button {
+    background-color: darkorange;
+    color: white;
+    display: inline-block;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.input {
+    line-height: 1.5rem;
+    font-family: monospace;
+    outline: none;
+    border: 1px solid lightgrey;
+    margin: 1rem 0;
+    min-height: 10rem;
+    padding: 1rem;
+}
+
+.options {
+    margin-top: 1rem;
+}
+
+.options input {
+    margin-left: 1rem;
+}
+
+.options input:first-child {
+    margin-left: 0;
+}

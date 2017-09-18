@@ -1,0 +1,76 @@
+.component {
+  background-color: #E6E6E6;
+  text-align: center;
+
+  & label {
+    font-size: 1.2rem;
+    margin-top: 2.5rem;
+    display: block;
+    font-weight: bold;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  & input {
+    padding: 0.5rem;
+    margin-top: 0.8rem;
+    border: 1px solid black;
+    font-size: 1.2rem;
+  }
+
+  & input:focus {
+    outline: none;
+    border: 1px solid #129FEA;
+  }
+
+  & input:focus:invalid {
+    color: #b94a48;
+    border-color: #e9322d;
+  }
+
+  & input:focus:valid {
+    border-color: green;
+  }
+}
+
+@custom-media --small (width <= 500);
+
+.middleHolder {
+  padding: 2rem 1rem 1rem;
+  display: inline-block;
+  text-align: left;
+  @media (--small) {
+    background-color: red;
+  }
+}
+
+.button {
+  display: inline-block;
+  background-color: #F7931E;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.2rem;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+
+  &.disabled {
+    background-color: gray;
+  }
+}
+
+.center {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translate(0, -50%);
+}
+
+.buttonHolder {
+  margin-top: 1rem;
+  text-align: center;
+}

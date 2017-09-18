@@ -1,0 +1,31 @@
+.component {
+    padding: 1rem;
+    font-family: "Maison Neue Medium", Calibri, Arial, Roboto, sans-serif;
+}
+
+.dateHolder {
+    display: inline-block;
+    background-color: #ED6841;
+    color: whitesmoke;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.nameHolder {
+    background-color: blue;
+    color: whitesmoke;
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.itemHolder {
+    border-radius: 0.2rem;
+    background-color: whitesmoke;
+    color: black;
+    padding: 1rem;
+    margin-top: 1rem;
+}

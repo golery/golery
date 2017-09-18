@@ -1,0 +1,6 @@
+:root {
+  --darkBlue: #3b5998;
+  --orange: #e67e22;
+}
+
+@custom-media --large (width >= 500px);

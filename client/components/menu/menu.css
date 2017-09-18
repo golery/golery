@@ -1,0 +1,19 @@
+.component {
+    background-color: #F6F6F6;
+}
+.main {
+    text-align: center;
+}
+
+.header {
+    font-size: 3rem;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.image {
+    max-width: 70%;
+    max-height: 70%;
+}

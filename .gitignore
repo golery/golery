@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+/node_modules/
+/docker/node_modules/
+.idea/
+build/
+node_modules
+/server/Pages/Components.generated.js
+/server/Pages/webpack.manifest.json

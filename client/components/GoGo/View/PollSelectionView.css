@@ -1,0 +1,118 @@
+@import "../Constants.css";
+
+.component {
+}
+
+.selectionHolder {
+  border-top: 2px solid lightgray;
+  padding-top: 1rem;
+
+  &:first-child {
+    border-top: none;
+  }
+
+  &.check {
+    & .checkIcon {
+      background-image: url(../images/check.svg);
+    }
+
+    & .selectionText {
+      font-weight: bold;
+    }
+  }
+
+  &.uncheck {
+    & .checkIcon {
+      background-image: url(../images/uncheck.svg);
+    }
+  }
+}
+
+.checkIcon {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  background: no-repeat center center;
+  position: relative;
+}
+
+.headerHolder {
+  padding-bottom: 1rem;
+  text-align: center;
+
+  & .header {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--darkBlue);
+  }
+
+  & .headerBar {
+    display: inline-block;
+    width: 6rem;
+    margin-top: 1rem;
+    border-top: 3px solid var(--darkBlue);
+  }
+}
+
+.subPollHolder {
+  margin-top: 2rem;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.subPollName {
+  color: var(--darkBlue);
+  font-size: 1.5rem;
+}
+
+.colLeft {
+  float: left;
+  width: 2rem;
+}
+
+.colRight {
+  float: right;
+  position: relative;
+  top: 1px;
+}
+
+.colMiddle {
+  margin-left: 2.5rem;
+  width: auto;
+}
+
+.iconMan {
+  display: inline-block;
+  width: 20px;
+  height: 18px;
+  background: url('../images/man.magenta.svg') no-repeat;
+}
+
+.selectionHolder.maxSelect .iconMan {
+  background: url('../images/man.orange.svg');
+}
+
+.numberPeople {
+  margin-right: 3px;
+  color: #1b1464;
+}
+
+.selectionHolder.maxSelect .numberPeople {
+  color: var(--orange);
+}
+
+.userSelectedHolder {
+  margin-left: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.optionText {
+  line-height: 2rem;
+}
+
+.selectionHolder.check .optionText {
+  font-weight: 500;
+}

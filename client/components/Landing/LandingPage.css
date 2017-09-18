@@ -1,0 +1,160 @@
+.component {
+  margin: 1rem;
+}
+
+.goleryHolder {
+  text-align: center;
+}
+
+.golery {
+  background-size: auto;
+  display: inline-block;
+  font-size: 5rem;
+  color: #882C00;
+  font-family: 'Anton', sans-serif;
+}
+
+@media only screen
+and (max-device-width: 667px) {
+  .golery {
+    width: 90%;
+    height: 3rem;
+  }
+}
+
+.appList {
+  text-align: center;
+}
+
+.appHolder {
+  display: inline-block;
+  background-color: whitesmoke;
+  margin: 1rem;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: left;
+}
+
+.appName {
+  margin-top: 1.5rem;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.appDescription {
+  margin-top: 1rem;
+}
+
+.appIcon {
+  display: inline-block;
+  background-color: white;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 0.2rem;
+}
+
+.appHolder:hover {
+  border: 1px solid lightsteelblue;
+}
+
+.pencilIcon {
+  background-image: url("./images/pencil.fca1.svg");
+  background-size: 15rem 15rem;
+}
+
+.checkbookIcon {
+  background-image: url("./images/calendar.fca4.svg");
+  background-size: 15rem 15rem;
+}
+
+.quizzIcon {
+  background-image: url("./images/quizz.fca2.svg");
+  background-size: 15rem 15rem;
+}
+
+.tryHtmlIcon {
+  background-image: url("./images/facebook-painted.fca5.svg");
+  background-size: 15rem 15rem;
+}
+
+.menuIcon {
+  background-image: url("./images/food-drink.fca3.svg");
+  background-size: 15rem 15rem;
+}
+
+.copyright {
+  font-size: 0.8rem;
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.imageScreenshot {
+  border-radius: 3px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
+  background-image: linear-gradient(0deg, #fff 20px, rgba(255, 255, 255, 0) 300px);
+  position: relative;
+    max-width: 20rem;
+}
+
+.appDetail {
+  margin-top: 5rem;
+  position: relative;
+  text-align: center;
+  & .colLeft {
+    vertical-align: middle;
+    width: 50%;
+    display: inline-block;
+    position: relative;
+    text-align: right;
+  }
+  & .colRight {
+    vertical-align: middle;
+    width: 50%;
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    padding-left: 3rem;
+  }
+}
+
+.imageScreenshotHolder {
+  position: relative;
+  display: inline-block;
+}
+
+.gradientHolder {
+  padding: 2rem;
+}
+
+.imageScreenshotGradient {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+    background-image: linear-gradient(0deg, #fff 0%, rgba(250, 255, 255, 0) 80%);
+}
+
+.appDetailTextBlock {
+  display: inline-block;
+  max-width: 30rem;
+}
+
+.appTextHead {
+  font-family: 'SourceSansPro', sans-serif;
+  font-size: 3rem;
+}
+
+.appTextBody {
+  margin-top: 1rem;
+  line-height: 1.4rem;
+}
+
+.pageFooter {
+  text-align: center;
+  font-size: .75em;
+  font-weight: 400;
+  color: #505050;
+  margin: 5rem 0 2rem;
+}

@@ -1,0 +1,9 @@
+.component {
+  & b {
+    font-weight: bold;
+  }
+}
+
+.content {
+
+}

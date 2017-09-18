@@ -1,0 +1,55 @@
+.component {
+    min-width: 20rem;
+    min-height: 20rem;
+}
+
+.textControlV {
+    font-size: 40px;
+}
+
+.textPasteFromClipboard {
+    font-size: 16px;
+    margin-top: 1rem;
+}
+
+.textPaste {
+    color: green
+}
+
+.button {
+    display: inline-block;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #fc9;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    padding: 0 1rem;
+    margin-right: 1rem;
+}
+
+.button:hover {
+    background-color: #f96;
+    color: #fff;
+}
+
+.spinnerHolder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: .9;
+    background-color: #eee;
+}
+
+.spinnerHolder .spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+.resizeSlider {
+  display: inline-block;
+}

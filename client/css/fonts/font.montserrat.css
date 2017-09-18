@@ -1,0 +1,10 @@
+/** Free alternative of Proxima Nova which is the most paid popular web fonts */
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url('./montserrat/Montserrat-Light.otf');
+}
+
+@font-face {
+  font-family: 'Montserrat-Bold';
+  src: url('./montserrat/Montserrat-Bold.otf');
+}

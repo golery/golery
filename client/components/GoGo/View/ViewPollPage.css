@@ -1,0 +1,28 @@
+@import "../Constants.css";
+
+.eventName {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--darkBlue);
+}
+
+.description {
+  margin-top: 1rem;
+  text-align: justify;
+}
+
+.section {
+  padding: 1.5rem 1rem 1.5rem 1rem;
+}
+
+.buttonHolder {
+  margin-top: 1rem;
+}
+
+.participantHeader {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--darkBlue);
+  margin-bottom: 1rem;
+}

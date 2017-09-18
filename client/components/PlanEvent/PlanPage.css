@@ -1,0 +1,95 @@
+.component {
+    margin: 1rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.eventId {
+    color: blue;
+    font-weight: bolder;
+}
+
+.eventHolder {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.date {
+    font-style: italic;
+    color: blue;
+}
+/* TODO: import from core.css */
+.button {
+    display: inline-block;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #fa5b35;
+    color: white;
+    border-radius: 2px;
+}
+
+.table {
+    margin-top: 2rem;
+    border: 1px solid #cc7a00;
+}
+
+.tableBody .tableRow:nth-child(even) {
+    background-color: white;
+}
+
+.tableBody .tableRow:nth-child(odd) {
+    background-color: #fff9f0;
+}
+
+.tableBody .tableRow:hover {
+    background-color: #ffd699;
+}
+
+.tableHead {
+    color: white;
+    background-color: #cc7a00;
+    font-weight: bolder;
+}
+
+.tableRow > div {
+    display: inline-block;
+    height: 2rem;
+    line-height: 2rem;
+    padding-left: 1rem;
+}
+
+.tableCol1 {
+    width: 30%;
+}
+
+.tableCol2 {
+    width: 30%;
+}
+
+.tableCol3 {
+    width: 25%;
+}
+
+.tableCol4 {
+    width: 15%;
+}
+
+.paidButton {
+    padding: 0.3rem;
+    margin: 0.5rem 0;
+}
+
+.notPaidButton {
+    background-color: #87ceeb;
+    padding: 0.3rem;
+    border-radius: 2px;
+    margin: 0.3rem 0;
+    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (max-width: 500px) {
+    .component {
+        margin: 1rem;
+    }
+}

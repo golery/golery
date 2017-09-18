@@ -1,0 +1,18 @@
+.component {
+}
+
+.table {
+  border: 1px solid gray;
+
+  & td {
+    border: 1px solid gray;
+    padding: 1rem;
+  }
+
+  & th {
+    border: 1px solid gray;
+    padding: 1rem;
+  }
+
+  margin-bottom: 1rem;
+}

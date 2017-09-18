@@ -1,0 +1,28 @@
+.component {
+    min-height: 18rem;
+}
+
+.component input {
+    display: block;
+    padding: 0.5rem;
+}
+
+.fieldSet {
+    line-height: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+    color: red;
+    margin-bottom: 1rem;
+}
+
+/* TODO: import from core.css */
+.button {
+    display: inline-block;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #fa5b35;
+    color: white;
+    border-radius: 2px;
+}

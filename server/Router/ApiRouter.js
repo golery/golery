@@ -1,0 +1,69 @@
+import {Router} from "express";
+import passport from "passport";
+
+import ApiNode from "../Api/ApiNode";
+import ApiGoEvent from "../Api/ApiGoEvent";
+import ApiFile from "../Api/ApiFile";
+import loginController from "../user/login.controller";
+
+
+function configGetUser(apiSecure) {
+    apiSecure.use(passport.session());
+    // enforce user
+    apiSecure.use(function (req, res, next) {
+        if (!req.user) {
+            res.status(401).send('401 - User not found. /www2/api/secure is protected');
+        } else {
+            next();
+        }
+    });
+}
+
+// All requess are accesible via /api/secure/... are secured (required authentication)
+function _buildApiSecureRouter() {
+    let route = new Router();
+    configGetUser(route);
+
+    ApiNode.setupRoute(route);
+    ApiFile.setupRoute(route);
+
+    return route;
+}
+
+// All requess are accesible via /api/public/... are secured (required authentication)
+function _buildApiPublicRouter() {
+    let route = new Router();
+    ApiGoEvent.setupRoute(route);
+    return route;
+}
+
+function buildApiRouter() {
+    let apiRouter = new Router();
+
+    // /api/public/ does not have authentication
+    let apiPublic = new Router();
+    apiPublic.post('/login', loginController);
+    apiRouter.use('/public', apiPublic);
+
+    // /api/secure/ require authentication and needs req.user object
+    apiRouter.use('/secure', _buildApiSecureRouter(apiRouter));
+    apiRouter.use('/public', _buildApiPublicRouter(apiRouter));
+
+    // /api/session
+    // Get current userId or 401 if not login
+    apiRouter.use('/session', passport.session());
+    apiRouter.get('/session', function (req, res) {
+        if (req.user) {
+            res.json({username: req.user.username});
+        } else {
+            res.status(401).send('401 - No login');
+        }
+    });
+
+    return apiRouter;
+}
+
+export default function (router) {
+    // http://localhost:3001/www2/api/node
+    router.use('/api', buildApiRouter());
+}
