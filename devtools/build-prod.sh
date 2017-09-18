@@ -6,9 +6,9 @@ rm -rf build/release
 # Build server code
 ./node_modules/.bin/babel server -d build/release/server --copy-files
 # Install node modules
-cd /work/www.node-modules/www2/prod
+cd /work/www.node-modules/www/prod
 ./install.sh
 cd -
-ln -s /work/www.node-modules/www2/prod/node_modules /work/www/build/release/node_modules
+ln -s /work/www.node-modules/www/prod/node_modules /work/www/build/release/node_modules
 
 echo "To run as PROD: cd /work/www/build/release && node server/server.js"

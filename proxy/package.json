@@ -1,0 +1,15 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "start": "node server/server",
+    "build": "node devtools/build"
+  },
+  "dependencies": {
+    "fs-extra": "^2.0.0",
+    "redbird": "^0.6.15"
+  }
+}
