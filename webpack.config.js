@@ -1,8 +1,11 @@
+"use strict"
+
+/** Intellij read this file */
 function buildConfig(env) {
-    if (!env) {
+    if (typeof env === 'undefined') {
         env = 'dev';
     }
-    return require('./devtools/webpack/webpack.config.js')({env: env})
+    return require('./devtools/webpack/webpack.config.client.all.js')({env: env});
 }
 
 module.exports = buildConfig;

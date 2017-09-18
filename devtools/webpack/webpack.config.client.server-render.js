@@ -1,4 +1,3 @@
-const path = require("path");
 const root = process.cwd();
 
 let localIdentName = '[name]__[local]___[hash:base64:5]';
@@ -8,7 +7,7 @@ let serverConfig = {
         path: root,
         filename: './server/Pages/Components.generated.js',
         // Library export module compatible with server nodejs
-        libraryTarget: "commonjs2"
+        libraryTarget: 'commonjs2'
     },
     entry: {
         app: './server/Pages/Components.js'
@@ -18,7 +17,7 @@ let serverConfig = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: 'babel-loader'
             },
             {
                 test: /\.css$/,

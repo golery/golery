@@ -29,12 +29,12 @@ module.exports = function (minify, output) {
         new ExtractTextPlugin({filename: cssFilename, allChunks: true}),
     ];
 
-    let cleanWebpackPlugin = minify ? [new CleanWebpackPlugin(['public'], {
+    let pluginList = minify ? [new CleanWebpackPlugin(['.'], {
         root: process.cwd() + output,
         verbose: true
     })] : [];
 
-    let plugins = cleanWebpackPlugin.concat(
+    let plugins = pluginList.concat(
             corePlugins,
             [new AssetManifestPlugin({output: '../../../server/Pages/webpack.manifest.json'}), new webpack.NoEmitOnErrorsPlugin()]);
 

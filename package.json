@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "server.nodemon": "export NODE_ENV=development; nodemon build/server/server.js --config devtools/nodemon.json",
+    "server.nodemon": "export NODE_ENV=development; nodemon build/dev/server/server.js --config devtools/nodemon.json",
     "server.watch": "babel server -d build/dev/server --copy-files -w",
-    "webpack": "webpack --env=dev --progress --colors",
-    "webpack.prod": "webpack --env=prod --progress --colors",
+    "client.watch": "webpack --env=dev --progress --colors --config devtools/webpack/webpack.config.client.all.js",
     "build": "./devtools/build-prod.sh"
   },
   "devDependencies": {
