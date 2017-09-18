@@ -15,4 +15,4 @@ rsync -rv /work/www.node-modules/proxy/prod/node_modules/ /softwares/GS/proxy/no
 
 # www
 rsync -rv /work/www/build/release/ /softwares/GS/www/
-rsync -rv /work/www.node-modules/www/prod/node_modules/ /softwares/GS/www/node_modules
+rsync -rv /work/www/build/release/node_modules/ /softwares/GS/www/node_modules
