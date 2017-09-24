@@ -33,6 +33,7 @@ class Node {
     constructor(_id, name) {
         this._id = _id;
         this.name = name;
+        this.children = [];
     }
 }
 
@@ -94,9 +95,7 @@ export default class PencilPage extends React.Component {
             }
         });
 
-        this.shortcutHandler = new ShortcutHandler();
-        this.shortcutHandler.register('view', 'F2', () => this._onShowEditView());
-        this.shortcutHandler.register('view', 'Escape', () => this._onShowContentView());
+        this._registerShortcutKeys();
     }
 
     render() {
@@ -125,6 +124,18 @@ export default class PencilPage extends React.Component {
         </div>;
     }
 
+    _registerShortcutKeys() {
+        let shortcutHandler = new ShortcutHandler();
+        shortcutHandler.register('view', 'F2', () => this._onShowEditView());
+        shortcutHandler.register('view', 'F3', (e) => {
+            this._onAddNode();
+            // F3 is search in chrome
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        shortcutHandler.register('view', 'Escape', () => this._onShowContentView());
+    }
+
     _renderThumbVertical() {
         return <div className={styles.scrollbarVerticalThumb}/>;
     }
@@ -135,7 +146,9 @@ export default class PencilPage extends React.Component {
 
     _onShowEditView() {
         this.setState({contentMode: CONTENT_MODE_EDIT});
-        this._htmlEditor.focusEditor();
+        setTimeout(() => {
+            this._htmlEditor.focusEditor();
+        });
     }
 
     _onShowContentView() {
@@ -207,10 +220,30 @@ export default class PencilPage extends React.Component {
         let parentNode = this.treeViewModel.selectedNode;
         let parentNodeView = this.treeViewModel.selectedNodeView;
         if (!parentNode || !parentNodeView) return;
+        let parentId = this.treeModel.getId(parentNode);
+        if (!parentId) {
+            console.log("Parent is saving. Cannot add");
+            return;
+        }
 
-        NodeRepo.create(this.treeModel.getId(parentNode)).then(node => {
-            this.treeView.newNodeAsChildren(node, parentNode, parentNodeView);
-            this._onShowEditView();
+        // immediately add node then save later
+        let node = new Node("TEMP" + this._uuidv4(), null);
+        this.treeModel.addChild(parentNode, node);
+        let nodeView = this.treeView.newNodeAsChildren(node, parentNodeView);
+        this._onShowEditView();
+
+        // save async
+        NodeRepo.create(this.treeModel.getId(parentNode)).then(newNode => {
+            console.log("Create new node successfully at server side ", newId);
+            let newId = newNode._id;
+            console.log("Replace nodeId ", node._id, " by ", newId);
+            this.treeModel.updateNodeId(node, parentNode, newId);
+            nodeView.changeNodeId(newId);
+
+            // if user edited the node then force save node
+            if (node.html) {
+                this.onUpdateEditor(node, node.html);
+            }
         });
     }
 
@@ -218,8 +251,12 @@ export default class PencilPage extends React.Component {
         let nodeId = this.treeView.getSelectedNodeId();
         if (!nodeId) return;
 
+        // immediately remove from view
+        this.treeView.deleteSelectedNode();
+
+        // then delete node async
         NodeRepo.delete(nodeId).then(() => {
-            this.treeView.deleteSelectedNode();
+            console.log("Delete node successfully at server side ", nodeId);
         });
     }
 
@@ -229,5 +266,11 @@ export default class PencilPage extends React.Component {
         console.log(selectedNode);
         let id = selectedNode._id;
         window.open("#/card/" + id, '_blank');
+    }
+
+    _uuidv4() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
     }
 }

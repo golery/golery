@@ -1,7 +1,7 @@
 import React from "react";
 
 import page from "./PageTemplate";
-import {GoGoPage} from "./Components.generated";
+import {GoGoPage} from "./Generated/Components.generated";
 
 export default function (req, res) {
     let mainHtml = "";

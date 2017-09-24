@@ -30,13 +30,12 @@ export default class TreeView extends React.Component {
         return !selectedNode ? null : selectedNode._id;
     }
 
-    newNodeAsChildren(newChildNode, parentNode, parentNodeView) {
-        this.treeModel.addChild(parentNode, newChildNode);
-
+    newNodeAsChildren(newChildNode, parentNodeView) {
         let newNodeView = this._createTreeNodeView(newChildNode);
         this._renderNodeView(newNodeView, newChildNode);
         parentNodeView.addFirstChild(newNodeView);
         this.nodeSelectionPlugin.selectNode(newChildNode);
+        return newNodeView;
     }
 
     deleteSelectedNode() {

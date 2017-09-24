@@ -29,7 +29,7 @@ export default class NodeSelectionPlugin {
         e.preventDefault();
 
         // when mouse down on selected node and user didn't drag the node then toggle node
-        if (child._id === this.nodeIdToToggle) {
+        if (child._id && child._id === this.nodeIdToToggle) {
             this._toggleNode(child);
         }
     }

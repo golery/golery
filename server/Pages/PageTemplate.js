@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/server";
-import hashes from "./webpack.manifest.json"
+import hashes from "./Generated/webpack.manifest.json"
 
 function getGoogleAnalytics() {
     return `

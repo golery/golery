@@ -7,3 +7,4 @@
 /server/Pages/webpack.manifest.json
 /proxy/node_modules
 /proxy/build
+/server/Pages/Generated/

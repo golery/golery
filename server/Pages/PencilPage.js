@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {PencilPage} from "./Components.generated";
+import {PencilPage} from "./Generated/Components.generated";
 
 export default function (req, res) {
     //let mainHtml = ReactDOM.renderToString(<PencilPage/>);

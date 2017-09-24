@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {UnixTimePage} from "./Components.generated";
+import {UnixTimePage} from "./Generated/Components.generated";
 
 export default function (req, res) {
     let mainHtml = ReactDOM.renderToString(<UnixTimePage/>);

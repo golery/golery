@@ -7,7 +7,7 @@ export default class ShortcutHandler {
                 //console.log(key);
                 let listener = this.map[key];
                 if (listener) {
-                    listener();
+                    listener(e);
                 }
             });
         }

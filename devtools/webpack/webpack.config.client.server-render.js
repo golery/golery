@@ -5,7 +5,7 @@ let serverConfig = {
     name: "***SERVER SIDE WEBPACK***",
     output: {
         path: root,
-        filename: './server/Pages/Components.generated.js',
+        filename: './server/Pages/Generated/Components.generated.js',
         // Library export module compatible with server nodejs
         libraryTarget: 'commonjs2'
     },

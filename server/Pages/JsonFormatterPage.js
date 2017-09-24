@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {JsonFormatterPage} from "./Components.generated";
+import {JsonFormatterPage} from "./Generated/Components.generated";
 
 export default function (req, res) {
     let mainHtml = ReactDOM.renderToString(<JsonFormatterPage/>);

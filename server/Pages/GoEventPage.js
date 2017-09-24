@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {GoGoPage} from "./Components.generated";
+import {GoGoPage} from "./Generated/Components.generated";
 
 export default function (req, res) {
     let mainHtml = ReactDOM.renderToString(<GoGoPage/>);

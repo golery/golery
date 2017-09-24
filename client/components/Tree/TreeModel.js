@@ -18,7 +18,6 @@ class Node {
 /** Maintains the list of nodes, the map from id to Node object, the map to parent Id */
 export default class TreeModel {
     constructor(nodes, rootId, listeners) {
-        this.nodes = nodes;
         this.map = this._buildMap(nodes);
         // key: node Id, value: parent node Id
         this._parentMap = this._buildParentMap(nodes);
@@ -205,5 +204,19 @@ export default class TreeModel {
             id = this.getParentId(id);
         }
         return false;
+    }
+
+    /** After create node, replace temporary nodeId by new one from server side */
+    updateNodeId(node, parentNode, newId) {
+        let oldId = node._id;
+        let index = parentNode.children.indexOf(oldId);
+        parentNode.children[index] = newId;
+        node._id = newId;
+
+        // update index
+        this.map[newId] = node;
+        delete this.map[oldId];
+        this._parentMap[newId] = parentNode._id;
+        delete this._parentMap[oldId];
     }
 }

@@ -36,7 +36,7 @@ module.exports = function (minify, output) {
 
     let plugins = pluginList.concat(
             corePlugins,
-            [new AssetManifestPlugin({output: '../../../server/Pages/webpack.manifest.json'}), new webpack.NoEmitOnErrorsPlugin()]);
+            [new AssetManifestPlugin({output: '../../../server/Pages/Generated/webpack.manifest.json'}), new webpack.NoEmitOnErrorsPlugin()]);
 
     let config = {
         name: "***CLIENT SIDE WEBPACK***",

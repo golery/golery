@@ -28,7 +28,7 @@ import DomUtils from './DomUtils';
  The NodeTree has a special id: "node-<node_id>". This class use method document.getElementId to find element quickly
  */
 
-const ELM_ATTR_NODE_ID = 'nodeId';
+const ELM_ATTR_NODE_ID = 'nodeid';
 const ELM_ID_CHILDREN_LIST = 'childrenList';
 
 export default class TreeNodeView {
@@ -84,6 +84,13 @@ export default class TreeNodeView {
         return nodeView;
     }
 
+
+    /** Replace current nodeId by new nodeId (ex: when create node, we use temporary Id and then replace it */
+    changeNodeId(newId) {
+        let elm = this._element;
+        elm.setAttribute("id", TreeNodeView._getElementId(newId));
+        elm.setAttribute(ELM_ATTR_NODE_ID, newId);
+    }
 
     getElement() {
         throw "Never implement this method. It's forbidden to get the element from NodeView";
