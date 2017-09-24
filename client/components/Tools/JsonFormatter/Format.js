@@ -54,7 +54,26 @@ function formatArray(json, options, level) {
     return s;
 }
 
+function formatObjectCompact(json) {
+    let keys = Object.keys(json);
+    if (keys.length > 1) return null;
+
+    if (keys.length === 0) return "{ }";
+
+    let key = keys[0];
+    let value = json[key];
+    if (!isAllPrimitive(value)) return null;
+
+    let formattedValue = formatPrimitive(value);
+    return `{ "${key}" : ${formattedValue} }`;
+}
+
 function formatObject(json, options, level) {
+    if (options.compact) {
+        let format = formatObjectCompact(json);
+        if (format !== null) return format;
+    }
+
     let tabOuter = space(level * indent);
     let tab = space((level + 1) * indent);
     let index = 0;
@@ -72,10 +91,14 @@ function formatObject(json, options, level) {
     return s;
 }
 
-export default function format(json, options, level = 0) {
+function formatPrimitive(json) {
     if (typeof json === "string") {
         return `"${json}"`;
     }
+    return `${json}`;
+}
+
+export default function format(json, options, level = 0) {
     if (typeof json === "object" && Array.isArray(json)) {
         return formatArray(json, options, level);
     }
@@ -84,5 +107,8 @@ export default function format(json, options, level = 0) {
         return formatObject(json, options, level);
     }
 
-    return `${json}`;
+    if (typeof json === "string") {
+        return `"${json}"`;
+    }
+    return formatPrimitive(json);
 }

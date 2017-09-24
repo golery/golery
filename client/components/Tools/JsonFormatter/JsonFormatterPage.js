@@ -9,7 +9,9 @@ export default class JsonFormatterPage extends React.Component {
         super(props);
 
         let sample = JSON.stringify(SampleJson);
-        this.state = {input: sample, compact: true, color: true};
+        this.state = {compact: true, color: true};
+        this.inputElm = null;
+        this.input = sample;
     }
 
     componentDidMount() {
@@ -17,7 +19,6 @@ export default class JsonFormatterPage extends React.Component {
     }
 
     render() {
-        let json = this.state.input;
         return <div className={styles.component}>
             <div>
                 <div className={styles.title}>JSON FORMATTER</div>
@@ -29,18 +30,25 @@ export default class JsonFormatterPage extends React.Component {
                            checked={this.state.compact}
                            onChange={e => this.setState({compact: e.target.checked})}/>Compact
                 </div>
-                <pre className={styles.input} contentEditable>{json}</pre>
+                <pre className={styles.input} contentEditable onInput={e => this._onChangeInput()}
+                     dangerouslySetInnerHTML={{__html: this.input}}
+                     ref={ref => this.inputElm = ref}/>
             </div>
         </div>;
     }
 
     _onFormat() {
-        let json = JSON.parse(this.state.input);
-        let s = format(json, {
+        let json = JSON.parse(this.input);
+        this.input = format(json, {
             compact: this.state.compact,
             color: this.state.color
         });
-        this.setState({input: s});
+        this.forceUpdate();
+    }
+
+    _onChangeInput() {
+        if (!this.inputElm) return;
+        this.input = this.inputElm.innerHTML;
     }
 }
 

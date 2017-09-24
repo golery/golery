@@ -5,7 +5,7 @@
   ],
   "ignore": [
     "node_modules",
-    "build/dev/server/Pages/webpack.manifest.json",
-    "build/dev/server/Pages/Components.generated.js"
+    "server/Pages/webpack.manifest.json",
+    "server/Pages/Components.generated.js"
   ]
 }
