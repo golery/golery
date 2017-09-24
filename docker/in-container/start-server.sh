@@ -13,10 +13,7 @@ export NODE_ENV=production
 pm2 flush
 
 cd /softwares/GS/www
-pm2 start --name 'www' server.js
-
-cd /softwares/GS/www2
-pm2 start --name 'www2' server/server.js
+pm2 start --name 'www' server/server.js
 
 cd /softwares/GS/proxy
 pm2 start --name 'proxy' server/server.js

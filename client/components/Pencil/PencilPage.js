@@ -159,7 +159,6 @@ export default class PencilPage extends React.Component {
     _buildContentElm() {
         if (!this.state.editingNode) return;
 
-        console.log(this.state);
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
             return <HtmlContentView html={this.state.editingNode.html}></HtmlContentView>
         }
