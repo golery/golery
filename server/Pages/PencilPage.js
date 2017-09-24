@@ -8,7 +8,7 @@ export default function (req, res) {
     //let mainHtml = ReactDOM.renderToString(<PencilPage/>);
     page(req, res, "a", 'PencilPage',
         {
-            title: 'Pencil',
+            title: 'Pencil - Best tree note tool',
             metaKeywords: 'Pencil Note in tree',
             metaDescription: 'The best notes in tree',
             openGraph: {
