@@ -43,7 +43,7 @@ class NodeRepo {
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
 
-        return Axios.get('api/secure/node').then(response => {
+        return Axios.get('/api/secure/node').then(response => {
             let nodes = response.data.nodes;
             if (!rootId) {
                 rootId = response.data.root;
@@ -77,7 +77,7 @@ class NodeRepo {
 
     save(node) {
         console.log('Save node');
-        return Axios.put('api/secure/node', {
+        return Axios.put('/api/secure/node', {
             _id: node._id,
             name: node.name,
             html: node.html,
@@ -87,7 +87,7 @@ class NodeRepo {
     }
 
     create(parentId) {
-        return Axios.post("api/secure/node/" + parentId).then(o => {
+        return Axios.post("/api/secure/node/" + parentId).then(o => {
             let node = o.data;
             console.log("Created node ", node);
             if (!node._id) {
@@ -98,7 +98,7 @@ class NodeRepo {
     }
 
     delete(nodeId) {
-        return Axios.delete("api/secure/node/" + nodeId).then(o => {
+        return Axios.delete("/api/secure/node/" + nodeId).then(o => {
             let body = o.data;
             console.log("Deleted node ", o.data.deleted);
             if (!body.parent._id) {
@@ -108,7 +108,7 @@ class NodeRepo {
     }
 
     moveNode(nodeId, newParentId, newPosition) {
-        return Axios.put("api/secure/node/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
+        return Axios.put("/api/secure/node/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
             let body = o.data;
             console.log("Move node", o.data);
         });

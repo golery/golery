@@ -3,7 +3,7 @@ import mainPage from "../Pages/MainPage";
 import goEventPage from "../Pages/GoEventPage";
 import unixTimePage from "../Pages/UnixTimePage";
 import jsonFormatterPage from "../Pages/JsonFormatterPage";
-import pencilPage from "../Pages/PencilPage";
+import pencilServerPage from "../Pages/PencilServerPage";
 import testPage from "../Pages/TestPage";
 
 /* TO ADD A NEW PAGE
@@ -19,7 +19,8 @@ export default function (router) {
     index.get('/goevent', goEventPage);
     index.get('/unix-timestamp-converter', unixTimePage);
     index.get('/json-formatter', jsonFormatterPage);
-    index.get('/pencil', pencilPage);
+    index.get('/pencil', pencilServerPage);
+    index.get('/pencil/:rootId/:childId', pencilServerPage);
     index.get('/test/:rootId/:childId', testPage);
 
     router.use('/', index);

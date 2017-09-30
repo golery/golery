@@ -23,7 +23,7 @@ function generateOpenGraphTags(openGraph) {
 /**
  * @param bootStrap: ID of variable in MAIN_COMPONENTS in client/app.js
  * */
-export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, state}) {
+export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, serverState}) {
     let manifest = "/" + hashes["manifest.js"];
     let vendor = "/" + hashes["vendor.js"];
     let app = "/" + hashes["app.js"];
@@ -31,7 +31,7 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
 
     // Fb open graph tags https://developers.facebook.com/docs/sharing/webmasters#markup
     let openGraphElm = generateOpenGraphTags(openGraph);
-    let stateJson = JSON.stringify(state);
+    let stateJson = JSON.stringify(serverState);
     let html = ReactDOM.renderToString(
         <html>
         <head>

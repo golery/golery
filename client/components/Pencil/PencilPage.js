@@ -55,13 +55,13 @@ export default class PencilPage extends React.Component {
         super(props);
 
         let {rootId, nodeId} = this.props.match ? this.props.match.params : {null, null};
-
-        this.state = {
+        let serverState = this.props.serverState || {initialNode: null};
+        this.state = Object.assign(serverState, {
             nodes: null,
             contentMode: CONTENT_MODE_VIEW,
             editingId: nodeId,
             editor: EDITOR_HTML
-        };
+        });
         this.treeModel = null;
 
         // ref to treeView element
@@ -103,8 +103,9 @@ export default class PencilPage extends React.Component {
             return <LoadingPage/>;
         }
 
+        let xx = this.state.initialNode ?  this.state.initialNode.html : "x";
         let listeners = {onSelect: this.onSelect};
-        return <div className={styles.component}>
+        return <div className={styles.component}> {xx}
             <div className={styles.treeViewHolder}>
                 <div className={styles.treeToolbarHolder}>
                     <Toolbar commands={this.treeCommands} themeLight={true}/>
@@ -175,6 +176,7 @@ export default class PencilPage extends React.Component {
     }
 
     _load(rootId) {
+        if (typeof window === 'undefined') return;
         return NodeRepo.load(rootId).then(({nodes, rootNode}) => {
             this.treeModel = new PencilTreeModel(nodes, rootNode._id, {
                 onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
