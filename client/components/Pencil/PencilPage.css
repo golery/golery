@@ -47,6 +47,23 @@
   opacity: 0.2;
 }
 
+.collapsedTree {
+  background: darkgrey;
+  color: white;
+  display: inline-block;
+  position: fixed;
+  left: -3px;
+  top: 3rem;
+  height: 3rem;
+  width: 0.6rem;
+  cursor: pointer;
+  border-radius: 2px;
+
+  &:hover {
+    width: 1.5rem;
+   }
+}
+
 @media only screen and (min-device-width: 480px) {
   .treeToolbarHolder {
     display: block;
@@ -75,3 +92,4 @@
     display: none;
   }
 }
+

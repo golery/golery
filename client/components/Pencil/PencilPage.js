@@ -62,7 +62,8 @@ export default class PencilPage extends React.Component {
             contentMode: CONTENT_MODE_VIEW,
             editingId: nodeId,
             editor: EDITOR_HTML,
-            editingNode: serverState.initialNode
+            editingNode: serverState.initialNode,
+            showTree: false,
         });
         console.log(this.state);
         this.treeModel = null;
@@ -106,25 +107,40 @@ export default class PencilPage extends React.Component {
             return <LoadingPage/>;
         }
 
-        let listeners = {onSelect: this.onSelect};
         return <div className={styles.component}>
-            <div className={styles.treeViewHolder}>
-                <div className={styles.treeToolbarHolder}>
-                    <Toolbar commands={this.treeCommands} themeLight={true}/>
-                </div>
-                <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
-                            renderThumbVertical={this._renderThumbVertical}
-                            renderThumbHorizontal={this._renderThumbHorizontal}>
-                    <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
-                              ref={(treeView) => this.treeView = treeView}/>
-                </Scrollbars>
-                <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/>
-                </div>
-            </div>
+            {this._buildTreeElm()}
             <div className={styles.editorHolder}>
                 {this._buildContentElm()}
             </div>
         </div>;
+    }
+
+    _buildTreeElm() {
+        let {showTree} = this.state;
+        if (!showTree) return this._buildTreeCollapseElm();
+
+        let listeners = {onSelect: this.onSelect};
+        return <div className={styles.treeViewHolder}>
+            <div className={styles.treeToolbarHolder}>
+                <Toolbar commands={this.treeCommands} themeLight={true}/>
+            </div>
+            <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
+                        renderThumbVertical={this._renderThumbVertical}
+                        renderThumbHorizontal={this._renderThumbHorizontal}>
+                <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
+                          ref={(treeView) => this.treeView = treeView}/>
+            </Scrollbars>
+            <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/>
+            </div>
+        </div>;
+    }
+
+    _buildTreeCollapseElm() {
+        return <div className={styles.collapsedTree} onClick={() => this._toggleTree()}/>;
+    }
+
+    _toggleTree() {
+        this.setState({showTree: !this.state.showTree});
     }
 
     _registerShortcutKeys() {
