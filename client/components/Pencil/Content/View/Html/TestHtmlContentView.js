@@ -16,9 +16,11 @@ export default class HtmlContentView extends React.Component {
     }
 
     render() {
-        let {html} = this.props;
+        let {html, rootId, childId} = this.props;
+        console.log(html);
         return <div className={[styles.component, htmlContentStyles.html].join(' ')}>
             <div dangerouslySetInnerHTML={{__html: html}}/>
+            {rootId} {childId}
         </div>;
     }
 }

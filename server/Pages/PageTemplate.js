@@ -15,7 +15,6 @@ function getGoogleAnalytics() {
 
 function generateOpenGraphTags(openGraph) {
     if (!openGraph) return null;
-    console.log(openGraph);
     for (let key of Object.keys(openGraph)) {
         return <meta property={key} content={openGraph[key]}/>;
     }
@@ -24,7 +23,7 @@ function generateOpenGraphTags(openGraph) {
 /**
  * @param bootStrap: ID of variable in MAIN_COMPONENTS in client/app.js
  * */
-export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph}) {
+export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, state}) {
     let manifest = "/" + hashes["manifest.js"];
     let vendor = "/" + hashes["vendor.js"];
     let app = "/" + hashes["app.js"];
@@ -32,6 +31,7 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
 
     // Fb open graph tags https://developers.facebook.com/docs/sharing/webmasters#markup
     let openGraphElm = generateOpenGraphTags(openGraph);
+    let stateJson = JSON.stringify(state);
     let html = ReactDOM.renderToString(
         <html>
         <head>
@@ -52,7 +52,8 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
         <div id="REACT_ROOT" dangerouslySetInnerHTML={{__html: mainHtml}}/>
         </body>
         <head>
-            <script dangerouslySetInnerHTML={{__html: `bootstrapPage('${bootStrap}');`}}/>
+            <script dangerouslySetInnerHTML={{__html:
+                `var __INITIAL_STATE__=${stateJson}; bootstrapPage('${bootStrap}', __INITIAL_STATE__);`}}/>
             <script dangerouslySetInnerHTML={{__html: getGoogleAnalytics()}}/>
         </head>
         </html>

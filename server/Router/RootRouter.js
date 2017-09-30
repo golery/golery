@@ -20,7 +20,7 @@ export default function (router) {
     index.get('/unix-timestamp-converter', unixTimePage);
     index.get('/json-formatter', jsonFormatterPage);
     index.get('/pencil', pencilPage);
-    index.get('/test', testPage);
+    index.get('/test/:rootId/:childId', testPage);
 
     router.use('/', index);
 }

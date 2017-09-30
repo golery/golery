@@ -3,6 +3,6 @@ import GoGoPage from '../../client/components/GoGo/GoGoPage';
 import UnixTimePage from '../../client/components/Tools/UnixTime/UnixTimePage';
 import JsonFormatterPage from '../../client/components/Tools/JsonFormatter/JsonFormatterPage';
 import PencilPage from '../../client/components/Pencil/PencilPage';
-import TestHtmlContentView from '../../client/components/Pencil/Content/View/Html/TestHtmlContentView';
+import PencilViewPage from '../../client/components/Pencil/PencilViewPage';
 
-export {GoGoPage, UnixTimePage, JsonFormatterPage, PencilPage, TestHtmlContentView};
+export {GoGoPage, UnixTimePage, JsonFormatterPage, PencilPage, PencilViewPage};

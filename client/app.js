@@ -7,10 +7,12 @@ import GoGoPage from './components/GoGo/GoGoPage';
 import UnixTimePage from './components/Tools/UnixTime/UnixTimePage';
 import JsonFormatterPage from './components/Tools/JsonFormatter/JsonFormatterPage';
 import PencilPage from './components/Pencil/PencilPage';
+import PencilViewPage from './components/Pencil/PencilViewPage';
 import Polyfill from './services/Polyfill';
 
+const StateHolder = {state: {html: 'x2'}};
+
 const MAIN_COMPONENTS = {
-    TestPage: <TestPage/>,
     PencilPage: <PencilPage/>,
     GoEventPage: <GoGoPage/>,
     MainRouter: MainRouter,
@@ -19,12 +21,20 @@ const MAIN_COMPONENTS = {
 };
 
 // This global method is called to populate correct react component to page
-window.bootstrapPage = function (page) {
+window.bootstrapPage = function (page, state) {
     Polyfill();
-    const component = MAIN_COMPONENTS[page];
+
+    function getMainComponent() {
+        if (page === "PencilViewPage")
+            return <PencilViewPage state={state}/>;
+        return MAIN_COMPONENTS[page];
+    };
+
+    let component = getMainComponent();
     if (!component) {
-        console.error('Cannot find component for ', page);
-        return;
+        component = <div>Component {page} is not defined in app.js</div>
     }
+    console.log(state);
+    StateHolder.state = state;
     ReactDOM.render(component, document.getElementById('REACT_ROOT'));
 };

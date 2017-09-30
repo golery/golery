@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
+mongoose.Promise = Promise;
+
 import NodeModel from "../Models/NodeModel";
 import PencilModel from "../Models/PencilModel";
 import Rest from "./Rest";
-import mongoose from "mongoose";
-
-mongoose.Promise = Promise;
+import nodeService from "./Node/NodeService";
 
 function findNode(allNodes, nodeId) {
     for (let i = 0; i < allNodes.length; i++) {
@@ -42,7 +43,7 @@ class ApiNode {
     }
 
     _createNode(req, res) {
-        let userId = req.user._id;
+        let userId = this.getUserId(req);
         let parentId = req.params.parentId;
         let parent = null;
         let result = null;
@@ -69,6 +70,10 @@ class ApiNode {
         return Rest.json(req, res, promise);
     }
 
+
+    getUserId(req) {
+        return req.user._id;
+    }
 
     _deleteNode(req, res) {
         const nodeId = req.params.nodeId;
@@ -134,6 +139,7 @@ class ApiNode {
         return Rest.json(req, res, promise);
     }
 
+    /** @return {rootNode: <nodeId>, nodes: flat list of nodes} */
     _findNodes(req, res) {
         console.log('Get list of nodes');
 
@@ -175,6 +181,8 @@ class ApiNode {
 
         return Rest.json(req, res, promise);
     }
+
+
 
     /** Move node to another place (new parent + new position) */
     _moveNode(req, res, userId, nodeId, newParentId, newPosition) {
