@@ -56,12 +56,15 @@ export default class PencilPage extends React.Component {
 
         let {rootId, nodeId} = this.props.match ? this.props.match.params : {null, null};
         let serverState = this.props.serverState || {initialNode: null};
-        this.state = Object.assign(serverState, {
+        this.state = Object.assign({}, serverState);
+        this.state = Object.assign(this.state, {
             nodes: null,
             contentMode: CONTENT_MODE_VIEW,
             editingId: nodeId,
-            editor: EDITOR_HTML
+            editor: EDITOR_HTML,
+            editingNode: serverState.initialNode
         });
+        console.log(this.state);
         this.treeModel = null;
 
         // ref to treeView element
@@ -103,9 +106,8 @@ export default class PencilPage extends React.Component {
             return <LoadingPage/>;
         }
 
-        let xx = this.state.initialNode ?  this.state.initialNode.html : "x";
         let listeners = {onSelect: this.onSelect};
-        return <div className={styles.component}> {xx}
+        return <div className={styles.component}>
             <div className={styles.treeViewHolder}>
                 <div className={styles.treeToolbarHolder}>
                     <Toolbar commands={this.treeCommands} themeLight={true}/>
@@ -158,7 +160,10 @@ export default class PencilPage extends React.Component {
 
 
     _buildContentElm() {
+        console.log("Content", this.state.editingNode);
         if (!this.state.editingNode) return;
+
+        console.log("Content", this.state.editingNode);
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
             return <HtmlContentView html={this.state.editingNode.html}></HtmlContentView>
@@ -183,11 +188,12 @@ export default class PencilPage extends React.Component {
             });
             this.treeViewModel = new TreeViewModel();
 
-            let editingNode = null;
+            let state = {nodes: nodes, rootId: rootNode._id};
+            /*let editingNode = null;
             if (this.state.editingId) {
                 editingNode = this.treeModel.findById(this.state.editingId);
-            }
-            this.setState({nodes: nodes, rootId: rootNode._id, editingNode: editingNode});
+            }*/
+            this.setState(state);
         })
     }
 
