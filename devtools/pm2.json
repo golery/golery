@@ -1,0 +1,14 @@
+{
+  "apps" : [{
+    "name"        : "server",
+    "script"      : "./build/dev/server/server.js",
+    "watch"       : ["./build/dev/server"],
+    "ignore_watch" : ["./build/dev/server/Pages/Generated"],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "env_production" : {
+      "NODE_ENV": "production"
+    }
+  }]
+}

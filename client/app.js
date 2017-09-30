@@ -10,6 +10,7 @@ import PencilPage from './components/Pencil/PencilPage';
 import Polyfill from './services/Polyfill';
 
 const MAIN_COMPONENTS = {
+    TestPage: <TestPage/>,
     PencilPage: <PencilPage/>,
     GoEventPage: <GoGoPage/>,
     MainRouter: MainRouter,

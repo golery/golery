@@ -58,7 +58,7 @@ function startServer() {
         configExpressRouter(app);
 
         app.listen(EXPRESS_PORT, function () {
-            console.log('Access at http://localhost:3001/www2');
+            console.log('Access at http://localhost:3001');
         });
     });
 }

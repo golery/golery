@@ -4,6 +4,7 @@ import goEventPage from "../Pages/GoEventPage";
 import unixTimePage from "../Pages/UnixTimePage";
 import jsonFormatterPage from "../Pages/JsonFormatterPage";
 import pencilPage from "../Pages/PencilPage";
+import testPage from "../Pages/TestPage";
 
 /* TO ADD A NEW PAGE
 - Add a router in RootRouter.js
@@ -19,6 +20,7 @@ export default function (router) {
     index.get('/unix-timestamp-converter', unixTimePage);
     index.get('/json-formatter', jsonFormatterPage);
     index.get('/pencil', pencilPage);
+    index.get('/test', testPage);
 
     router.use('/', index);
 }

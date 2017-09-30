@@ -1,11 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {PencilPage} from "./Generated/Components.generated";
+import {TestHtmlContentView} from "./Generated/Components.generated";
 
 export default function (req, res) {
-    let mainHtml = ReactDOM.renderToString(<PencilPage/>);
+    console.log("Start");
+    // let mainHtml = ReactDOM.renderToString(<TestHtmlContentView html={"hello"}/>);
+    let mainHtml = "heee";
     page(req, res, mainHtml, 'PencilPage',
         {
             title: 'Pencil - Best tree note tool',
