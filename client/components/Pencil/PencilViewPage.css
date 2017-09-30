@@ -1,0 +1,14 @@
+@custom-media --large (width >= 500px);
+
+.component {
+
+}
+
+.body {
+    margin: 0 1rem;
+    @media (--large) {
+        max-width: 1110px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
