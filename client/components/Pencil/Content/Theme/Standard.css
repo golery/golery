@@ -1,14 +1,39 @@
-:global(.theme.article .title) {
+:global(.pencilTheme) {
+  & :global(.nodeTitle) {
     font-size: 3rem;
     font-weight: bold;
     border: none;
     margin-bottom: 1rem;
 
     &:focus {
-        outline: none;
+      outline: none;
     }
     &::placeholder {
-        color: #ddd;
-        font-style: italic;
+      color: #ddd;
+      font-style: italic;
     }
+  }
+
+  & :global(.nodeHtml) {
+    line-height: 1.5rem;
+
+    & h1 {
+      font-family: 'Montserrat-Bold';
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    & b {
+      font-family: 'Montserrat-Bold';
+    }
+
+    & ol, li {
+      margin-left: 1rem;
+    }
+
+    & ol {
+      list-style: decimal;
+    }
+  }
 }

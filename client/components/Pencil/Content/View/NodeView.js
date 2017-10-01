@@ -11,9 +11,9 @@ export default class NodeView extends React.Component{
     render()
     {
         let {node} = this.props;
-        return <div className={[styles.component, "theme article"].join(' ')}>
-            <HtmlView html={node.title} className="title"/>
-            <HtmlView html={node.html}/>
+        return <div className={[styles.component, "pencilTheme"].join(' ')}>
+            <HtmlView html={node.title} className="nodeTitle"/>
+            <HtmlView html={node.html} className="nodeHtml"/>
         </div>;
     }
 }

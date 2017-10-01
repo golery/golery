@@ -30,14 +30,15 @@ export default class NodeEditor extends React.Component {
     render() {
         let {node} = this.props;
 
-        return <div className={[styles.component, "theme article"].join(' ')}>
+        return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <HtmlEditor html={node.title}
                         placeHolder="<page-title>"
-                        contentEditableClassName="title"
+                        contentEditableClassName="nodeTitle"
                         toolbar={TITLE_EDITOR_TOOLBAR_COMMANDS}
                         onChange={html => this._onChangeTitle(html)}
             />
             <HtmlEditor html={node.html}
+                        contentEditableClassName="nodeHtml"
                         onChange={html => this._onChangeNodeHtml(html)}
                         ref={ref=> {this.elmNodeHtml = ref}}
             />
