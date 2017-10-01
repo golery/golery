@@ -20,6 +20,7 @@ export default function (router) {
     index.get('/json-formatter', jsonFormatterPage);
     index.get('/pencil', pencilServerPage);
     index.get('/pencil/:rootId', pencilServerPage);
+    index.get('/pencil/:rootId/:childId', pencilServerPage);
 
     router.use('/', index);
 }

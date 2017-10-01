@@ -56,16 +56,17 @@ export default class PencilPage extends React.Component {
         super(props);
 
         let {rootId, nodeId} = this.props.match ? this.props.match.params : {rootId: null, nodeId: null};
-        let serverState = this.props.serverState || {initialNode: null};
-        this.state = Object.assign({}, serverState);
-        this.state = Object.assign(this.state, {
+        let {initialNode} = this.props.serverState || {initialNode: null};
+        initialNode = initialNode || null;
+
+        this.state = {
             nodes: null,
             contentMode: CONTENT_MODE_VIEW,
             editingId: nodeId,
             editor: EDITOR_HTML,
-            editingNode: serverState.initialNode,
-            showTree: false,
-        });
+            editingNode: initialNode || null,
+            showTree: initialNode === null
+        };
         console.log(this.state);
         this.treeModel = null;
 
