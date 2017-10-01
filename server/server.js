@@ -6,7 +6,7 @@ import path from "path";
 
 import configPassport from "./user/passport.config";
 import apiRouter from "./Router/ApiRouter";
-import rootRouter from "./Router/RootRouter";
+import pageRouter from "./Router/PageRouter";
 
 import {MAX_UPLOAD_FILE_SIZE} from "./Api/ApiFile";
 
@@ -39,7 +39,7 @@ function configExpressMiddleware(app, db) {
 function configExpressRouter(app) {
     let router = Router();
 
-    rootRouter(router);
+    pageRouter(router);
     apiRouter(router);
 
     router.use('/', express.static(path.join(__dirname, 'Static')));

@@ -30,7 +30,7 @@ function configSerializeUser() {
         done(null, user.id);
     });
 
-    // Retrieve user object from userID in sesion
+    // Retrieve user object from userID in session
     let cache = {};
     passport.deserializeUser(function (id, done) {
         // for simplicity, the cache is never expire
