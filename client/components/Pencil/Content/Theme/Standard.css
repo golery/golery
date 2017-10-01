@@ -1,0 +1,14 @@
+:global(.theme.article .title) {
+    font-size: 3rem;
+    font-weight: bold;
+    border: none;
+    margin-bottom: 1rem;
+
+    &:focus {
+        outline: none;
+    }
+    &::placeholder {
+        color: #ddd;
+        font-style: italic;
+    }
+}

@@ -76,13 +76,14 @@ class NodeRepo {
     }
 
     save(node) {
-        console.log('Save node');
+        console.log('Start save node....');
         return Axios.put('/api/secure/node', {
             _id: node._id,
             name: node.name,
             html: node.html,
+            title: node.title
         }).then(result => {
-            console.log('Save done.');
+            console.log('DONE save.', result);
         });
     }
 

@@ -70,10 +70,8 @@ export default class TreeView extends React.Component {
         if (!view) {
             return;
         }
-        node.name = null;
         node.name = this.treeModel.getNodeName(node);
         view.setText(node.name);
-
     }
 
     componentDidMount() {

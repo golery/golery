@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/server";
 
 import page from "./PageTemplate";
-import {PencilViewPage} from "./Generated/Components.generated";
+import {PencilPage} from "./Generated/Components.generated";
 import nodeService from "../Api/Node/NodeService";
 
 export default function (req, res) {
@@ -11,8 +11,8 @@ export default function (req, res) {
         let html = node[0].html;
         console.log(html);
         let state = {html: html};
-        let mainHtml = ReactDOM.renderToString(<PencilViewPage state={state}/>);
-        page(req, res, mainHtml, 'PencilViewPage',
+        let mainHtml = ReactDOM.renderToString(<PencilPage state={state}/>);
+        page(req, res, mainHtml, 'PencilPage',
             {
                 title: 'Pencil - Best tree note tool',
                 metaKeywords: 'Pencil Note in tree',

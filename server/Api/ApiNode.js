@@ -125,6 +125,7 @@ class ApiNode {
         // clone content to be sure that only contents are updated
         let update = {
             name: body.name,
+            title: body.title,
             html: body.html,
             updateDate: Date.now()
         };

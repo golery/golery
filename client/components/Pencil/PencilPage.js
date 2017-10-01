@@ -1,11 +1,11 @@
+import themeStyles from './Content/Theme/Standard.css';
 import styles from "./PencilPage.css";
 
 import React from "react";
 import {Scrollbars} from 'react-custom-scrollbars';
 
 import NodeRepo from "../../services/NodeRepo";
-import HtmlEditor from "./Editor/HtmlEditor/HtmlEditor";
-import HtmlSourceEditor from "./Editor/HtmlSourceEditor";
+import NodeEditor from "./Content/Editor/NodeEditor";
 import TreeView from "../Tree/TreeView";
 import TreeModel from "../Tree/TreeModel";
 import TreeViewModel from "../Tree/TreeViewModel";
@@ -16,23 +16,24 @@ import TreeActionButtons from "./TreeActionButtons";
 import Action from "./Action";
 import LoadingPage from "./LoadingPage";
 import SyncTracker from "./SyncTracker";
-import HtmlContentView from "./Content/View/Html/HtmlContentView";
+import NodeView from "./Content/View/NodeView";
 import ShortcutHandler from "./ShortcutHandler";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
 
-const DELAY_UPDATE_TITLE_MS = 400;
-const DELAY_SAVE_MS = 3000;
 const EDITOR_HTML = Symbol();
-const EDITOR_HTML_SOURCE = Symbol();
 const CONTENT_MODE_VIEW = "VIEW";
 const CONTENT_MODE_EDIT = "EDIT";
 
 class Node {
     constructor(_id, name) {
         this._id = _id;
+        // short name to be displayed in tree
         this.name = name;
+        // full title
+        this.title = null;
+        this.html = null;
         this.children = [];
     }
 }
@@ -54,7 +55,7 @@ export default class PencilPage extends React.Component {
     constructor(props) {
         super(props);
 
-        let {rootId, nodeId} = this.props.match ? this.props.match.params : {null, null};
+        let {rootId, nodeId} = this.props.match ? this.props.match.params : {rootId: null, nodeId: null};
         let serverState = this.props.serverState || {initialNode: null};
         this.state = Object.assign({}, serverState);
         this.state = Object.assign(this.state, {
@@ -77,9 +78,8 @@ export default class PencilPage extends React.Component {
         this._load(rootId);
 
         this.onSelect = this.onSelect.bind(this);
-        this.onUpdateEditor = this.onUpdateEditor.bind(this);
 
-        let commands = this.treeCommands = [];
+        let commands = this.toolbarCommands = [];
         Toolbar.addCommand(commands, this, 'Add', this._onAddNode, 'fa fa-plus');
         Toolbar.addCommand(commands, this, 'Delete', this._onDeleteNode, 'fa fa-close');
         Toolbar.addCommand(commands, this, 'Refresh', this._onShowEditView, 'fa fa-pencil');
@@ -122,7 +122,7 @@ export default class PencilPage extends React.Component {
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder}>
             <div className={styles.treeToolbarHolder}>
-                <Toolbar commands={this.treeCommands} themeLight={true}/>
+                <Toolbar commands={this.toolbarCommands} themeLight={true}/>
             </div>
             <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
                         renderThumbVertical={this._renderThumbVertical}
@@ -165,8 +165,8 @@ export default class PencilPage extends React.Component {
 
     _onShowEditView() {
         this.setState({contentMode: CONTENT_MODE_EDIT});
-        setTimeout(() => {
-            this._htmlEditor.focusEditor();
+        window.setTimeout(() => {
+            this._nodeEditor.focus();
         });
     }
 
@@ -176,23 +176,16 @@ export default class PencilPage extends React.Component {
 
 
     _buildContentElm() {
-        console.log("Content", this.state.editingNode);
         if (!this.state.editingNode) return;
 
-        console.log("Content", this.state.editingNode);
-
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <HtmlContentView html={this.state.editingNode.html}></HtmlContentView>
+            return <NodeView node={this.state.editingNode}/>
         }
         if (this.state.editor === EDITOR_HTML) {
-            return <HtmlEditor html={this.state.editingNode.html} editingContext={this.state.editingNode}
-                               updateListener={this.onUpdateEditor}
-                               ref={(ref) => this._htmlEditor = ref}
-            />;
-        }
-        if (this.state.editor === EDITOR_HTML_SOURCE) {
-            return <HtmlSourceEditor html={this.state.editingNode.html} editingContext={this.state.editingNode}
-                                     updateListener={this.onUpdateEditor}/>;
+            return <NodeEditor node={this.state.editingNode} listeners={{
+                onChangeNodeName: (node) => this._onChangeNodeName(node)
+            }}
+            ref={ref=>this._nodeEditor = ref}/>
         }
     }
 
@@ -205,10 +198,6 @@ export default class PencilPage extends React.Component {
             this.treeViewModel = new TreeViewModel();
 
             let state = {nodes: nodes, rootId: rootNode._id};
-            /*let editingNode = null;
-            if (this.state.editingId) {
-                editingNode = this.treeModel.findById(this.state.editingId);
-            }*/
             this.setState(state);
         })
     }
@@ -219,23 +208,7 @@ export default class PencilPage extends React.Component {
             .then(() => this.syncTracker.stopTask(taskId));
     }
 
-    onUpdateEditor(node, newHtml) {
-        this.updateNodeTitleScheduler.schedule(DELAY_UPDATE_TITLE_MS, () => {
-            node.html = newHtml;
-            node.name = HeadLineParser.parseTitle(newHtml);
-            this.treeView.updateText(node);
-        });
-        this.saveNodeScheduler.schedule(DELAY_SAVE_MS, () => {
-            if (DISABLE_SAVE) return;
-            NodeRepo.save(node);
-        });
-    }
-
     onSelect(node) {
-        console.log(node);
-        if (this._htmlEditor) {
-            this._htmlEditor.focusEditor();
-        }
         this.setState({editingNode: node, contentMode: CONTENT_MODE_VIEW});
     }
 
@@ -295,5 +268,9 @@ export default class PencilPage extends React.Component {
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         )
+    }
+
+    _onChangeNodeName(node) {
+        this.treeView.updateText(node);
     }
 }

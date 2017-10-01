@@ -11,6 +11,9 @@ const schema = new Schema({
     name: {
         type: String,
     },
+    title: {
+        type: String,
+    },
 
     // all nodes have html description
     // node type specific data are stored in "value" field

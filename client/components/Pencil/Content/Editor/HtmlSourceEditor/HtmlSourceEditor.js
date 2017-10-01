@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Toolbar from '../Toolbar';
+import Toolbar from '../../../Toolbar';
 
 import styles from './HtmlSourceEditor.css';
 
@@ -9,7 +9,7 @@ export default class HtmlSourceEditor extends React.Component {
         super(props);
         this._onChange = this._onChange.bind(this);
 
-        let commands = this.treeCommands = [];
+        let commands = this.toolbarCommands = [];
         Toolbar.addCommand(commands, this, 'Clean', this._onCleanUp, 'fa fa-bold');
 
         let html = this.props.html == null ? '' : this.props.html;

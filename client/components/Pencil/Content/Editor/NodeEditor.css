@@ -1,0 +1,7 @@
+.component {
+  padding-top: 1.5rem;
+
+  & div[contentEditable=true]:focus {
+      outline: none;
+  }
+}

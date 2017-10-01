@@ -1,0 +1,43 @@
+.component {
+}
+
+.contentEditable:focus {
+  outline: none;
+}
+
+.contentEditable.emptyMinimize {
+  font-size: 1rem !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: lightgray;
+  font-style: italic;
+  margin: 0!important;
+  font-weight: 100!important;
+}
+
+.editor h1 {
+  font-family: 'Montserrat-Bold';
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.editor b {
+  font-family: 'Montserrat-Bold';
+}
+
+.editor ol, li {
+  margin-left: 1rem;
+}
+
+.editor ol {
+  list-style: decimal;
+}
+
+.toolbarHolder {
+  position: fixed;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 1px;
+  visibility: hidden;
+}

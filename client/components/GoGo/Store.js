@@ -1,6 +1,5 @@
 import {Dispatcher} from "flux";
 import EventRest from "./EventRest";
-import mongoose from "mongoose";
 
 class Store {
     constructor() {
@@ -23,7 +22,8 @@ class Store {
     }
 
     objectId() {
-        return mongoose.Types.ObjectId();
+        //return mongoose.Types.ObjectId();
+        return "fixme"
     }
 }
 
