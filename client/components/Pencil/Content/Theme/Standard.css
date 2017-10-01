@@ -28,7 +28,11 @@
       font-family: 'Montserrat-Bold';
     }
 
-    & ol, li {
+    & ol {
+      margin-left: 1rem;
+    }
+
+    & li {
       margin-left: 1rem;
     }
 
