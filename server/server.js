@@ -19,7 +19,7 @@ const WEBAPP_PATH = '/';
 
 function connectMongo() {
     // use ES6 promise
-    mongoose.Promise = Promise;
+    mongoose.Promise = global.Promise;
     let mongoUrl = MONGO_URL;
     console.log('Connecting to database...', mongoUrl);
     return mongoose.connect(mongoUrl);

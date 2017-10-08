@@ -23,14 +23,14 @@ function renderPage(req, res, node) {
     page(req, res, mainHtml, 'PencilPage', options);
 }
 
-function renderLandingPage (req, res) {
+export function pencilLandingPage (req, res) {
     let mainHtml = ReactDOM.renderToString(<PencilLandingPage/>);
     page(req, res, mainHtml, 'PencilLandingPage', getPageOptions());
 }
 
 export default function (req, res) {
     if (!req.user) {
-        renderLandingPage(req, res);
+        pencilLandingPage(req, res);
     }
 
     let {rootId, childId} = req.params;

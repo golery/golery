@@ -18,26 +18,22 @@ var validateLocalStrategyProperty = function(property) {
  * A Validation function for local strategy password
  */
 var validateLocalStrategyPassword = function(password) {
-	return (this.provider !== 'local' || (password && password.lefngth > 6));
+	return (this.provider !== 'local' || (password && password.length > 6));
 };
 
 /**
  * User Schema
  */
 var UserSchema = new Schema({
-	_id: Number,
-	
 	firstName: {
 		type: String,
 		trim: true,
 		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your first name']
 	},
 	lastName: {
 		type: String,
 		trim: true,
 		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your last name']
 	},
 	displayName: {
 		type: String,
@@ -46,13 +42,14 @@ var UserSchema = new Schema({
 	email: {
 		type: String,
 		trim: true,
+        unique: 'Email was used',
 		default: '',
 		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
 		match: [/.+\@.+\..+/, 'Please fill a valid email address']
 	},
 	username: {
 		type: String,
-		unique: 'testing error message',
+		unique: 'Username was used',
 		required: 'Please fill in a username',
 		trim: true
 	},
@@ -114,7 +111,7 @@ UserSchema.pre('save', function(next) {
  */
 UserSchema.methods.hashPassword = function(password) {
 	if (this.salt && password) {
-		return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
+		return crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha1').toString('base64');
 	} else {
 		return password;
 	}

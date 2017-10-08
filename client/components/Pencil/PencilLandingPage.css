@@ -1,0 +1,75 @@
+.component {
+    text-align: center;
+    padding-top: 5rem;
+}
+.input {
+  border: none;
+  border-bottom: 1px dashed lightgray;
+  color: darkgray;
+  font-size: 1.2rem;
+}
+
+.input:focus {
+  outline: none;
+  color: #111111;
+}
+
+.imgName {
+  position: relative;
+  top: 0.8rem;
+  margin-right: 1rem;
+  padding-left: 4.6rem;
+}
+
+.imgPassword {
+  position: relative;
+  top: 0.7rem;
+  margin-right: 1rem;
+  padding-left: 3rem;
+}
+
+.imgPasswordAgain {
+  position: relative;
+  top: 1.6rem;
+  margin-right: 0.8rem;
+}
+
+.captureIdeaHolder {
+  margin: 2rem 0;
+}
+
+.inputHolder{
+  position: relative;
+  margin: 2rem 0 4rem;
+  left: -4rem;
+}
+
+.passwordHolder {
+  margin-top: 1.5rem;
+}
+
+.passwordAgainHolder {
+  margin-top: 0.9rem;
+}
+
+.button {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid darkgray;
+  padding: 0.7rem 1.3rem;
+  margin: 0 1rem;
+  color: gray;
+}
+
+.button:hover {
+  color: black;
+  border-color: gray;
+  cursor: pointer;
+}
+
+.message {
+  color: #333;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  font-style: italic;
+}

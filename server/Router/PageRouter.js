@@ -3,7 +3,7 @@ import mainPage from "../Pages/MainPage";
 import goEventPage from "../Pages/GoEventPage";
 import unixTimePage from "../Pages/UnixTimePage";
 import jsonFormatterPage from "../Pages/JsonFormatterPage";
-import pencilServerPage from "../Pages/PencilServerPage";
+import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
 import passport from "passport";
 
 /* TO ADD A NEW PAGE
@@ -17,6 +17,7 @@ export default function (router) {
     let pencil = new Router();
     pencil.use(passport.session());
     pencil.get('/', pencilServerPage);
+    pencil.get('/landing', (req, res) => { pencilLandingPage(req, res)});
     pencil.get('/:rootId', pencilServerPage);
     pencil.get('/:rootId/:childId', pencilServerPage);
     router.use('/pencil', pencil);

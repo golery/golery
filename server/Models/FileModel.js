@@ -2,7 +2,7 @@ import mongoose, {Schema} from 'mongoose';
 
 const schema = new mongoose.Schema({
     userId: {
-        type: Number,
+        type: Schema.ObjectId,
         required: true,
         index: true
     },

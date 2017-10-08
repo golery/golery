@@ -67,7 +67,6 @@ export default class PencilPage extends React.Component {
             editingNode: initialNode || null,
             showTree: initialNode === null
         };
-        console.log(this.state);
         this.treeModel = null;
 
         // ref to treeView element

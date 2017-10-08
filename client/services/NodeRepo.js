@@ -44,9 +44,9 @@ class NodeRepo {
         }
 
         return Axios.get('/api/secure/node').then(response => {
-            let nodes = response.data.nodes;
+            let nodes = response.data;
             if (!rootId) {
-                rootId = response.data.root;
+                rootId = response.data[0]._id;
             }
 
             let rootNode = this._findNode(nodes, rootId);

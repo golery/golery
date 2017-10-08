@@ -18,7 +18,7 @@ module.exports = function () {
         function (username, password, done) {
             console.log('Passport local strategy: load ' + username);
             User.findOne({
-                username: username
+                $or: [ {username: username}, {email: username}]
             }, function (err, user) {
                 if (err) {
                     console.log('Passport local strategy: Fail ', err);

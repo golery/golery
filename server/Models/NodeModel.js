@@ -4,7 +4,7 @@ import mongoose, {Schema} from 'mongoose';
 /** NODE */
 const schema = new Schema({
     user: {
-        type: Number,
+        type: Schema.ObjectId,
         required: true,
         index: true
     },
@@ -50,7 +50,11 @@ const schema = new Schema({
         type: String,
         required: true,
         default: 'html'
-    }
+    },
+
+    // if the node is cloned from a sample (when user create pencil)
+    // this field is the id of original node. We keep track of this for statistics only
+    cloneFromSample: Schema.Types.ObjectId
 });
 
 export default mongoose.model('Node', schema);

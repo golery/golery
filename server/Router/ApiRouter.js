@@ -4,8 +4,7 @@ import passport from "passport";
 import ApiNode from "../Api/ApiNode";
 import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
-import loginController from "../user/login.controller";
-
+import ApiAuth from "../Api/ApiAuth";
 
 function configGetUser(apiSecure) {
     apiSecure.use(passport.session());
@@ -34,16 +33,12 @@ function _buildApiSecureRouter() {
 function _buildApiPublicRouter() {
     let route = new Router();
     ApiGoEvent.setupRoute(route);
+    ApiAuth.setupRoute(route);
     return route;
 }
 
 function buildApiRouter() {
     let apiRouter = new Router();
-
-    // /api/public/ does not have authentication
-    let apiPublic = new Router();
-    apiPublic.post('/login', loginController);
-    apiRouter.use('/public', apiPublic);
 
     // /api/secure/ require authentication and needs req.user object
     apiRouter.use('/secure', _buildApiSecureRouter(apiRouter));

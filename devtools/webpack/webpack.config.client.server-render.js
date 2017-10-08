@@ -37,6 +37,15 @@ let serverConfig = {
                         /* configuration (ex: list of plugins) is in file postcss.config.js */
                     }
                 ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg|otf)$/i,
+                use: [
+                    {loader: 'file-loader',
+                    options: {
+                        emitFile: false
+                    }}
+                ]
             }
         ]
     },

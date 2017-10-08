@@ -1,14 +1,17 @@
 import mongoose from "mongoose";
+
 mongoose.Promise = Promise;
 
 import NodeModel from "../Models/NodeModel";
 import PencilModel from "../Models/PencilModel";
 import Rest from "./Rest";
-import nodeService from "./Node/NodeService";
+import NodeService from "./Node/NodeService";
+
+const SAMPLE_NODE_ID = "000000000000000000000001";
 
 function findNode(allNodes, nodeId) {
     for (let i = 0; i < allNodes.length; i++) {
-        console.log("Compare", allNodes[i]._id, nodeId, allNodes[i]._id === nodeId);
+        console.log("Compare", allNodes[i]._id, nodeId, allNodes[i]._id.equals(nodeId));
         if (allNodes[i]._id.equals(nodeId)) {
             return allNodes[i];
         }
@@ -37,9 +40,18 @@ class ApiNode {
         route.put('/node/move/:nodeId/:parentId/:position',
             (req, res) => this._moveNode(req, res, req.user.id, req.params.nodeId, req.params.parentId, req.params.position));
         route.post('/node/:parentId', this._createNode.bind(this));
-        route.get('/node', this._findNodes.bind(this));
+        route.get('/node', (req, res) => this._findNodes(req, res, req.user.id));
         route.delete('/node/:nodeId', this._deleteNode.bind(this));
         route.put('/node', this._updateNode.bind(this));
+        route.get('/node/test', (req, res) => this._test(req, res));
+    }
+
+    _test(req, res) {
+        let userId = this.getUserId(req);
+        let rootId = "59da28b15ea06509f7385f1d";
+        Rest.json(req, res, NodeService.cloneTree(rootId, userId).then((list) => {
+            return list;
+        }));
     }
 
     _createNode(req, res) {
@@ -51,7 +63,8 @@ class ApiNode {
             if (!o) {
                 throw "Parent not found";
             }
-            if (o.user !== userId) {
+            if (!o.user.equals(userId)) {
+                console.log('User: ', userId, ' Node userId:', o.user);
                 throw "Parent belong to another user";
             }
             parent = o;
@@ -140,49 +153,31 @@ class ApiNode {
         return Rest.json(req, res, promise);
     }
 
-    /** @return {rootNode: <nodeId>, nodes: flat list of nodes} */
-    _findNodes(req, res) {
-        console.log('Get list of nodes');
-
-        function setup() {
-            console.log('Setup pencil');
-            return createRootNode(req.user).then(function (root) {
-                rootNode = root._id;
-                let pencil = new PencilModel();
-                pencil._id = req.user.id;
-                pencil.rootNode = rootNode;
-                return pencil.save();
-            });
-        }
-
-        let userId = req.user._id;
-        let rootNode;
-
-        // find pencil
-        let promise = PencilModel.findOne({
-            _id: userId
-        }).then(function (foundPencil) {
-            if (!foundPencil) {
-                return setup();
-            }
-            return foundPencil;
-        }).then(function (foundPencil) {
-            rootNode = foundPencil.rootNode;
-        }).then(function () {
-            console.log('Find node for user ', userId);
-            return NodeModel.find({
-                deleted: {
-                    $ne: true
-                },
-                user: userId
-            });
-        }).then(function (list) {
-            return {root: rootNode, nodes: list};
+    _generateInitialTree(userId) {
+        console.log('Setup pencil');
+        return NodeService.cloneTree(SAMPLE_NODE_ID, userId).then(nodes => {
+            let pencil = new PencilModel();
+            pencil._id = userId;
+            pencil.rootNode = nodes[0]._id;
+            return pencil.save();
         });
-
-        return Rest.json(req, res, promise);
     }
 
+    /** @return {rootNode: <nodeId>, nodes: flat list of nodes} */
+    _findNodes(req, res, userId) {
+        let promise = PencilModel.findOne({
+            _id: userId
+        }).then(pencil => {
+            if (!pencil) {
+                return this._generateInitialTree(userId);
+            }
+            return pencil;
+        }).then((pencil) => {
+            console.log("Found pencil", pencil);
+            return NodeService.findAllNodes(userId, pencil.rootNode);
+        });
+        return Rest.json(req, res, promise);
+    }
 
 
     /** Move node to another place (new parent + new position) */
@@ -193,7 +188,7 @@ class ApiNode {
             user: userId,
             children: nodeId
         }).then(parent => {
-            if (parent._id === newParentId) return parent;
+            if (parent._id.equals(newParentId)) return parent;
 
             // update current parent
             let index = parent.children.indexOf(nodeId);

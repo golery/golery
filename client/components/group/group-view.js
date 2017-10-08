@@ -26,7 +26,6 @@ export default class GroupView extends React.Component {
     onAddMember(e) {
         let newMembers = this.state.members.concat([{name: this.state.addingName, email: this.state.addingEmail}]);
         this.setState({members: newMembers});
-        console.log(this.state);
     }
 
     componentDidMount() {

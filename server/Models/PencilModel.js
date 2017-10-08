@@ -3,7 +3,7 @@ import mongoose, {Schema} from 'mongoose';
 /** APP params */
 var PencilSchema = new Schema({
     _id: { // user id
-        type: Number,
+        type: Schema.ObjectId,
         required: true
     },
     rootNode: {
