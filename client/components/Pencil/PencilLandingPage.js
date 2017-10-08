@@ -25,7 +25,7 @@ export default class PencilLandingPage extends React.Component {
             <div><img src={"/" + imgPencilTitle}/></div>
             <div className={styles.captureIdeaHolder}><img src={"/" + imgCaptureYourIdeas}/></div>
             <div><img src={"/" + imgSeparator}/></div>
-            <form>
+            <form className={styles.form}>
                 <div className={styles.inputHolder}>
                     <div><img className={styles.imgName} src={"/" + imgName}/>
                         <input className={styles.input} type="email"
@@ -53,6 +53,22 @@ export default class PencilLandingPage extends React.Component {
                             onClick={(e) => this._onSignUp(e)}>{this.state.inputMode === MODE_SIGNUP ? "CREATE NEW ACCOUNT" : "SIGN UP"}</button>
                 </div>
             </form>
+            <div><img src={"/" + imgSeparator}/></div>
+            <div>
+                <div className={styles.sectionHeader}>Distract free writing mode</div>
+                It's only you and the text. No distraction. Keep focus on writing.
+            </div>
+            <div>
+                <div className={styles.sectionHeader}>Organize your ideas</div>
+                Write your ideas down. Keep it in structure with tree, tags.
+            </div>
+            <div>
+                <div className={styles.sectionHeader}>Take notes in class</div>
+                Good tools to keep note in your classes every day.
+            </div>
+            <div className={styles.copyright}>
+                Copyrigh (C) Golery.com. All right reserved
+            </div>
         </div>;
     }
 

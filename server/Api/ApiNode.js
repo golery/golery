@@ -43,7 +43,18 @@ class ApiNode {
         route.get('/node', (req, res) => this._findNodes(req, res, req.user.id));
         route.delete('/node/:nodeId', this._deleteNode.bind(this));
         route.put('/node', this._updateNode.bind(this));
+        route.get('/node/stats', (req, res) => this._stats(req, res));
         route.get('/node/test', (req, res) => this._test(req, res));
+    }
+
+    _stats(req, res) {
+        let promise = NodeModel.count({
+            deleted: {$ne: true}
+        }).then(c => {
+            return { totalNode: c};
+        });
+
+        Rest.json(req, res, promise);
     }
 
     _test(req, res) {

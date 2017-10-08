@@ -10,7 +10,7 @@ import BudgetView from "./components/group/budget-view";
 import GroupHomePage from "./components/group/home-page";
 import LoginPage from "./components/Login/LoginPage";
 import LandingPage from "./components/Landing/LandingPage";
-import PencilPage from "./components/Pencil/PencilPage";
+import AdminPage from "./components/Pencil/Admin/AdminPage";
 import PlanPage from "./components/PlanEvent/PlanPage";
 import EventHomePage from "./components/PlanEvent/EventHomePage";
 import AccreditPage from "./components/Accredit/AccreditPage";
@@ -40,7 +40,7 @@ export default
             <Route path="/group/main" component={GroupView}/>
             <Route path="/group/budget" component={BudgetView}/>
             <Route path="/login" component={LoginPage}/>
-            <Route path="/pencil" component={PencilPage}/>
+            <Route path="/pencil/admin" component={AdminPage}/>
             <Route path="/accredit" component={AccreditPage}/>
             <Route path="/app/event/payment" component={PlanPage}/>
             <Route path="/app/event/home" component={EventHomePage}/>

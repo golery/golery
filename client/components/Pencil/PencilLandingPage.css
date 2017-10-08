@@ -73,3 +73,19 @@
   margin-bottom: 0;
   font-style: italic;
 }
+
+.sectionHeader {
+  margin-top: 2rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.copyright {
+  font-size: 0.8rem;
+  font-style: italic;
+  font-weight: lighter;
+  margin-top: 5rem;
+  color: gray;
+}
+.form {
+  margin-bottom: 3rem;
+}

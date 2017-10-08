@@ -1,0 +1,14 @@
+.component {
+    
+}
+.body {
+  width: 80%;
+  margin: 5rem auto;
+}
+.statName {
+  font-size: 2rem;
+}
+.statNumber {
+  font-size: 5rem;
+  font-weight: bold;
+}
