@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import sanitizeHtml from 'sanitize-html';
 mongoose.Promise = Promise;
 
 import NodeModel from "../Models/NodeModel";
@@ -145,6 +145,8 @@ class ApiNode {
     _updateNode(req, res) {
         //FIXME: authentication
         let body = req.body;
+
+        let sanitizedHtml = body.html ? sanitizeHtml(body.html) : null;
 
         // clone content to be sure that only contents are updated
         let update = {

@@ -64,6 +64,7 @@
     "react-select": "^1.0.0-rc.3",
     "react-swipeable": "^3.9.2",
     "redux": "^3.6.0",
+    "sanitize-html": "^1.14.1",
     "textversionjs": "^1.0.2"
   }
 }

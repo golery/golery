@@ -1,9 +1,11 @@
-const ELEMENT_MAP = {
+import sanitizeHtml from 'sanitize-html';
+
+/*const ELEMENT_MAP = {
     DIV: ['H1', 'H2', 'H3', 'PRE', 'CODE', 'IMG', 'SECTION'],
     B: ['EM', 'STRONG']
 };
 
-const SUPPORTED_TAGS = ['DIV', 'SPAN', 'B', 'P', 'BR', 'A', 'OL', 'UL', 'LI'];
+const SUPPORTED_TAGS = ['DIV', 'SPAN', 'B', 'P', 'BR', 'A', 'OL', 'UL', 'LI'];*/
 
 const LINK_REGEX = /^((((https?|ftp|file):\/\/)|(www\.))[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])$/i;
 
@@ -40,6 +42,7 @@ class PasteHtmlProcessor {
 
         let html = event.clipboardData.getData('text/html');
         if (html) {
+            html = sanitizeHtml(html);
             return this._htmlToNode(html);
         } else {
             return this._textToNode(text);
@@ -79,8 +82,8 @@ class PasteHtmlProcessor {
 
         let elm = document.createElement('span');
         elm.innerHTML = html;
-        console.log('Clean up', elm);
-        elm = this._cleanDom(elm);
+        /*console.log('Clean up', elm);
+        elm = this._cleanDom(elm);*/
 
         if (!elm) return;
 
@@ -91,7 +94,7 @@ class PasteHtmlProcessor {
         return elm;
     }
 
-    _cleanDom(elm) {
+    /*_cleanDom(elm) {
         let textContent = elm.textContent;
 
         if (elm.tagName === 'BR') {
@@ -155,7 +158,7 @@ class PasteHtmlProcessor {
 
         console.log('Unrecognized tag', tag);
         return null;
-    }
+    }*/
 }
 
 export default new PasteHtmlProcessor();
