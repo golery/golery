@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import styles from './NodeEditor.css';
 import HtmlEditor from './HtmlEditor/HtmlEditor';
 import DelayTaskScheduler from "../../DelayTaskScheduler";
-import NodeRepo from "../../../../services/NodeRepo";
 import HeadLineParser from "../../HeadLineParser";
+import ShareEditor from './ShareEditor';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -42,6 +42,9 @@ export default class NodeEditor extends React.Component {
                         onChange={html => this._onChangeNodeHtml(html)}
                         ref={ref=> {this.elmNodeHtml = ref}}
             />
+            <div className={styles.shareEditorHolder}>
+                <ShareEditor node={this.props.node}/>
+            </div>
         </div>;
     }
 

@@ -1,0 +1,12 @@
+.component {
+  & > div {
+    margin-bottom: 1rem;
+  }
+  & button {
+    margin-right: 2rem;
+  }
+}
+
+.linkHolder {
+  margin-left: 2rem;
+}

@@ -1,6 +1,10 @@
 .component {
 }
 
+.contentEditable {
+  min-height: 5rem;
+}
+
 .contentEditable:focus {
   outline: none;
 }
