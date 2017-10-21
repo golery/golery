@@ -10,7 +10,7 @@ then echo "STOP task"
 fi
 
 echo "START TASK";
-aws ecs run-task --task-definition www:9
+aws ecs run-task --task-definition www:4
 TASKID=$(aws ecs list-tasks | jq -r '.taskArns[0]')
 echo WAIT FOR RUNNING TASK: $TASKID
 aws ecs wait tasks-running --tasks $TASKID
