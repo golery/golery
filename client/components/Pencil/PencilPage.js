@@ -72,7 +72,6 @@ export default class PencilPage extends React.Component {
         // ref to treeView element
         this.treeView = null;
 
-        this.updateNodeTitleScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
 
         this._load(rootId);
@@ -103,7 +102,8 @@ export default class PencilPage extends React.Component {
     }
 
     render() {
-        if (!this.treeModel) {
+        if (!this.treeModel && typeof window !== "undefined" && window.location.pathname === ("/pencil")) {
+            // only show loading if there is no initial nodeId
             return <LoadingPage/>;
         }
 
@@ -118,6 +118,7 @@ export default class PencilPage extends React.Component {
     _buildTreeElm() {
         let {showTree} = this.state;
         if (!showTree) return this._buildTreeCollapseElm();
+
 
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder}>
@@ -140,6 +141,9 @@ export default class PencilPage extends React.Component {
     }
 
     _toggleTree() {
+        if (!this.state.showTree && !this.state.nodes) {
+            window.location.href = "/pencil";
+        }
         this.setState({showTree: !this.state.showTree});
     }
 

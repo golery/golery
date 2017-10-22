@@ -6,6 +6,7 @@ import HtmlEditor from './HtmlEditor/HtmlEditor';
 import DelayTaskScheduler from "../../DelayTaskScheduler";
 import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
+import NodeRepo from '../../../../services/NodeRepo';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;

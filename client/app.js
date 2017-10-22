@@ -24,8 +24,9 @@ window.bootstrapPage = function (page, serverState) {
     Polyfill();
 
     function getMainComponent() {
-        if (page === "PencilPage")
+        if (page === "PencilPage") {
             return <PencilPage serverState={serverState}/>;
+        }
         return MAIN_COMPONENTS[page];
     }
 

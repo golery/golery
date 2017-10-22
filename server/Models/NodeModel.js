@@ -25,6 +25,11 @@ const schema = new Schema({
         type: String,
     },
 
+    /** 0: private, 1: public */
+    access: {
+        type: Number
+    },
+
     deleted: Boolean,
 
     children: [{

@@ -110,8 +110,16 @@ class NodeRepo {
 
     moveNode(nodeId, newParentId, newPosition) {
         return Axios.put("/api/secure/node/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
-            let body = o.data;
             console.log("Move node", o.data);
+        });
+    }
+
+    /**
+     * @param access - 0: private 1: public  */
+    setAccess(nodeId, access) {
+        return Axios.put("/api/secure/node/access/" + nodeId + "/" + access).then(o=> {
+            console.log("Set acess", o.data);
+            return o.data;
         });
     }
 }

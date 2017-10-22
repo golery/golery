@@ -2,36 +2,54 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './ShareEditor.css';
+import NodeRepo from '../../../../services/NodeRepo';
 
 export default class ShareEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {expand: false, shareMode: 0};
+
+        const {node} = this.props;
+        const access = node.access || 0;
+        this.state = {expand: false, access: access};
         this.shareUrl = this._buildShareUrl(props.node._id);
     }
 
     render() {
         if (!this.state.expand) {
-            return <button onClick={() => this._toggleShareEditor()}>Share Mode</button>;
+            return <button onClick={() => this._toggleShareEditor()}>Visibility</button>;
         }
 
-        let elmLink = parseInt(this.state.shareMode) > 0 ?
+        const {node} = this.props;
+        const {access} = this.state;
+
+        let elmLink = access > 0 ?
             <a href={this.shareUrl} target="_blank">{this.shareUrl}</a> : [];
+
+        let elmSaveButtons = access === node.access || (access === 0 && !node.access) ? [] :
+            <div>
+                <button onClick={() => this._onSave()}>Save</button>
+                <button onClick={() => this._toggleShareEditor()}>Cancel</button>
+            </div>;
         return <div className={styles.component}>
             <div>
-                <select value={this.state.shareMode} onChange={(e) => this.setState({shareMode: e.target.value})}>
-                    <option value="0">Only me</option>
-                    <option value="1">With shared people (coming soon)</option>
-                    <option value="2">Public but only those who knows the link</option>
-                    <option value="3">Public and publish link</option>
+                <select value={this.state.access} onChange={(e) => this.setState({access: parseInt(e.target.value)})}>
+                    <option value="0">Private</option>
+                    <option value="1">Public</option>
                 </select>
                 <span className={styles.linkHolder}>{elmLink}</span>
             </div>
-            <div>
-                <button>Save</button>
-                <button onClick={() => this._toggleShareEditor()}>Cancel</button>
-            </div>
+            {elmSaveButtons}
         </div>;
+    }
+
+    _onSave() {
+        const node = this.props.node;
+        const access = this.state.access;
+        NodeRepo.setAccess(node._id, access).then((o)=> {
+            console.log(o);
+            node.access = access;
+            this.forceUpdate();
+        });
     }
 
     _toggleShareEditor() {

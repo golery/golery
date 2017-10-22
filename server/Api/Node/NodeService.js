@@ -5,8 +5,19 @@ mongoose.Promise = Promise;
 import NodeModel from "../../Models/NodeModel";
 
 class NodeService {
-    findOneNode(userId, nodeId) {
-        return NodeModel.find({
+    /** @mode - node.access : 0 private, 1 public */
+    setAccess(userId, nodeId, access) {
+        return NodeModel.update({user: userId, _id: nodeId}, {access: access}).then(o => {
+            return "Updated " + nodeId + ":" + access;
+        });
+    }
+
+    findById(nodeId) {
+        if (!nodeId) {
+            return Promise.resolve(null);
+        }
+
+        return NodeModel.findById({
             _id: nodeId,
             deleted: {
                 $ne: true
@@ -34,7 +45,7 @@ class NodeService {
             }
             list.splice(index, 1);
             list.unshift(node);
-            console.log('ROOT node:', node);
+            //console.log('ROOT node:', node);
             return list;
         }).then(list => {
             console.log("Load all nodes in ", new Date() - startTime, "ms");
@@ -66,7 +77,12 @@ class NodeService {
 
         return NodeModel.findOne({_id: rootId}).then(rootNode => {
             if (!rootNode) {
-                return new NodeModel({html: 'PENCIL', title: 'PENCIL', name: 'PENCIL', user: userId}).save().then(node => {
+                return new NodeModel({
+                    html: 'PENCIL',
+                    title: 'PENCIL',
+                    name: 'PENCIL',
+                    user: userId
+                }).save().then(node => {
                     console.log('RSULE:', node);
                     return [node];
                 });
