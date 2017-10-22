@@ -21,6 +21,12 @@ function renderPage(req, res, node) {
     options.serverState = {initialNode: node};
 
     let mainHtml = ReactDOM.renderToString(<PencilPage serverState={options.serverState}/>);
+
+    if (node && node.name) {
+        options.title = node.name;
+        options.metaDescription = " " + node.name;
+        options.metaKeywords += " " + node.name;
+    }
     page(req, res, mainHtml, 'PencilPage', options);
 }
 

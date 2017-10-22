@@ -1,6 +1,6 @@
+/** Generate sitemap.txt for crawler. It has static pages + public pencil pages */
 import React from "react";
 import nodeService from "../Api/Node/NodeService";
-
 
 function getStatic() {
     let s = "";
