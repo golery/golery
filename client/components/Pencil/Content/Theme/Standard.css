@@ -1,6 +1,6 @@
 :global(.pencilTheme) {
   & :global(.nodeTitle) {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: bold;
     border: none;
     margin-bottom: 1rem;
@@ -50,6 +50,19 @@
 
     & ol {
       list-style: decimal;
+    }
+  }
+}
+
+@media only screen and (min-device-width: 480px) {
+  :global(.pencilTheme) {
+    & :global(.nodeTitle) {
+      font-size: 3rem;
+    }
+    & :global(.nodeHtml) {
+      & h1 {
+        font-size: 1.5rem;
+      }
     }
   }
 }
