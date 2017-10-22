@@ -12,6 +12,10 @@ class NodeService {
         });
     }
 
+    findAllPublicNodeId() {
+        return NodeModel.find({access: 1, deleted: { $ne: true}}, '_id');
+    }
+
     findById(nodeId) {
         if (!nodeId) {
             return Promise.resolve(null);

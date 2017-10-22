@@ -3,6 +3,7 @@ import mainPage from "../Pages/MainPage";
 import goEventPage from "../Pages/GoEventPage";
 import unixTimePage from "../Pages/UnixTimePage";
 import jsonFormatterPage from "../Pages/JsonFormatterPage";
+import siteMapPage from "../Pages/SiteMapPage";
 import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
 import passport from "passport";
 
@@ -24,6 +25,7 @@ export default function (router) {
 
     let index = new Router();
     index.get('/', mainPage);
+    index.get('/sitemap.txt', siteMapPage);
     index.get('/app', mainPage);
     index.get('/goevent', goEventPage);
     index.get('/unix-timestamp-converter', unixTimePage);
