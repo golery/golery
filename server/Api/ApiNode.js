@@ -54,13 +54,25 @@ class ApiNode {
     }
 
     _stats(req, res) {
-        let promise = NodeModel.count({
+        let p1 = NodeModel.count({
             deleted: {$ne: true}
         }).then(c => {
-            return { totalNode: c};
+            return { nodeCount: c};
         });
 
-        Rest.json(req, res, promise);
+        let p2 = NodeModel.find({
+            deleted: {$ne: true},
+            access: 1
+        }, ['_id', 'name']).then(nodes => {
+            return { publicNodes: nodes};
+        });
+
+        let all = Promise.all([p1, p2]).then(values => {
+            let [v1, v2] = values;
+            return Object.assign({}, v1, v2);
+        });
+
+        Rest.json(req, res, all);
     }
 
     _test(req, res) {

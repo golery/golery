@@ -12,3 +12,7 @@
   font-size: 5rem;
   font-weight: bold;
 }
+.publicNodeHolder {
+  margin: 2rem 0;
+  line-height: 1.5rem;
+}
