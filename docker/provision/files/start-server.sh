@@ -7,15 +7,15 @@
 #-e  ERRFILE      Logs stderr from child script to ERRFILE
 #--minUptime      Minimum uptime (millis) for a script to not be considered "spinning" (ie. Fail to start)
 #--spinSleepTime  Time to wait (millis) between launches of a spinning script.
-source /softwares/GS/amazon.ecs.env.sh
+source /softwares/golery/amazon.ecs.env.sh
 export NODE_ENV=production
 # delete all logs
 pm2 flush
 
-cd /softwares/GS/www
+cd /softwares/golery/www
 pm2 start --name 'www' server/server.js
 
-cd /softwares/GS/proxy
+cd /softwares/golery/proxy
 pm2 start --name 'proxy' server/server.js
 
 pm2 logs

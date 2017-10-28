@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
+import https from 'https';
+import fs from 'fs';
 
 import configPassport from "./user/passport.config";
 import apiRouter from "./Router/ApiRouter";
@@ -57,7 +59,12 @@ function startServer() {
         configExpressMiddleware(app, mongoose.connection.db);
         configExpressRouter(app);
 
-        app.listen(EXPRESS_PORT, function () {
+        let sslOptions = {
+            key: fs.readFileSync('/data/ssl-certs/key.pem'),
+            cert: fs.readFileSync('/data/ssl-certs/fullchain.pem')
+        };
+
+        https.createServer(sslOptions, app).listen(EXPRESS_PORT, function () {
             console.log('Access at http://localhost:3001');
         });
     });

@@ -6,13 +6,13 @@ BASE_IMAGE=greensuisse/nodejs
 #If we use the www:lastest, the sync of node module will be faster
 
 # Start container in detach mode
-DOCKER=$(docker run -itPd -v /work:/work -w '/softwares/GS/' $BASE_IMAGE bash)
+CONTAINER=$(docker run -itPd -v /work:/work -w '/softwares/golery/' $BASE_IMAGE bash)
 # Run provision script inside docker container
-docker exec $DOCKER /work/www/docker/in-container/provision.sh
-docker stop $DOCKER
-echo ">> Created and provision container id= $DOCKER"
-docker commit $DOCKER greensuisse/www
-echo ">> Commit container $DOCKER to greensuisse/www"
+docker exec $CONTAINER /work/www/docker/provision/provision.sh
+docker stop $CONTAINER
+echo ">> Created and provision container id= $CONTAINER"
+docker commit $CONTAINER greensuisse/www
+echo ">> Commit container $CONTAINER to greensuisse/www"
 echo "For testing: ./run-image.sh and access http://localhost:80"
 echo "Push: ./push-image.sh"
 echo "Restart: Launch task with Amazone ECS website"

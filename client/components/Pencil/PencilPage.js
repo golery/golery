@@ -228,6 +228,7 @@ export default class PencilPage extends React.Component {
 
         // immediately add node then save later
         let node = new Node("TEMP" + this._uuidv4(), null);
+        node.html="<ol><li/></ol>";
         this.treeModel.addChild(parentNode, node);
         let nodeView = this.treeView.newNodeAsChildren(node, parentNodeView);
         this._onShowEditView();
