@@ -15,7 +15,7 @@ pm2 flush
 cd /softwares/golery/www
 pm2 start --name 'www' server/server.js
 
-cd /softwares/golery/proxy
-pm2 start --name 'proxy' server/server.js
+#cd /softwares/golery/proxy
+#pm2 start --name 'proxy' server/server.js
 
 pm2 logs

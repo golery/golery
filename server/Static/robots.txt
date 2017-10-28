@@ -1,1 +1,1 @@
-Sitemap: http://www.golery.com/sitemap.txt
+Sitemap: https://www.golery.com/sitemap.txt

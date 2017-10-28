@@ -15,7 +15,7 @@ import {MAX_UPLOAD_FILE_SIZE} from "./Api/ApiFile";
 
 const ENV = process.env.NODE_ENV || 'development';
 const IS_PRODUCTION = ENV === 'production';
-const EXPRESS_PORT = 3001;
+const EXPRESS_PORT = 443;
 const MONGO_URL = process.env.MONGOLAB_URI || 'mongodb://mongo/mean-dev';
 const WEBAPP_PATH = '/';
 
@@ -61,11 +61,15 @@ function startServer() {
 
         let sslOptions = {
             key: fs.readFileSync('/data/ssl-certs/key.pem'),
-            cert: fs.readFileSync('/data/ssl-certs/fullchain.pem')
+            cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
         };
 
-        https.createServer(sslOptions, app).listen(EXPRESS_PORT, function () {
-            console.log('Access at http://localhost:3001');
+        app.listen(8080, function () {
+            console.log('Access at http://localhost:8080');
+        });
+
+        https.createServer(sslOptions, app).listen(8443, function () {
+            console.log('Access at http://localhost:8443');
         });
     });
 }
