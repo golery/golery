@@ -65,7 +65,7 @@ class PasteHtmlProcessor {
     }
 
     _createAnchorTag(url) {
-        let fullUrl;
+        let fullUrl = url;
         if (url.indexOf('www') === 0) {
             fullUrl = 'http://' + url;
         }
