@@ -183,13 +183,12 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <NodeView node={this.state.editingNode}/>
+            return <div onDoubleClick={e=>this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
         }
         if (this.state.editor === EDITOR_HTML) {
-            return <NodeEditor node={this.state.editingNode} listeners={{
-                onChangeNodeName: (node) => this._onChangeNodeName(node)
-            }}
-            ref={ref=>this._nodeEditor = ref}/>
+            return <NodeEditor node={this.state.editingNode}
+                               listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
+                               ref={ref => this._nodeEditor = ref}/>
         }
     }
 
@@ -228,7 +227,7 @@ export default class PencilPage extends React.Component {
 
         // immediately add node then save later
         let node = new Node("TEMP" + this._uuidv4(), null);
-        node.html="<ol><li/></ol>";
+        node.html = "<ol><li/></ol>";
         this.treeModel.addChild(parentNode, node);
         let nodeView = this.treeView.newNodeAsChildren(node, parentNodeView);
         this._onShowEditView();
