@@ -67,6 +67,9 @@
 @media only screen and (min-device-width: 480px) {
   .treeToolbarHolder {
     display: block;
+    position: fixed;
+    bottom: 0;
+    height: 2rem;
   }
 
   .editorHolder {
@@ -83,8 +86,8 @@
   .treeViewHolder {
     border-top: none;
     top: 0;
-    left: 0;
-    bottom: 0;
+    left: 0.4rem;
+    bottom: 2rem;
     width: 300px;
   }
 

@@ -122,15 +122,15 @@ export default class PencilPage extends React.Component {
 
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder}>
-            <div className={styles.treeToolbarHolder}>
-                <Toolbar commands={this.toolbarCommands} themeLight={true}/>
-            </div>
             <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
                         renderThumbVertical={this._renderThumbVertical}
                         renderThumbHorizontal={this._renderThumbHorizontal}>
                 <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
                           ref={(treeView) => this.treeView = treeView}/>
             </Scrollbars>
+            <div className={styles.treeToolbarHolder}>
+                <Toolbar commands={this.toolbarCommands} themeLight={true}/>
+            </div>
             <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/>
             </div>
         </div>;
@@ -183,7 +183,7 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <div onDoubleClick={e=>this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
+            return <div onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
         }
         if (this.state.editor === EDITOR_HTML) {
             return <NodeEditor node={this.state.editingNode}
