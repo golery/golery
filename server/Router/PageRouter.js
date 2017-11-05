@@ -24,7 +24,8 @@ export default function (router) {
     router.use('/pencil', pencil);
 
     let index = new Router();
-    index.get('/', mainPage);
+    index.get('/', pencilLandingPage);
+    index.get('/landing', mainPage);
     index.get('/sitemap.txt', siteMapPage);
     index.get('/app', mainPage);
     index.get('/goevent', goEventPage);

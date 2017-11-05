@@ -10,6 +10,7 @@ function minChunk(module) {
 }
 
 module.exports = function (minify, output) {
+    let root = process.cwd();
     // in dev-mode: use random number
     let outputFilename = minify ? '[name].[chunkhash].js' : '[name].js';
     let cssFilename = minify ? '[name].[contenthash].css' : '[name].css';
@@ -30,18 +31,19 @@ module.exports = function (minify, output) {
     ];
 
     let pluginList = minify ? [new CleanWebpackPlugin(['.'], {
-        root: process.cwd() + output,
+        root: root + output + '/client',
         verbose: true
     })] : [];
 
     let plugins = pluginList.concat(
-            corePlugins,
-            [new AssetManifestPlugin({output: '../../../server/Pages/Generated/webpack.manifest.json'}), new webpack.NoEmitOnErrorsPlugin()]);
+        corePlugins,
+        [new AssetManifestPlugin({output: root + output + '/server/Pages/Generated/webpack.manifest.json'}),
+            new webpack.NoEmitOnErrorsPlugin()]);
 
     let config = {
         name: "***CLIENT SIDE WEBPACK***",
         output: {
-            path: process.cwd() + output,
+            path: process.cwd() + output + '/client',
             /* [hash]: hash for all module. [chunkhash]: hash for each module */
             filename: outputFilename,
         },

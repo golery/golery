@@ -1,57 +1,61 @@
-const root = process.cwd();
+module.exports = function (minify, output) {
+    const root = process.cwd();
 
-let localIdentName = '[name]__[local]___[hash:base64:5]';
-let serverConfig = {
-    name: "***SERVER SIDE WEBPACK***",
-    output: {
-        path: root,
-        filename: './server/Pages/Generated/Components.generated.js',
-        // Library export module compatible with server nodejs
-        libraryTarget: 'commonjs2'
-    },
-    entry: {
-        app: './server/Pages/Components.js'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader'
-            },
-            {
-                test: /\.css$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        // /locals is for server-side (https://github.com/dferber90/fake-style-loader/issues/3)
-                        loader: 'css-loader/locals',
-                        options: {
-                            modules: true,
-                            localIdentName: localIdentName,
-                            importLoaders: 1
+    let localIdentName = '[name]__[local]___[hash:base64:5]';
+    let serverConfig = {
+        name: "***SERVER SIDE WEBPACK***",
+        output: {
+            path: root + output,
+            filename: './server/Pages/Generated/Components.generated.js',
+            // Library export module compatible with server nodejs
+            libraryTarget: 'commonjs2'
+        },
+        entry: {
+            app: './server/Pages/Components.js'
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    loader: 'babel-loader'
+                },
+                {
+                    test: /\.css$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            // /locals is for server-side (https://github.com/dferber90/fake-style-loader/issues/3)
+                            loader: 'css-loader/locals',
+                            options: {
+                                modules: true,
+                                localIdentName: localIdentName,
+                                importLoaders: 1
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader'
+                            /* configuration (ex: list of plugins) is in file postcss.config.js */
                         }
-                    },
-                    {
-                        loader: 'postcss-loader'
-                        /* configuration (ex: list of plugins) is in file postcss.config.js */
-                    }
-                ]
-            },
-            {
-                test: /\.(jpe?g|png|gif|svg|otf)$/i,
-                use: [
-                    {loader: 'file-loader',
-                    options: {
-                        emitFile: false
-                    }}
-                ]
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
-};
+                    ]
+                },
+                {
+                    test: /\.(jpe?g|png|gif|svg|otf)$/i,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                emitFile: false
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        resolve: {
+            extensions: ['.js', '.jsx']
+        },
+    };
 
-module.exports = serverConfig;
+    return serverConfig;
+};
