@@ -9,21 +9,16 @@
     display: inline-block;
     line-height: 25px;
     vertical-align: middle;
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: no-repeat center center;
     background-size: 18px 18px;
     text-align: center;
     width: 25px;
     border-radius: 2px;
     margin-right: 4px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
 }
 
 .button:hover {
-    border: 1px solid #dcdcdc;
-    color: darkgrey;
+    color: black;
 }
 
 .themeLight .button {
@@ -31,5 +26,5 @@
 }
 
 .themeLight .button:hover {
-    color: darkgrey;
+    color: black;
 }

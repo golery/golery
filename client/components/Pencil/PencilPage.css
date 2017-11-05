@@ -70,6 +70,8 @@
     position: fixed;
     bottom: 0;
     height: 2rem;
+    line-height: 2rem;
+    vertical-align: middle;
   }
 
   .editorHolder {
