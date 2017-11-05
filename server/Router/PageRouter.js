@@ -18,7 +18,7 @@ export default function (router) {
     let pencil = new Router();
     pencil.use(passport.session());
     pencil.get('/', pencilServerPage);
-    pencil.get('/landing', (req, res) => { pencilLandingPage(req, res)});
+    pencil.get('/landing', pencilLandingPage);
     pencil.get('/:nodeId', pencilServerPage);
     pencil.get('/:nodeId/:rootId', pencilServerPage);
     router.use('/pencil', pencil);

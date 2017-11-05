@@ -5,6 +5,7 @@ import nodeService from "../Api/Node/NodeService";
 function getStatic() {
     let s = "";
     s += "http://www.golery.com" + "\n";
+    s += "http://www.golery.com/landing" + "\n";
     s += "http://www.golery.com/pencil" + "\n";
     s += "http://www.golery.com/goevent" + "\n";
     s += "http://www.golery.com/unix-timestamp-converter" + "\n";
