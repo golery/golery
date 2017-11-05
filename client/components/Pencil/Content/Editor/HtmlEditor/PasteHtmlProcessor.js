@@ -67,13 +67,27 @@ class PasteHtmlProcessor {
     _createAnchorTag(url) {
         let fullUrl = url;
         if (url.indexOf('www') === 0) {
-            fullUrl = 'http://' + url;
+            fullUrl = 'https://' + url;
         }
+
+        let youtubeId = this._detectYoutubeLink(url);
+        if (youtubeId) {
+            let elm = document.createElement('div');
+            elm.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${youtubeId}" frameborder="0" allowfullscreen/>`;
+            return elm.firstChild;
+        }
+
         let elm = document.createElement('a');
         elm.setAttribute('target', '_blank');
         elm.setAttribute('href', fullUrl);
         elm.innerText = url;
         return elm;
+    }
+
+    _detectYoutubeLink(url) {
+        let match = /https:\/\/www.youtube.com\/watch\?v=([a-zA-Z0-9]*)/.exec(url);
+        if (match && match[1]) return match[1];
+        return null;
     }
 
     /** Clean up the paste html and convert it to DOM node */
@@ -93,72 +107,6 @@ class PasteHtmlProcessor {
         }
         return elm;
     }
-
-    /*_cleanDom(elm) {
-        let textContent = elm.textContent;
-
-        if (elm.tagName === 'BR') {
-            // br is exceptional case when text content is empty
-            return document.createElement('br');
-        }
-
-        if (!textContent || !textContent.trim()) {
-            // don't clone empty elements
-            return null;
-        }
-
-        let clone = this._cloneElement(elm);
-        let childNodes = elm.childNodes;
-        if (childNodes && childNodes.length > 0) {
-            for (let child of childNodes) {
-                if (child.nodeType === 3) {
-                    // text node
-                    clone.appendChild(document.createTextNode(child.nodeValue));
-                } else if (child.nodeType === 1) {
-                    // element
-                    let cloneChild = this._cleanDom(child);
-                    if (cloneChild) {
-                        clone.appendChild(cloneChild);
-                    }
-                }
-                // don't clone comment node
-            }
-        }
-
-        if (!clone.childNodes || clone.childNodes.length === 0) return null;
-        return clone;
-    }
-
-    _cloneElement(elm) {
-        let tagName = this._mapTagName(elm.tagName);
-        let clone = document.createElement(tagName);
-        if (tagName === 'A') {
-            // copy the href for <a>
-            let href = elm.getAttribute('href');
-            if (href) {
-                clone.setAttribute('href', href);
-            }
-        }
-        return clone;
-    }
-
-    _mapTagName(tagName) {
-        let tag = tagName;
-
-        for (let key in ELEMENT_MAP) {
-            let value = ELEMENT_MAP[key];
-            if (value.indexOf(tag) >= 0) {
-                tag = key;
-            }
-        }
-
-        if (SUPPORTED_TAGS.indexOf(tag) >= 0) {
-            return tagName;
-        }
-
-        console.log('Unrecognized tag', tag);
-        return null;
-    }*/
 }
 
 export default new PasteHtmlProcessor();
