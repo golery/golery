@@ -76,6 +76,7 @@ export default class HtmlEditor extends React.Component {
         let {html} = this.props;
         this.hasContent = !!html;
         html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
+        console.log('render');
 
         // the div.editor contains default style for text. We cannot set directly to div.contentEditable, becaseu
         // it will generate custom attribute for innerHtml
@@ -274,18 +275,27 @@ export default class HtmlEditor extends React.Component {
     }
 
     _onFocus() {
+        console.log('Focus editor');
         if (!this.hasContent) {
             this.elmEdit.innerHTML = '';
             this.elmEdit.classList.remove(styles.emptyMinimize);
+
+            // on mobile, we lose the cursor when chaning innerHtml.
+            // Thus, we recreate it
+            let range = document.createRange();
+            range.selectNodeContents(this.elmEdit);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
         }
     }
 
     _onBlur(e) {
-        if (!this.hasContent) {
-            this.elmEdit.innerHTML = this.placeHolder;
-            this.elmEdit.classList.add(styles.emptyMinimize);
-        }
-        this._setToolbarVisibility(false);
+        // if (!this.hasContent) {
+        //     this.elmEdit.innerHTML = this.placeHolder;
+        //     this.elmEdit.classList.add(styles.emptyMinimize);
+        // }
+        // this._setToolbarVisibility(false);
     }
 
     _setToolbarVisibility(visible) {
