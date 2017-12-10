@@ -47,6 +47,7 @@ export default class NodeEditor extends React.Component {
                 <ShareEditor node={this.props.node}/>
                 <button>Insert</button>
             </div>
+            <div className={styles.toolbarHolder}>Toolbar</div>
         </div>;
     }
 

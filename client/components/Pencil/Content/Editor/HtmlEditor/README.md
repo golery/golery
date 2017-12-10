@@ -14,3 +14,6 @@ This editor is supposed to be shared. So no pencil / node related code in this c
     - Auto detect link on paste
     - Clean html
     
+
+#REFERENCE EDITOR LIBRARY
+1. https://draftjs.org/

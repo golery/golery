@@ -72,8 +72,6 @@ export default class PencilPage extends React.Component {
         // ref to treeView element
         this.treeView = null;
 
-        this.saveNodeScheduler = new DelayTaskScheduler();
-
         this._load(rootId);
 
         this.onSelect = this.onSelect.bind(this);
@@ -239,11 +237,6 @@ export default class PencilPage extends React.Component {
             console.log("Replace nodeId ", node._id, " by ", newId);
             this.treeModel.updateNodeId(node, parentNode, newId);
             nodeView.changeNodeId(newId);
-
-            // if user edited the node then force save node
-            if (node.html) {
-                this.onUpdateEditor(node, node.html);
-            }
         });
     }
 
