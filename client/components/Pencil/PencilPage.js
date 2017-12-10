@@ -149,7 +149,7 @@ export default class PencilPage extends React.Component {
                                 listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
                                 ref={ref => this._nodeEditor = ref}/>,
                 <div className={styles.doneEditButton}
-                     onClick={() => this._closeEditor()}>DONE</div>
+                     onClick={() => this._closeEditor()}>CLOSE</div>
             ]
         }
     }
