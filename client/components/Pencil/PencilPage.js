@@ -61,6 +61,7 @@ export default class PencilPage extends React.Component {
 
         this.state = {
             nodes: null,
+            // view or edit
             contentMode: CONTENT_MODE_VIEW,
             editingId: nodeId,
             editor: EDITOR_HTML,
@@ -104,8 +105,10 @@ export default class PencilPage extends React.Component {
             // only show loading if there is no initial nodeId
             return <LoadingPage/>;
         }
+        let styleEditing = '';
+        if (this.state.contentMode === CONTENT_MODE_EDIT) styleEditing = styles.editing;
 
-        return <div className={styles.component}>
+        return <div className={[styles.component, styleEditing].join(' ')}>
             {this._buildTreeElm()}
             <div className={styles.editorHolder}>
                 {this._buildContentElm()}
@@ -132,6 +135,27 @@ export default class PencilPage extends React.Component {
             <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/>
             </div>
         </div>;
+    }
+
+
+    _buildContentElm() {
+        if (!this.state.editingNode) return;
+
+        if (this.state.contentMode === CONTENT_MODE_VIEW) {
+            return <div onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
+        }
+        if (this.state.editor === EDITOR_HTML) {
+            return [<NodeEditor node={this.state.editingNode}
+                                listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
+                                ref={ref => this._nodeEditor = ref}/>,
+                <div className={styles.doneEditButton}
+                     onClick={() => this._closeEditor()}>DONE</div>
+            ]
+        }
+    }
+
+    _closeEditor() {
+        this.setState({contentMode: CONTENT_MODE_VIEW});
     }
 
     _buildTreeCollapseElm() {
@@ -174,20 +198,6 @@ export default class PencilPage extends React.Component {
 
     _onShowContentView() {
         this.setState({contentMode: CONTENT_MODE_VIEW});
-    }
-
-
-    _buildContentElm() {
-        if (!this.state.editingNode) return;
-
-        if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <div onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
-        }
-        if (this.state.editor === EDITOR_HTML) {
-            return <NodeEditor node={this.state.editingNode}
-                               listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
-                               ref={ref => this._nodeEditor = ref}/>
-        }
     }
 
     _load(rootId) {
