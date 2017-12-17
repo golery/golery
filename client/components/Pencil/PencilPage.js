@@ -113,7 +113,7 @@ export default class PencilPage extends React.Component {
 
         return <div className={[styles.component, styleEditing].join(' ')}>
             {this._buildTreeElm()}
-            <div className={styles.editorHolder}>
+            <div className={styles.contentPane}>
                 {this._buildContentElm()}
             </div>
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
@@ -145,7 +145,7 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <div onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
+            return <div className={styles.nodeViewHolder} onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
         }
         if (this.state.editor === EDITOR_HTML) {
             return [<NodeEditor node={this.state.editingNode}

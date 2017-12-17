@@ -32,20 +32,24 @@ export default class NodeEditor extends React.Component {
         let {node} = this.props;
 
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            <HtmlEditor html={node.title}
-                        placeHolder="<page-title>"
-                        contentEditableClassName="nodeTitle"
-                        toolbar={TITLE_EDITOR_TOOLBAR_COMMANDS}
-                        onChange={html => this._onChangeTitle(html)}
-            />
-            <HtmlEditor html={node.html}
-                        contentEditableClassName="nodeHtml"
-                        onChange={html => this._onChangeNodeHtml(html)}
-                        ref={ref=> {this.elmNodeHtml = ref}}
-            />
-            <div className={styles.shareEditorHolder}>
-                <ShareEditor node={this.props.node}/>
-                <button>Insert</button>
+            <div className={styles.contentHolder}>
+                <HtmlEditor html={node.title}
+                            placeHolder="<page-title>"
+                            contentEditableClassName="nodeTitle"
+                            toolbar={TITLE_EDITOR_TOOLBAR_COMMANDS}
+                            onChange={html => this._onChangeTitle(html)}
+                />
+                <HtmlEditor html={node.html}
+                            contentEditableClassName="nodeHtml"
+                            onChange={html => this._onChangeNodeHtml(html)}
+                            ref={ref => {
+                                this.elmNodeHtml = ref
+                            }}
+                />
+                <div className={styles.shareEditorHolder}>
+                    <ShareEditor node={this.props.node}/>
+                    <button>Insert</button>
+                </div>
             </div>
             <div className={styles.toolbarHolder}>Toolbar</div>
         </div>;
