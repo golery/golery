@@ -20,8 +20,11 @@ export default class DragDropPlugin {
     }
 
     onMouseDown(e) {
-        this._startX = e.pageX;
-        this._startY = e.pageY;
+        // only drag and drop with left mouse button
+        if (e.button === 0) {
+            this._startX = e.pageX;
+            this._startY = e.pageY;
+        }
     }
 
     onMouseMove(e) {

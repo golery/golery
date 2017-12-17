@@ -18,6 +18,7 @@ import LoadingPage from "./LoadingPage";
 import SyncTracker from "./SyncTracker";
 import NodeView from "./Content/View/NodeView";
 import ShortcutHandler from "./ShortcutHandler";
+import ContextMenuView from "./ContextMenuView";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -66,8 +67,10 @@ export default class PencilPage extends React.Component {
             editingId: nodeId,
             editor: EDITOR_HTML,
             editingNode: initialNode || null,
-            showTree: initialNode === null
+            showTree: initialNode === null,
         };
+
+        this.contextMenuView = null;
         this.treeModel = null;
 
         // ref to treeView element
@@ -113,6 +116,7 @@ export default class PencilPage extends React.Component {
             <div className={styles.editorHolder}>
                 {this._buildContentElm()}
             </div>
+            <ContextMenuView ref={(view) => this.contextMenuView = view}/>
         </div>;
     }
 
@@ -122,7 +126,7 @@ export default class PencilPage extends React.Component {
 
 
         let listeners = {onSelect: this.onSelect};
-        return <div className={styles.treeViewHolder}>
+        return <div className={styles.treeViewHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
             <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
                         renderThumbVertical={this._renderThumbVertical}
                         renderThumbHorizontal={this._renderThumbHorizontal}>
@@ -132,8 +136,7 @@ export default class PencilPage extends React.Component {
             <div className={styles.treeToolbarHolder}>
                 <Toolbar commands={this.toolbarCommands} themeLight={true}/>
             </div>
-            <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/>
-            </div>
+            <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div>
         </div>;
     }
 
@@ -279,5 +282,23 @@ export default class PencilPage extends React.Component {
 
     _onChangeNodeName(node) {
         this.treeView.updateText(node);
+    }
+
+    _onContextMenuOnTree(e) {
+        this.contextMenuView.show(e.clientX, e.clientY, [{
+            name: 'Add',
+            action: () => this._onAddNode()
+        }, {
+            name: 'Remove',
+            action: () => this._onDeleteNode()
+        }, {
+            name: 'Edit',
+            action: () => this._onShowEditView()
+        }, {
+            name: 'Play',
+            action: () => this._onPlay()
+        }]);
+        e.stopPropagation();
+        e.preventDefault();
     }
 }
