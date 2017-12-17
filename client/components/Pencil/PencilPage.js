@@ -133,8 +133,8 @@ export default class PencilPage extends React.Component {
                 <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
                           ref={(treeView) => this.treeView = treeView}/>
             </Scrollbars>
-            <div className={styles.treeToolbarHolder}>
-                <Toolbar commands={this.toolbarCommands} themeLight={true}/>
+            <div className={styles.treeToolTipHolder}>
+                Right click on tree or Double click to edit
             </div>
             <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div>
         </div>;
