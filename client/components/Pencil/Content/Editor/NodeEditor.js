@@ -8,6 +8,8 @@ import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
 
+import ModalDialog from '../../../Core/Dialog/ModalDialog';
+
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
 const TITLE_EDITOR_TOOLBAR_COMMANDS = ['bold', 'underline', 'italic'];
@@ -46,12 +48,10 @@ export default class NodeEditor extends React.Component {
                                 this.elmNodeHtml = ref
                             }}
                 />
-                <div className={styles.shareEditorHolder}>
-                    <ShareEditor node={this.props.node}/>
-                    <button>Insert</button>
-                </div>
             </div>
-            <div className={styles.toolbarHolder}>Toolbar</div>
+            <div className={styles.toolbarHolder}>
+                    <div className={styles.toolbarButton} onClick={()=>this._onClickShare()}>Share</div>
+            </div>
         </div>;
     }
 
@@ -85,6 +85,11 @@ export default class NodeEditor extends React.Component {
 
     focus() {
         this.elmNodeHtml.focus();
+    }
+
+    _onClickShare() {
+        let modal = new ModalDialog();
+        modal.show(<div><ShareEditor node={this.props.node}/></div>);
     }
 }
 

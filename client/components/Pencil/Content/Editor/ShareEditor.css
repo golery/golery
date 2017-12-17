@@ -1,12 +1,21 @@
 .component {
-  & > div {
-    margin-bottom: 1rem;
-  }
+  margin-right: 3rem;
+
   & button {
     margin-right: 2rem;
   }
 }
 
+.title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
 .linkHolder {
-  margin-left: 2rem;
+  margin-top: 1rem;
+}
+
+.bottomButtonsHolder {
+  margin-top: 1rem;
 }

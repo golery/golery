@@ -10,34 +10,33 @@ export default class ShareEditor extends React.Component {
 
         const {node} = this.props;
         const access = node.access || 0;
-        this.state = {expand: false, access: access};
+        this.state = {access: access};
         this.shareUrl = this._buildShareUrl(props.node._id);
     }
 
     render() {
-        if (!this.state.expand) {
-            return <button onClick={() => this._toggleShareEditor()}>Visibility</button>;
-        }
-
         const {node} = this.props;
         const {access} = this.state;
 
         let elmLink = access > 0 ?
-            <a href={this.shareUrl} target="_blank">{this.shareUrl}</a> : [];
+            <span>"Your article is public at" <a href={this.shareUrl} target="_blank">{this.shareUrl}</a></span> :
+            <span>"Nobody (except you) can access content of article"</span>;
 
         let elmSaveButtons = access === node.access || (access === 0 && !node.access) ? [] :
-            <div>
+            <div className={styles.bottomButtonsHolder}>
                 <button onClick={() => this._onSave()}>Save</button>
-                <button onClick={() => this._toggleShareEditor()}>Cancel</button>
             </div>;
         return <div className={styles.component}>
+            <div className={styles.title}>
+                CONTENT VISIBILITY
+            </div>
             <div>
                 <select value={this.state.access} onChange={(e) => this.setState({access: parseInt(e.target.value)})}>
                     <option value="0">Private</option>
                     <option value="1">Public</option>
                 </select>
-                <span className={styles.linkHolder}>{elmLink}</span>
             </div>
+            <div className={styles.linkHolder}>{elmLink}</div>
             {elmSaveButtons}
         </div>;
     }
@@ -50,10 +49,6 @@ export default class ShareEditor extends React.Component {
             node.access = access;
             this.forceUpdate();
         });
-    }
-
-    _toggleShareEditor() {
-        this.setState({expand: !this.state.expand});
     }
 
     _buildShareUrl(nodeId) {

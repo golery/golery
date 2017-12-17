@@ -4,10 +4,6 @@
   }
 }
 
-.shareEditorHolder {
-  margin-top: 2rem;
-}
-
 .toolbarHolder {
   display: none;
 }
@@ -17,6 +13,7 @@
   padding-bottom: 1rem;
 }
 
+
 @media only screen and (min-device-width: 480px) {
   .toolbarHolder {
     display: block;
@@ -25,8 +22,18 @@
     right: 0;
     bottom: 0;
     height: 2rem;
-    border-top: 1px solid gray;
-    background-color: green;
+    padding: 0.1rem;
+  }
+  .toolbarButton {
+    line-height: 1.8rem;
+    height: 1.8rem;
+    border: 1px solid gray;
+    border-radius: 2px;
+    display: inline-block;
+    padding: 0 0.5rem;
+  }
+  .toolbarButton:hover {
+    background-color: lightgray;
   }
   .contentHolder {
     padding-bottom: 1rem;
