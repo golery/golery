@@ -14,6 +14,7 @@ class ApiAuth {
 
     _login(req, res, next) {
         // 'local': use LocalStrategy
+        // Ref. http://www.passportjs.org/docs/authenticate/ (section Custom Callback)
         passport.authenticate('local', function (err, user, info) {
             if (err || !user) {
                 console.log('Login fail', err, user, info);
@@ -23,6 +24,7 @@ class ApiAuth {
                 user.password = undefined;
                 user.salt = undefined;
 
+                // req.login() is provided by Passport to store user to session
                 req.login(user, function (err) {
                     if (err) {
                         res.status(400).send(err);
@@ -52,7 +54,14 @@ class ApiAuth {
             return;
         }
         let promise = new User({username: email, email: email, password: password, provider: 'local'}).save().then(user => {
-            console.log(user);
+            // req.login() is provided by Passport to store user to session
+            req.login(user, function (err) {
+                if (err) {
+                    res.status(400).send(err);
+                } else {
+                    res.json(user);
+                }
+            });
         });
         Rest.json(req, res, promise);
     }

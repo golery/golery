@@ -7,8 +7,8 @@ import nodeService from "../Api/Node/NodeService";
 
 function getPageOptions() {
     return {
-        title: 'Pencil - Best tree note',
-        metaKeywords: 'Pencil Take note in tree',
+        title: 'Pencil - Best hierarchical note taking',
+        metaKeywords: 'Hierarchical note taking Tree note',
         metaDescription: 'The best notes in tree. Distract free writing tool',
         openGraph: {
             'og:image': 'https://i.imgur.com/SZhyyFb.png'
@@ -39,6 +39,7 @@ export default function (req, res) {
     let {rootId, nodeId} = req.params;
 
     if (!nodeId) {
+        console.log("User in req.user=", req.user);
         if (req.user) {
             renderPage(req, res, null);
         } else {

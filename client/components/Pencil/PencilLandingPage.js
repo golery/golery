@@ -55,16 +55,20 @@ export default class PencilLandingPage extends React.Component {
             </form>
             <div><img src={"/" + imgSeparator}/></div>
             <div>
-                <div className={styles.sectionHeader}>Distract free writing mode</div>
-                It's only you and the text. No distraction. Keep focus on writing.
+                <div className={styles.sectionHeader}>Hierarchical note taking</div>
+                Organize your ideas into a tree. Easy and intuitive drag & drop to organize your knowledge tree.
             </div>
             <div>
-                <div className={styles.sectionHeader}>Organize your ideas</div>
-                Write your ideas down. Keep it in structure with tree, tags.
+                <div className={styles.sectionHeader}>Visualize your ideas with images and youtube</div>
+                Easily insert image and youtube video just by Ctrl-C, Ctrl-V.
             </div>
             <div>
-                <div className={styles.sectionHeader}>Take notes in class</div>
-                Good tools to keep note in your classes every day.
+                <div className={styles.sectionHeader}>Simplistic design</div>
+                Distract free writing tool with the most simplistic design.
+            </div>
+            <div>
+                <div className={styles.sectionHeader}>Tool for take notes in class</div>
+                Looking for a tool to take notes in class. This is your perfect accompany tool !
             </div>
             <div className={styles.copyright}>
                 Copyrigh (C) Golery.com. All right reserved
