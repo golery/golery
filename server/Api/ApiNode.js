@@ -170,7 +170,7 @@ class ApiNode {
         let update = {
             name: body.name,
             title: body.title,
-            html: body.html,
+            html: sanitizedHtml,
             updateDate: Date.now()
         };
         let nodeId = body._id;
