@@ -6,37 +6,6 @@ import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
 
-function configGetUser(apiSecure) {
-    apiSecure.use(passport.session());
-    // enforce user
-    apiSecure.use(function (req, res, next) {
-        if (!req.user) {
-            res.status(401).send('401 - User not found. /www2/api/secure is protected');
-        } else {
-            next();
-        }
-    });
-}
-
-// All requess are accesible via /api/secure/... are secured (required authentication)
-function _buildApiSecureRouter() {
-    let route = new Router();
-    configGetUser(route);
-
-    ApiNode.setupRoute(route);
-    ApiFile.setupRoute(route);
-
-    return route;
-}
-
-// All requess are accesible via /api/public/... are secured (required authentication)
-function _buildApiPublicRouter() {
-    let route = new Router();
-    ApiGoEvent.setupRoute(route);
-    ApiAuth.setupRoute(route);
-    return route;
-}
-
 function buildApiRouter() {
     let apiRouter = new Router();
 
@@ -56,6 +25,38 @@ function buildApiRouter() {
     });
 
     return apiRouter;
+}
+
+function configGetUser(apiSecure) {
+    apiSecure.use(passport.session());
+    // enforce user
+    apiSecure.use(function (req, res, next) {
+        if (!req.user) {
+            res.status(401).send('401 - User not found. /www2/api/secure is protected');
+        } else {
+            next();
+        }
+    });
+}
+
+// All requess are accesible via /api/secure/... are secured (required authentication)
+function _buildApiSecureRouter() {
+    let route = new Router();
+    configGetUser(route);
+
+    ApiNode.setupRoute(route);
+    ApiFile.setupRoute(route);
+    ApiAuth.setupSecureRoute(route);
+
+    return route;
+}
+
+// All requess are accesible via /api/public/... are secured (required authentication)
+function _buildApiPublicRouter() {
+    let route = new Router();
+    ApiGoEvent.setupRoute(route);
+    ApiAuth.setupPublicRoute(route);
+    return route;
 }
 
 export default function (router) {

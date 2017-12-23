@@ -6,10 +6,14 @@ import passport from "passport";
 const SPECIAL_USER = "hly";
 
 class ApiAuth {
-    setupRoute(route) {
+    setupPublicRoute(route) {
         route.post('/login', this._login);
         route.post('/signup',
             (req, res) => this._createAccount(req, res, req.body.email, req.body.password, req.body.confirmPassword));
+    }
+    setupSecureRoute(route) {
+        route.post('/logout',
+            (req, res) => this._logout(req, res));
     }
 
     _login(req, res, next) {
@@ -75,6 +79,11 @@ class ApiAuth {
         if (email === SPECIAL_USER) return true;
 
         return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+    }
+
+    _logout(req, res) {
+        req.logout();
+        res.json("Logout");
     }
 }
 export default new ApiAuth();

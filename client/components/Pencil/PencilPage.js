@@ -3,6 +3,7 @@ import styles from "./PencilPage.css";
 
 import React from "react";
 import {Scrollbars} from 'react-custom-scrollbars';
+import Axios from "axios";
 
 import NodeRepo from "../../services/NodeRepo";
 import NodeEditor from "./Content/Editor/NodeEditor";
@@ -19,6 +20,7 @@ import SyncTracker from "./SyncTracker";
 import NodeView from "./Content/View/NodeView";
 import ShortcutHandler from "./ShortcutHandler";
 import ContextMenuView from "./ContextMenuView";
+import AppMenu from "./AppMenu";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -117,6 +119,7 @@ export default class PencilPage extends React.Component {
                 {this._buildContentElm()}
             </div>
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
+            <AppMenu onLogout={()=>this._onLogout()}/>
         </div>;
     }
 
@@ -300,5 +303,13 @@ export default class PencilPage extends React.Component {
         }]);
         e.stopPropagation();
         e.preventDefault();
+    }
+
+    _onLogout() {
+        Axios.post("/api/secure/logout").then(function () {
+            location.reload();
+        }).catch(error => {
+            alert('Fail to logout');
+        });
     }
 }
