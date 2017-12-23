@@ -11,7 +11,6 @@ import TreeView from "../Tree/TreeView";
 import TreeModel from "../Tree/TreeModel";
 import TreeViewModel from "../Tree/TreeViewModel";
 import HeadLineParser from "./HeadLineParser";
-import DelayTaskScheduler from "./DelayTaskScheduler";
 import Toolbar from "./Toolbar";
 import TreeActionButtons from "./TreeActionButtons";
 import Action from "./Action";
@@ -115,11 +114,9 @@ export default class PencilPage extends React.Component {
 
         return <div className={[styles.component, styleEditing].join(' ')}>
             {this._buildTreeElm()}
-            <div className={styles.contentPane}>
-                {this._buildContentElm()}
-            </div>
+            {this._buildContentElm()}
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
-            <AppMenu onLogout={()=>this._onLogout()}/>
+            <AppMenu onLogout={() => this._onLogout()}/>
         </div>;
     }
 
@@ -148,15 +145,21 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <div className={styles.nodeViewHolder} onDoubleClick={e => this._onShowEditView()}><NodeView node={this.state.editingNode}/></div>;
+            return <div className={styles.contentPane}>
+                <div className={styles.nodeViewHolder} onDoubleClick={e => this._onShowEditView()}><NodeView
+                    node={this.state.editingNode}/></div>
+            </div>;
         }
+
         if (this.state.editor === EDITOR_HTML) {
-            return [<NodeEditor node={this.state.editingNode}
-                                listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
-                                ref={ref => this._nodeEditor = ref}/>,
+            return <div className={styles.contentPane}>
+                <NodeEditor node={this.state.editingNode}
+                                    listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
+                                    ref={ref => this._nodeEditor = ref}/>,
                 <div className={styles.doneEditButton}
-                     onClick={() => this._closeEditor()}>CLOSE</div>
-            ]
+                     onClick={() => this._closeEditor()}>CLOSE
+                </div>
+            </div>;
         }
     }
 
@@ -229,31 +232,31 @@ export default class PencilPage extends React.Component {
         this.setState({editingNode: node, contentMode: CONTENT_MODE_VIEW});
     }
 
-    _onAddNode() {
-        let parentNode = this.treeViewModel.selectedNode;
-        let parentNodeView = this.treeViewModel.selectedNodeView;
-        if (!parentNode || !parentNodeView) return;
-        let parentId = this.treeModel.getId(parentNode);
-        if (!parentId) {
-            console.log("Parent is saving. Cannot add");
-            return;
-        }
+    _onAddNode(asNextSibling) {
+        if (!this.treeViewModel.selectedNode) return;
 
-        // immediately add node then save later
-        let node = new Node("TEMP" + this._uuidv4(), null);
-        node.html = "<ol><li/></ol>";
-        this.treeModel.addChild(parentNode, node);
-        let nodeView = this.treeView.newNodeAsChildren(node, parentNodeView);
+        let newNode = this._createNewEmptyNode();
+
+        let {parentNode, position, nodeView} = asNextSibling ?
+            this.treeView.addNewNodeAsNextSiblings(newNode) :
+            this.treeView.addNewNodeAsChildren(newNode);
+
         this._onShowEditView();
 
         // save async
-        NodeRepo.create(this.treeModel.getId(parentNode)).then(newNode => {
+        NodeRepo.create(parentNode._id, position).then(createdNode => {
+            let newId = createdNode._id;
             console.log("Create new node successfully at server side ", newId);
-            let newId = newNode._id;
-            console.log("Replace nodeId ", node._id, " by ", newId);
-            this.treeModel.updateNodeId(node, parentNode, newId);
+            console.log("Replace nodeId ", newNode._id, " by ", newId);
+            this.treeModel.updateNodeId(newNode, parentNode, newId);
             nodeView.changeNodeId(newId);
         });
+    }
+
+    _createNewEmptyNode() {
+        let node = new Node("TEMP" + this._uuidv4(), null);
+        node.html = "<ol><li/></ol>";
+        return node;
     }
 
     _onDeleteNode() {
@@ -290,7 +293,10 @@ export default class PencilPage extends React.Component {
     _onContextMenuOnTree(e) {
         this.contextMenuView.show(e.clientX, e.clientY, [{
             name: 'Add',
-            action: () => this._onAddNode()
+            action: () => this._onAddNode(false)
+        }, {
+            name: 'Add below',
+            action: () => this._onAddNode(true)
         }, {
             name: 'Remove',
             action: () => this._onDeleteNode()

@@ -39,8 +39,8 @@ export default function (req, res) {
     let {rootId, nodeId} = req.params;
 
     if (!nodeId) {
-        console.log("User in req.user=", req.user);
         if (req.user) {
+            console.log("User in req.user=", req.user._id);
             renderPage(req, res, null);
         } else {
             pencilLandingPage(req, res);

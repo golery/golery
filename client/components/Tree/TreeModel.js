@@ -80,15 +80,15 @@ export default class TreeModel {
         return node.children;
     }
 
-    addChild(parent, child) {
-        let childId = child._id;
+    addChild(parent, newNode, position) {
+        let newNodeId = newNode._id;
         if (!parent.children) {
-            parent.children = [childId];
+            parent.children = [newNodeId];
         } else {
-            parent.children.unshift(childId);
+            parent.children.splice(position, position, newNodeId);
         }
-        this.map[childId] = child;
-        this._parentMap[childId] = parent._id;
+        this.map[newNodeId] = newNode;
+        this._parentMap[newNodeId] = parent._id;
     }
 
     findById(id) {

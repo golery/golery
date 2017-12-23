@@ -30,12 +30,44 @@ export default class TreeView extends React.Component {
         return !selectedNode ? null : selectedNode._id;
     }
 
-    newNodeAsChildren(newChildNode, parentNodeView) {
-        let newNodeView = this._createTreeNodeView(newChildNode);
-        this._renderNodeView(newNodeView, newChildNode);
-        parentNodeView.addFirstChild(newNodeView);
-        this.nodeSelectionPlugin.selectNode(newChildNode);
-        return newNodeView;
+    addNewNodeAsChildren(newNode) {
+        let {selectedNode} = this.treeViewModel;
+        if (!selectedNode) return;
+
+        return this._addChild(selectedNode, newNode, 0);
+    }
+
+    addNewNodeAsNextSiblings(newNode) {
+        let {selectedNode} = this.treeViewModel;
+        if (!selectedNode) return;
+
+        let parent = this.treeModel.getParentNode(selectedNode._id);
+        if (!parent) {
+            console.log("Parent node not found");
+            return;
+        }
+
+        let index = parent.children.indexOf(selectedNode._id);
+        const position = index + 1;
+
+        return this._addChild(parent, newNode, position);
+    }
+
+    _addChild(parentNode, newNode, position) {
+        // first update model
+        this.treeModel.addChild(parentNode, newNode, position);
+
+        // create node view
+        let newNodeView = this._createTreeNodeView(newNode);
+        this._renderNodeView(newNodeView, newNode);
+
+        // update parent node view
+        let parentNodeView = TreeNodeView.findByNodeId(parentNode._id);
+        parentNodeView.addChildAtPosition(newNodeView, position);
+
+        // update selected node
+        this.nodeSelectionPlugin.selectNode(newNode);
+        return {parentNode, position, nodeView: newNodeView};
     }
 
     deleteSelectedNode() {

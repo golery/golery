@@ -102,12 +102,16 @@ export default class TreeNodeView {
     }
 
     addFirstChild(childNodeView) {
+        this.addChildAtPosition(childNodeView, 0);
+    }
+
+    addChildAtPosition(childNodeView, position) {
         let elmChildrenList = this._getChildrenListElement();
         let elmChild = childNodeView._element;
-        if (elmChildrenList.children.length === 0) {
+        if (elmChildrenList.children.length <= position) {
             elmChildrenList.appendChild(elmChild);
         } else {
-            elmChildrenList.insertBefore(elmChild, elmChildrenList.childNodes[0]);
+            elmChildrenList.insertBefore(elmChild, elmChildrenList.childNodes[position]);
         }
     }
 

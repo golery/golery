@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import sanitizeHtml from 'sanitize-html';
+
 mongoose.Promise = Promise;
 
 import NodeModel from "../Models/NodeModel";
@@ -41,7 +42,7 @@ class ApiNode {
 
         route.put('/node/move/:nodeId/:parentId/:position',
             (req, res) => this._moveNode(req, res, req.user.id, req.params.nodeId, req.params.parentId, req.params.position));
-        route.post('/node/:parentId', this._createNode.bind(this));
+        route.post('/node/:parentId', (req, res) => this._createNode(req, res, req.user.id, req.params.parentId, req.query.position));
         route.get('/node', (req, res) => this._findNodes(req, res, req.user.id));
         route.delete('/node/:nodeId', this._deleteNode.bind(this));
         route.put('/node', this._updateNode.bind(this));
@@ -57,14 +58,14 @@ class ApiNode {
         let p1 = NodeModel.count({
             deleted: {$ne: true}
         }).then(c => {
-            return { nodeCount: c};
+            return {nodeCount: c};
         });
 
         let p2 = NodeModel.find({
             deleted: {$ne: true},
             access: 1
         }, ['_id', 'name']).then(nodes => {
-            return { publicNodes: nodes};
+            return {publicNodes: nodes};
         });
 
         let all = Promise.all([p1, p2]).then(values => {
@@ -83,9 +84,8 @@ class ApiNode {
         }));
     }
 
-    _createNode(req, res) {
-        let userId = this.getUserId(req);
-        let parentId = req.params.parentId;
+    _createNode(req, res, userId, parentId, position) {
+        console.log(">>> START. create node, parent=", parentId, ",position=", position);
         let parent = null;
         let result = null;
         let promise = NodeModel.findById(parentId).then(function (o) {
@@ -99,13 +99,15 @@ class ApiNode {
             parent = o;
             return new NodeModel({user: userId, html: ''}).save();
         }).then(function (newNode) {
-            console.log("CREATED node", newNode);
+            console.log("CREATED node", newNode._id);
             result = newNode;
-            parent.children.unshift(newNode._id);
+            if (!position) {
+                position = 0;
+            }
+            parent.children.splice(position, 0, newNode._id);
+            console.log('Children', parent.children);
             return parent.save();
         }).then(function (o) {
-            console.log("UPDATED children list", o);
-            console.log("DONE.");
             return result;
         });
 
@@ -174,7 +176,7 @@ class ApiNode {
             updateDate: Date.now()
         };
         let nodeId = body._id;
-        console.log('UPDATE node ' + nodeId, update);
+        console.log('START:UPDATE node ' + nodeId, update);
         let promise = NodeModel.findByIdAndUpdate(nodeId, {
             $set: update
         }, {
