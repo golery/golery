@@ -34,7 +34,7 @@
 3. Preset users
    - 000000000000000000000000:  admin (password same as hly): sample data
    - 000000000000000000000001:  hly
-   - 000000000000000000000002:  golery: publish article to attract traffics)
+   - 000000000000000000000002:  golery: publish article to attract traffics
    - 000000000000000000000003:  test: user
    Create special userID:
    doc = db.users.findOne({_id: ObjectId("000000000000000000000001")})
