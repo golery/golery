@@ -1,19 +1,12 @@
 import React from "react";
 import styles from "./LandingPage.css";
-
-class AppLauncher extends React.Component {
-    render() {
-        return <div className={styles.appHolder}>
-            <a className={`${styles.appIcon} ${this.props.style}`} href={this.props.href}/>
-            <div className={styles.appName}>{this.props.name}</div>
-            <div className={styles.appDescription}>{this.props.desc}</div>
-        </div>;
-    }
-}
+import imgPencilLanding from "./images/pencil-landing.png";
+import imgPencilLandingMobile from "./images/pencil-landing-mobile.png";
 
 class AppDetail extends React.Component {
     render() {
         return <div className={styles.appDetail}>
+            <div className={styles.appTextHeadMobile}><a href={this.props.href}>{this.props.title}</a></div>
             <div className={styles.colLeft}>
                 <div className={styles.imageScreenshotHolder}>
                     <div className={styles.gradientHolder}>
@@ -24,7 +17,7 @@ class AppDetail extends React.Component {
             </div>
             <div className={styles.colRight}>
                 <div className={styles.appDetailTextBlock}>
-                    <div className={styles.appTextHead}><a href={this.props.href}>{this.props.title}</a></div>
+                    <div className={styles.appTextHeadDesktop}><a href={this.props.href}>{this.props.title}</a></div>
                     <div className={styles.appTextBody}>
                         {this.props.children}
                     </div>
@@ -35,34 +28,37 @@ class AppDetail extends React.Component {
 }
 
 export default class LandingPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            openOtherAppDetails: false
+        };
+    }
+
     render() {
+        let {openOtherAppDetails} = this.state;
+
+        let elmOtherAppDetail = openOtherAppDetails ? this.getOpenAppDetails() :
+            <div><a href="#" onClick={() => this._openOtherAppDetails()}>Other apps</a></div>;
         return <div className={styles.component}>
-            <div className={styles.goleryHolder}>
-                <div className={styles.golery}>GOLERY</div>
+            <div className={styles.pencilLandingBanner}>
+                <a href="/pencil">
+                    <picture>
+                        <source media='(min-width: 480px)'
+                                srcSet={imgPencilLanding}/>
+                        <source media='(max-width: 480px)'
+                                srcSet={imgPencilLandingMobile}/>
+                        <img src={imgPencilLanding}/>
+                    </picture>
+                </a>
             </div>
-            {/*<div><Link to={{pathname: `/login`}}>Login</Link></div>*/}
-            {/*<div><a href="api/session">Session</a></div>*/}
-            <div className={styles.appList}>
-                <AppLauncher style={styles.pencilIcon} href="#/pencil/" name="PENCIL"
-                             desc="Save your knowledge in tree"/>
-                <AppLauncher style={styles.checkbookIcon} href="/goevent" name="GOEVENT"
-                             desc="Schedule events"/>
-            </div>
-            <div className={styles.appList}>
-                <AppLauncher style={styles.menuIcon} href="#/shop/menu/" name="MENU"
-                             desc="Resto menu"/>
-                <AppLauncher style={styles.tryHtmlIcon} href="/tryhtml/" name="PUBLISH HTML"
-                             desc="Publish a HTML snippet"/>
-                <AppLauncher style={styles.tryHtmlIcon} href="#/app/counter" name="COUNTER"
-                             desc="Click to count"/>
-            </div>
+            {elmOtherAppDetail}
+            <div className={styles.pageFooter}>Copyright © 2017 - 2017 Golery™ — All rights reserved</div>
+        </div>;
+    }
 
-            <AppDetail image="https://i.imgur.com/rID4P7q.png" title="Pencil" href="/pencil">
-                Write down your ideas !<br/>
-                Take note in your class. <br/>
-                Keep track of your knowledge in tree structure <br/>
-            </AppDetail>
-
+    getOpenAppDetails() {
+        return <div>
             <AppDetail image="https://i.imgur.com/DSNxUFG.jpg" title="Go Event" href="/goevent">
                 You're going to have a party soon ! <br/>
                 Have a list of options to ask your friend to vote for. <br/>
@@ -83,9 +79,11 @@ export default class LandingPage extends React.Component {
             <AppDetail image="https://i.imgur.com/XCU4jXn.png" title="CountIt" href="#/app/counter">
                 Count anything.
             </AppDetail>
-
-            <div className={styles.pageFooter}>Copyright © 2017 - 2017 Golery™ — All rights reserved</div>
         </div>;
+    }
+
+    _openOtherAppDetails() {
+        this.setState({openOtherAppDetails: !this.state.openOtherAppDetails});
     }
 }
 

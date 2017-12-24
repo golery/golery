@@ -1,66 +1,22 @@
 .component {
-  margin: 1rem;
-}
-
-.goleryHolder {
-  text-align: center;
-}
-
-.golery {
-  background-size: auto;
-  display: inline-block;
-  font-size: 5rem;
-  color: #882C00;
-  font-family: 'Anton', sans-serif;
-}
-
-@media only screen
-and (max-device-width: 667px) {
-  .golery {
-    width: 90%;
-    height: 3rem;
-  }
-}
-
-.appList {
-  text-align: center;
-}
-
-.appHolder {
-  display: inline-block;
-  background-color: whitesmoke;
-  margin: 1rem;
-  border: 1px solid white;
-  border-radius: 0.5rem;
   padding: 1rem;
-  text-align: left;
+  text-align: center;
 }
 
-.appName {
-  margin-top: 1.5rem;
-  font-weight: bold;
-  font-size: 2rem;
+.pencilLandingBanner {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
 }
+.pencilLandingBanner img {
+  max-width: 100%;
+  height: auto;
 
-.appDescription {
-  margin-top: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
 }
-
-.appIcon {
-  display: inline-block;
-  background-color: white;
-  width: 15rem;
-  height: 15rem;
-  border-radius: 0.2rem;
-}
-
-.appHolder:hover {
-  border: 1px solid lightsteelblue;
-}
-
-.pencilIcon {
-  background-image: url("./images/pencil.fca1.svg");
-  background-size: 15rem 15rem;
+.pencilLandingBanner:hover img {
+  box-shadow: 0px 0px 20px rgba(33,33,33,.9);
+  transition: box-shadow .1s;
 }
 
 .checkbookIcon {
@@ -97,24 +53,25 @@ and (max-device-width: 667px) {
     max-width: 20rem;
 }
 
+.appTextHeadDesktop {
+  display: none;
+}
+
+.appTextHeadMobile {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
 .appDetail {
-  margin-top: 5rem;
-  position: relative;
-  text-align: center;
+  border-top: 1px solid lightgray;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
   & .colLeft {
-    vertical-align: middle;
-    width: 50%;
-    display: inline-block;
-    position: relative;
-    text-align: right;
+    display: block;
   }
   & .colRight {
-    vertical-align: middle;
-    width: 50%;
-    display: inline-block;
-    position: relative;
+    display: block;
     text-align: left;
-    padding-left: 3rem;
   }
 }
 
@@ -124,7 +81,7 @@ and (max-device-width: 667px) {
 }
 
 .gradientHolder {
-  padding: 2rem;
+  padding: 2rem 0 1rem;
 }
 
 .imageScreenshotGradient {
@@ -141,10 +98,6 @@ and (max-device-width: 667px) {
   max-width: 30rem;
 }
 
-.appTextHead {
-  font-family: 'SourceSansPro', sans-serif;
-  font-size: 3rem;
-}
 
 .appTextBody {
   margin-top: 1rem;
@@ -157,4 +110,38 @@ and (max-device-width: 667px) {
   font-weight: 400;
   color: #505050;
   margin: 5rem 0 2rem;
+}
+
+@media only screen and (min-device-width: 480px) {
+  .appTextHeadDesktop {
+    font-family: 'SourceSansPro', sans-serif;
+    font-size: 1.5rem;
+    display: block;
+  }
+
+  .appTextHeadMobile {
+    display: none;
+  }
+
+  .appDetail {
+    border-top: none;
+    padding: 0;
+    margin-top: 5rem;
+    position: relative;
+    text-align: center;
+    & .colLeft {
+      vertical-align: middle;
+      width: 50%;
+      display: inline-block;
+      position: relative;
+      text-align: right;
+    }
+    & .colRight {
+      vertical-align: middle;
+      width: 50%;
+      display: inline-block;
+      position: relative;
+      padding-left: 3rem;
+    }
+  }
 }
