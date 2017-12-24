@@ -38,7 +38,7 @@ export default class LandingPage extends React.Component {
     render() {
         let {openOtherAppDetails} = this.state;
 
-        let elmOtherAppDetail = openOtherAppDetails ? this.getOpenAppDetails() :
+        let elmOtherAppDetail = openOtherAppDetails ? this.getOtherAppDetails() :
             <div><a href="#" onClick={() => this._openOtherAppDetails()}>Other apps</a></div>;
         return <div className={styles.component}>
             <div className={styles.pencilLandingBanner}>
@@ -52,13 +52,14 @@ export default class LandingPage extends React.Component {
                     </picture>
                 </a>
             </div>
+            <div className={styles.startPencilLinkHolder}><a href="/pencil">Start Pencil Notes app</a></div>
             {elmOtherAppDetail}
             <div className={styles.pageFooter}>Copyright © 2017 - 2017 Golery™ — All rights reserved</div>
         </div>;
     }
 
-    getOpenAppDetails() {
-        return <div>
+    getOtherAppDetails() {
+        return <div className={styles.otherAppDetailHolder}>
             <AppDetail image="https://i.imgur.com/DSNxUFG.jpg" title="Go Event" href="/goevent">
                 You're going to have a party soon ! <br/>
                 Have a list of options to ask your friend to vote for. <br/>
