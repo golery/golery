@@ -22,17 +22,18 @@ export default class PencilLandingPage extends React.Component {
 
     render() {
         return <div className={styles.component}>
-            <div><img src={"/" + imgPencilTitle}/></div>
+            <div className={styles.pencilTitleImageHolder}><img src={"/" + imgPencilTitle}/></div>
             <div className={styles.captureIdeaHolder}><img src={"/" + imgCaptureYourIdeas}/></div>
-            <div><img src={"/" + imgSeparator}/></div>
             <form className={styles.form}>
                 <div className={styles.inputHolder}>
-                    <div><img className={styles.imgName} src={"/" + imgName}/>
+                    <div>
+                        <div className={styles.inputLabel}><img className={styles.imgName} src={"/" + imgName}/></div>
                         <input className={styles.input} type="email"
                                value={this.state.email}
                                onChange={(e) => this.setState({email: e.target.value})}/>
                     </div>
-                    <div className={styles.passwordHolder}><img className={styles.imgPassword} src={"/" + imgPassword}/>
+                    <div className={styles.passwordHolder}>
+                        <div className={styles.inputLabel}><img className={styles.imgPassword} src={"/" + imgPassword}/></div>
                         <input className={styles.input} type="password"
                                value={this.state.password}
                                onChange={(e) => this.setState({password: e.target.value})}/>
@@ -53,7 +54,7 @@ export default class PencilLandingPage extends React.Component {
                             onClick={(e) => this._onSignUp(e)}>{this.state.inputMode === MODE_SIGNUP ? "CREATE NEW ACCOUNT" : "SIGN UP"}</button>
                 </div>
             </form>
-            <div><img src={"/" + imgSeparator}/></div>
+            <div><img className={styles.separator} src={"/" + imgSeparator}/></div>
             <div>
                 <div className={styles.sectionHeader}>Hierarchical note taking</div>
                 Organize your ideas into a tree. Easy and intuitive drag & drop to organize your knowledge tree.
@@ -71,7 +72,7 @@ export default class PencilLandingPage extends React.Component {
                 Looking for a tool to take notes in class. This is your perfect accompany tool !
             </div>
             <div className={styles.copyright}>
-                Copyrigh (C) Golery.com. All right reserved
+                Copyright © 2017 - 2017 Golery™. All rights reserved. Contact: <a href="mailto:golery.team@gmail.com">golery.team@gmail.com</a>
             </div>
         </div>;
     }

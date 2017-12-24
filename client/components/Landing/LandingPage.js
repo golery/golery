@@ -54,7 +54,9 @@ export default class LandingPage extends React.Component {
             </div>
             <div className={styles.startPencilLinkHolder}><a href="/pencil">Start Pencil Notes app</a></div>
             {elmOtherAppDetail}
-            <div className={styles.pageFooter}>Copyright © 2017 - 2017 Golery™ — All rights reserved</div>
+            <div className={styles.pageFooter}>
+                Copyright © 2017 - 2017 Golery™. All rights reserved. Contact: <a href="mailto:golery.team@gmail.com">golery.team@gmail.com</a>
+            </div>
         </div>;
     }
 
