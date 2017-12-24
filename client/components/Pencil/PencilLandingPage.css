@@ -92,9 +92,10 @@
 
 .message {
   color: #333;
-  margin-top: 2rem;
-  margin-bottom: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   font-style: italic;
+  color: orangered;
 }
 
 .sectionHeader {
@@ -114,6 +115,11 @@
   margin-bottom: 3rem;
 }
 
+.acceptTermsConditions {
+  font-style: italic;
+  color: grey;
+  margin-top: 2rem;
+}
 @media only screen and (min-device-width: 480px) {
   .component {
     padding-top: 5rem;
@@ -148,6 +154,7 @@
     padding: 0;
     max-width: 30rem;
     display: inline-block;
+    text-align: center;
   }
 
   .separator {

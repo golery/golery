@@ -13,12 +13,13 @@ export default class AppMenu extends React.Component {
 
     render() {
         let {openMenu} = this.state;
-        let {onLogout} = this.props;
+        let {onLogout, onShowTerms} = this.props;
 
         let menu;
         if (openMenu) {
             menu = <div className={styles.menu1}>
                 <div className={styles.menuItem} onClick={onLogout}>Logout</div>
+                <div className={styles.menuItem} onClick={onShowTerms}>Terms</div>
             </div>;
         } else {
             menu = [];

@@ -1,0 +1,8 @@
+.component {
+    width: 75vw;
+    max-height: 85vw;
+    overflow-y: auto;
+  & p {
+    margin: 1rem 0;
+  }
+}

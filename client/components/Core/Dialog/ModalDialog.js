@@ -55,7 +55,7 @@ class ModalComponent extends React.Component {
  </pre>
  * */
 export default class ModalDialog {
-    constructor(dialogInner) {
+    constructor() {
         this._resolveHandler = null;
         this._rejectHandler = null;
         this._elm = null;

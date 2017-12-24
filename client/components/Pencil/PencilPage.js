@@ -19,7 +19,9 @@ import SyncTracker from "./SyncTracker";
 import NodeView from "./Content/View/NodeView";
 import ShortcutHandler from "./ShortcutHandler";
 import ContextMenuView from "./ContextMenuView";
+import TermsView from "./TermsView";
 import AppMenu from "./AppMenu";
+import ModalDialog from "../Core/Dialog/ModalDialog";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -116,7 +118,7 @@ export default class PencilPage extends React.Component {
             {this._buildTreeElm()}
             {this._buildContentElm()}
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
-            <AppMenu onLogout={() => this._onLogout()}/>
+            <AppMenu onLogout={() => this._onLogout()} onShowTerms={()=>this._onShowTerms()}/>
         </div>;
     }
 
@@ -317,5 +319,9 @@ export default class PencilPage extends React.Component {
         }).catch(error => {
             alert('Fail to logout');
         });
+    }
+
+    _onShowTerms() {
+        new ModalDialog().show(<TermsView/>);
     }
 }

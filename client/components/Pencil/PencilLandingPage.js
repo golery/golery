@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Axios from "axios";
+
 import styles from './PencilLandingPage.css';
 import imgPencilTitle from './Assets/Landing/pencil-title-landing.png';
 import imgCaptureYourIdeas from './Assets/Landing/capture-your-ideas.png';
@@ -8,7 +10,8 @@ import imgSeparator from './Assets/Landing/separator.png';
 import imgName from './Assets/Landing/name.png';
 import imgPassword from './Assets/Landing/password.png';
 import imgPasswordAgain from './Assets/Landing/password-again.png';
-import Axios from "axios";
+import ModalDialog from '../Core/Dialog/ModalDialog';
+import TermsView from './TermsView';
 
 const MODE_LOGIN = "LOGIN";
 const MODE_SIGNUP = "SIGNUP";
@@ -33,17 +36,24 @@ export default class PencilLandingPage extends React.Component {
                                onChange={(e) => this.setState({email: e.target.value})}/>
                     </div>
                     <div className={styles.passwordHolder}>
-                        <div className={styles.inputLabel}><img className={styles.imgPassword} src={"/" + imgPassword}/></div>
+                        <div className={styles.inputLabel}><img className={styles.imgPassword} src={"/" + imgPassword}/>
+                        </div>
                         <input className={styles.input} type="password"
                                value={this.state.password}
                                onChange={(e) => this.setState({password: e.target.value})}/>
                     </div>
                     {this.state.inputMode === MODE_SIGNUP ?
-                        <div className={styles.passwordAgainHolder}><img className={styles.imgPasswordAgain}
-                                                                         src={"/" + imgPasswordAgain}/>
-                            <input className={styles.input} type="password"
-                                   value={this.state.confirmPassword}
-                                   onChange={(e) => this.setState({confirmPassword: e.target.value})}/>
+                        <div>
+                            <div className={styles.passwordAgainHolder}><img className={styles.imgPasswordAgain}
+                                                                             src={"/" + imgPasswordAgain}/>
+                                <input className={styles.input} type="password"
+                                       value={this.state.confirmPassword}
+                                       onChange={(e) => this.setState({confirmPassword: e.target.value})}/>
+                            </div>
+                            <div className={styles.acceptTermsConditions}>
+                                By signing up, I accept all <a href="#" onClick={() => this._onShowTermConditions()}>
+                                    Terms and services (TOS)</a>.
+                            </div>
                         </div>
                         : []}
                     <div className={styles.message}>{this.state.message}</div>
@@ -117,6 +127,10 @@ export default class PencilLandingPage extends React.Component {
             }
             this.setState({message: message});
         });
+    }
+
+    _onShowTermConditions() {
+        new ModalDialog().show(<TermsView/>);
     }
 }
 
