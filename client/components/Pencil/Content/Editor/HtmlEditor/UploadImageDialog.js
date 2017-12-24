@@ -46,11 +46,14 @@ export default class UploadImageDialog extends React.Component {
                 <div>
                     <div className={styles.button} onClick={this._onClickUploadImgur}><i
                         className="fa fa-cloud-upload"/>
-                        &nbsp; Upload to Imugr
+                        &nbsp; Upload to Imugr.com**
                     </div>
                     <div className={styles.button} onClick={this._onClickUploadGolery}><i
                         className="fa fa-cloud-upload"/>
-                        &nbsp; Upload to Golery
+                        &nbsp; Upload to Golery.com
+                    </div>
+                    <div className={styles.igmurWarning}>**Imgur.com is free public image hosting. Even if your note content
+                        is set to private access, image are still accessible from public.
                     </div>
                     <div>
                         <input className={styles.resizeSlider} type="range" value={this.state.resizePercent}

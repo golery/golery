@@ -16,6 +16,10 @@
     color: green
 }
 
+.igmurWarning {
+    color: #bf0000;
+    max-width: 600px;
+}
 .button {
     display: inline-block;
     font-size: 14px;
