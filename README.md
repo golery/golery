@@ -1,5 +1,8 @@
 # GOLERY
-A free hierarchy note online
+A free hierarchy note online.
+
+The service is available online at [https://www.golery.com/pencil]. 
+
 
 ## Technology stack
 1. Front:
@@ -16,5 +19,16 @@ A free hierarchy note online
     - Docker
     - Aws ECS
 
-## Development guides
+## Dockers for development architecture
+During developments, building and running at local are in side containers.
+![Docker architecture](docs/dev-architecture.png)
+
+There are 2 contains 
+- Mongo DB docker container
+- Dev docker container
+
+## Development guides (more)
 [Link](docs/README.md)
+
+## License
+[Link](LICENSE.txt)
