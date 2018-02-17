@@ -17,4 +17,4 @@ A free hierarchy note online
     - Aws ECS
 
 ## Development guides
-[Link](docs/develop.md)
+[Link](docs/README.md)
