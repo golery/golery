@@ -3,6 +3,7 @@
 ## Dockers for development architecture
 During developments, building and running at local are in side containers.
 ![Docker architecture](dev-architecture.png)
+
 There are 2 contains 
 - Mongo DB docker container
 - Dev docker container
