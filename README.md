@@ -1,4 +1,4 @@
-#BUILD
+# BUILD
 1. In 
    - build/dev : contains file that are build for dev
    - build/release: contains file that are built for release.
@@ -14,7 +14,7 @@
    - yarn run server.nodemon - Run server code in build/dev/server
    - yarn run client.watch - Build client (client-renderning + server render) to build/dev
   
-#AMAZON investigation and manual restart
+# AMAZON investigation and manual restart
 1. ssh to EC2 instance
 2. free -m : show memories
 3. docker exec -it containerId bash
@@ -22,7 +22,7 @@
    cd /softwares/GS/www
    node server/server.js
    
-#MONGO DB
+# MONGO DB
 1. mongolab.
 2. Connection for admin
    cat /work/www.credentials/env.sh
