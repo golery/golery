@@ -1,4 +1,13 @@
-# BUILD
+# Develop guidelines
+
+## Dockers for development architecture
+During developments, building and running at local are in side containers.
+![Docker architecture](dev-architecture.png)
+There are 2 contains 
+- Mongo DB docker container
+- Dev docker container
+			
+## BUILD
 1. In 
    - build/dev : contains file that are build for dev
    - build/release: contains file that are built for release.
@@ -14,7 +23,7 @@
    - yarn run server.nodemon - Run server code in build/dev/server
    - yarn run client.watch - Build client (client-renderning + server render) to build/dev
   
-# AMAZON investigation and manual restart
+## AMAZON investigation and manual restart
 1. ssh to EC2 instance
 2. free -m : show memories
 3. docker exec -it containerId bash
@@ -22,7 +31,7 @@
    cd /softwares/GS/www
    node server/server.js
    
-# MONGO DB
+## MONGO DB
 1. mongolab.
 2. Connection for admin
    cat /work/www.credentials/env.sh
@@ -40,22 +49,9 @@
    doc = db.users.findOne({_id: ObjectId("000000000000000000000001")})
    doc._id = ObjectId("000000000000000000000000");
    db.users.insert(doc);
-# Note
+## Note
 - Diagram in this folder can be edit with https://www.draw.io (open .png file directly)
-# Dev
-1. Docker architecture
-   ![Docker architecture](dev-architecture.png)
-2. Links
-	- http://localhost:3001/goevent
-3. Run
-	+ cd /work/provision/docker/mongo
-		- ???
-	+ cd /work/provision/docker/dev
-		- ./run.sh
-		- ./attach.sh
-			- yarn run webpack
-			- yarn run server
-# Renew certificate
+## Renew certificate
 - Login to amazon ecs
 - docker exec -it container
 - /softwares/golery/acme/cron-renew.sh
