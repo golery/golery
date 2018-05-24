@@ -8,6 +8,7 @@ import UnixTimePage from './components/Tools/UnixTime/UnixTimePage';
 import JsonFormatterPage from './components/Tools/JsonFormatter/JsonFormatterPage';
 import PencilPage from './components/Pencil/PencilPage';
 import PencilLandingPage from './components/Pencil/PencilLandingPage';
+import MenuPage from './components/Menu/MenuPage';
 import Polyfill from './services/Polyfill';
 
 const MAIN_COMPONENTS = {
@@ -16,7 +17,8 @@ const MAIN_COMPONENTS = {
     MainRouter: MainRouter,
     UnixTimePage: <UnixTimePage/>,
     JsonFormatterPage: <JsonFormatterPage/>,
-    PencilLandingPage: <PencilLandingPage/>
+    PencilLandingPage: <PencilLandingPage/>,
+    MenuPage: <MenuPage/>
 };
 
 // This global method is called to populate correct react component to page

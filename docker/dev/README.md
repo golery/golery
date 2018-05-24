@@ -32,7 +32,7 @@ yarn run client.watch
 - 2nd console:
 ```
 ./attach.sh
-yarn run server.pm2
+yarn run server.watch
 ```
 
 - 3rd console:
