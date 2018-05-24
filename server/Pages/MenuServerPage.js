@@ -6,9 +6,9 @@ import {MenuPage} from "./Generated/Components.generated";
 
 function getPageOptions() {
     return {
-        title: 'Pencil - Best hierarchical note taking',
-        metaKeywords: 'Hierarchical note taking Tree note',
-        metaDescription: 'The best notes in tree. Distract free writing tool',
+        title: 'eMenu - Quick menu',
+        metaKeywords: 'Quick menu eMenu Digital menu',
+        metaDescription: 'Best eMenu for restaurant',
         openGraph: {
             'og:image': 'https://i.imgur.com/SZhyyFb.png'
         }

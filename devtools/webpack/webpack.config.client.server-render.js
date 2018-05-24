@@ -21,7 +21,7 @@ module.exports = function (minify, output) {
                     loader: 'babel-loader'
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.css|\.scss$/,
                     exclude: /node_modules/,
                     use: [
                         {
