@@ -9,6 +9,7 @@ import JsonFormatterPage from './components/Tools/JsonFormatter/JsonFormatterPag
 import PencilPage from './components/Pencil/PencilPage';
 import PencilLandingPage from './components/Pencil/PencilLandingPage';
 import MenuPage from './components/Menu/MenuPage';
+import PomodoroPage from './components/Pomodoro/PomodoroPage';
 import Polyfill from './services/Polyfill';
 
 const MAIN_COMPONENTS = {
@@ -18,7 +19,8 @@ const MAIN_COMPONENTS = {
     UnixTimePage: <UnixTimePage/>,
     JsonFormatterPage: <JsonFormatterPage/>,
     PencilLandingPage: <PencilLandingPage/>,
-    MenuPage: <MenuPage/>
+    MenuPage: <MenuPage/>,
+    PomodoroPage: <PomodoroPage/>
 };
 
 // This global method is called to populate correct react component to page

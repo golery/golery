@@ -6,6 +6,7 @@ import jsonFormatterPage from "../Pages/JsonFormatterPage";
 import siteMapPage from "../Pages/SiteMapPage";
 import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
 import menuServerPage from "../Pages/MenuServerPage";
+import pomodoroPage from "../Pages/PomodoroPage";
 import passport from "passport";
 
 /* TO ADD A NEW PAGE
@@ -36,5 +37,6 @@ export default function (router) {
     index.get('/goevent', goEventPage);
     index.get('/unix-timestamp-converter', unixTimePage);
     index.get('/json-formatter', jsonFormatterPage);
+    index.get('/pomodoro', pomodoroPage);
     router.use('/', index);
 }

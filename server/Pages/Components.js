@@ -5,5 +5,6 @@ import JsonFormatterPage from '../../client/components/Tools/JsonFormatter/JsonF
 import PencilPage from '../../client/components/Pencil/PencilPage';
 import PencilLandingPage from '../../client/components/Pencil/PencilLandingPage';
 import MenuPage from '../../client/components/Menu/MenuPage';
+import PomodoroPage from '../../client/components/Pomodoro/PomodoroPage';
 
-export {GoGoPage, UnixTimePage, JsonFormatterPage, PencilPage, PencilLandingPage, MenuPage};
+export {GoGoPage, UnixTimePage, JsonFormatterPage, PencilPage, PencilLandingPage, MenuPage, PomodoroPage};
