@@ -10,6 +10,7 @@ function getStatic() {
     s += "http://www.golery.com/goevent" + "\n";
     s += "http://www.golery.com/unix-timestamp-converter" + "\n";
     s += "http://www.golery.com/json-formatter" + "\n";
+    s += "http://www.golery.com/pomodoro" + "\n";
     return s;
 }
 
