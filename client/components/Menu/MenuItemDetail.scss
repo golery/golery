@@ -1,0 +1,88 @@
+.component {
+}
+
+.headerImage {
+  width: 100%;
+}
+
+.name {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.holder {
+  margin: 1rem;
+}
+
+.description {
+  color: gray;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.button {
+  background-color: cadetblue;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+.button:hover {
+  background-color: #007DBC;
+}
+
+.addOnPrice {
+  display: inline-block;
+  float: right;
+}
+
+.addOnHolder {
+  margin: 1.2rem;
+}
+
+.addOnName {
+  display: inline-block;
+}
+
+.addOnGroupName {
+  margin-top: 2rem;
+}
+
+.inputSpecialInstruction {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.circle {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+
+  border: 1px solid darkgrey;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 3rem;
+
+  font-size: 2rem;
+}
+
+.addRemoveHolder {
+  vertical-align: middle;
+  height: 3rem  ;
+  line-height: 3rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.quantity {
+  height: 3rem;
+  line-height: 3rem;
+  vertical-align: middle;
+  display: inline-block;
+  font-weight: bold;
+  padding: 0 1rem;
+}

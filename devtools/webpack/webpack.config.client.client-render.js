@@ -58,7 +58,7 @@ module.exports = function (minify, output) {
                     loader: "babel-loader"
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.css|\.scss$/,
                     exclude: /node_modules/,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
@@ -80,7 +80,7 @@ module.exports = function (minify, output) {
                     })
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.css|\.scss$/,
                     include: /node_modules/,
                     use: [
                         {loader: 'style-loader'},

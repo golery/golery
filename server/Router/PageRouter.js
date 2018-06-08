@@ -5,6 +5,7 @@ import unixTimePage from "../Pages/UnixTimePage";
 import jsonFormatterPage from "../Pages/JsonFormatterPage";
 import siteMapPage from "../Pages/SiteMapPage";
 import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
+import menuServerPage from "../Pages/MenuServerPage";
 import passport from "passport";
 
 /* TO ADD A NEW PAGE
@@ -22,6 +23,10 @@ export default function (router) {
     pencil.get('/:nodeId', pencilServerPage);
     pencil.get('/:nodeId/:rootId', pencilServerPage);
     router.use('/pencil', pencil);
+
+    let menu = new Router();
+    menu.get('/', menuServerPage);
+    router.use('/menu', menu);
 
     let index = new Router();
     index.get('/', mainPage);

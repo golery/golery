@@ -5,7 +5,7 @@ EXPOSE 8080 8443
 # Start
 #ADD scripts /scripts
 ADD ssl-certs-staging /data/ssl-certs
-WORKDIR /work/www
+WORKDIR /work/golery
 RUN pwd
 CMD bash
 
