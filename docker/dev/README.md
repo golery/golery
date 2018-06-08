@@ -3,6 +3,7 @@ Docker Dev provides an environment for building and running project
 
 #HOW TO START ?
 ##Build
+In /work/golery/docker/dev/dev
 ```
 ./build.sh
 ./create-networks.sh
