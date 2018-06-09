@@ -13,5 +13,5 @@ RUN ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 #install json parser for mep.sh script
 RUN apt-get install jq -y
 
-WORKDIR /work/www/docker/mep/deploy
+WORKDIR /work/golery/docker/mep/deploy
 CMD ./mep.sh

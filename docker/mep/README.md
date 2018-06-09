@@ -1,5 +1,15 @@
-This image is used for building and deploy www to amazon.
-It does not contains any credentials (the docker account, aws account are mounted from local (see. run.sh))
-To deploy, just run:
+This image builds and deploys www module to amazon ECS
 
+#To build and deploy
+(Just one time) ./build-image.sh
+(Just one time on host machine) sudo docker login
 ./run-image.sh
+
+#To investigate build issue
+./build-image.sh
+./run-image.sh bash
+Inside container, run step by steps command in mep.sh
+
+#To investigate run container issue
+docker run -it -p 8080:8080 greensuisse/www ./start-server.sh
+Access http://localhost:8080 

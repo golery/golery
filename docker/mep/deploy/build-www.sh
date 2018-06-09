@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd /work/www
+cd /work/golery
 yarn run build
 cd -
 

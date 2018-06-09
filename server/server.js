@@ -59,18 +59,22 @@ function startServer() {
         configExpressMiddleware(app, mongoose.connection.db);
         configExpressRouter(app);
 
-        let sslOptions = {
-            key: fs.readFileSync('/data/ssl-certs/key.pem'),
-            cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
-        };
-
         app.listen(8080, function () {
             console.log('Access at http://localhost:8080');
         });
 
-        https.createServer(sslOptions, app).listen(8443, function () {
-            console.log('Access at http://localhost:8443');
-        });
+        try {
+            let sslOptions = {
+                key: fs.readFileSync('/data/ssl-certs/key.pem'),
+                cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
+            };
+
+            https.createServer(sslOptions, app).listen(8443, function () {
+                console.log('Access at http://localhost:8443');
+            });
+        } catch (e) {
+            console.error('Fail to load ssl certs in /data/ssl-certs', e);
+        }
     });
 }
 

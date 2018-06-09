@@ -8,15 +8,6 @@ const LOCAL_STORAGE_KEY = "STATE";
 const STOPPED = 'STOPPED';
 const RUNNING = 'RUNNING';
 
-class Settings {
-    constructor() {
-        this.mode = STOPPED;
-        this.startTime = null;
-        this.maxSeconds = 25 * 60;
-        this.inputMinutes = 25;
-    }
-}
-
 export default class PomodoroPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30,14 +21,12 @@ export default class PomodoroPage extends React.Component {
 
     _loadState() {
         let settings = null;
-        try {
+        if (typeof(window) !== "undefined") {
             let json = window.localStorage.getItem(LOCAL_STORAGE_KEY);
             console.log('Loaded state:', json);
-            if (json) {
+            if (json != null) {
                 settings = JSON.parse(json);
             }
-        } catch (e) {
-            console.log('Cannot load previous state', e);
         }
         if (!settings) {
             settings = {startTime: null, maxSeconds: 25 * 60, mode: STOPPED, inputMinutes: 25};
@@ -47,6 +36,8 @@ export default class PomodoroPage extends React.Component {
     }
 
     _saveState() {
+        // don't save at server side
+        if (typeof(window) === "undefined") return;
         let {startTime, maxSeconds, mode, inputMinutes} = this.state;
         let store = {startTime, maxSeconds, mode, inputMinutes};
         let json = JSON.stringify(store);
@@ -127,7 +118,7 @@ export default class PomodoroPage extends React.Component {
         let backgroundImage = `${maskGradient}, ${processGradient}`;
 
         let elapseText = this._getElapseText();
-        document.title = elapseText;
+        this._updateDocumentTitle(elapseText);
         return <div className={styles.component}>
             <div className={styles.container} style={{'backgroundImage': backgroundImage}}>
                 <div className={styles.space}>
@@ -141,6 +132,12 @@ export default class PomodoroPage extends React.Component {
             </div>
             {this._renderStartButton()}
         </div>;
+    }
+
+    _updateDocumentTitle(elapseText) {
+        if (typeof (document) !== "undefined") {
+            document.title = elapseText;
+        }
     }
 
     _renderStartButton() {

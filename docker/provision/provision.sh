@@ -2,7 +2,7 @@
 # DESCRIPTION: This script runs inside container. It provision container
 
 APP=/softwares/golery
-WWW=/work/www
+WWW=/work/golery
 PROVISION=$WWW/docker/provision/files
 
 # create folders

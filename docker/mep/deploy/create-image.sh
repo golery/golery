@@ -8,7 +8,7 @@ BASE_IMAGE=greensuisse/nodejs
 # Start container in detach mode
 CONTAINER=$(docker run -itPd -v /work:/work -w '/softwares/golery/' $BASE_IMAGE bash)
 # Run provision script inside docker container
-docker exec $CONTAINER /work/www/docker/provision/provision.sh
+docker exec $CONTAINER /work/golery/docker/provision/provision.sh
 docker stop $CONTAINER
 echo ">> Created and provision container id= $CONTAINER"
 docker commit $CONTAINER greensuisse/www

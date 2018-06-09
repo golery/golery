@@ -1,16 +1,12 @@
-# BUILD DOCKER IMAGE
-1. Build (if the project was not changed, rebuild is not necessary)
-	- ./build-proxy.sh
-	- ./build-www.sh
-	- ./build-www2.sh
-2. ./mep.sh
+# BUILD DOCKER IMAGES FOR AMAZON
+Just run: /work/golery/docker/mep/deploy/mep.sh
 
 OR manually as follow:
 1. Build:
    ./build-proxy.sh
-   ./build-www2.sh
+   ./build-www.sh
    Those build create releases file in project/build/release folder. 
-2. Build www2, create and provision container
+2. Build www, create and provision container
    ./create-container.sh
    This create image greensuisse/www:latest then run it.
    Access to url: http://172.17.0.3:3001/www2/#/view/584db3f3640df20011dced4a/5856527b640df20011dced72
