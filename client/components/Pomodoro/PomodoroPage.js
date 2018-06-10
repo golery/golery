@@ -8,11 +8,60 @@ const LOCAL_STORAGE_KEY = "STATE";
 const STOPPED = 'STOPPED';
 const RUNNING = 'RUNNING';
 
+const ICON_DEFAULT = 'DEFAULT';
+const ICON_RUNNING = 'RUNNING';
+const ICON_STOP = 'STOP';
+const ICON_DATA_RUNNING = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHWSURBVDhPY6AZqK+vZ3L3CvF29Qn2BLGhwsQDD48QUVfvkJuu3sG3nQMChKHC+IGfnx8vkGL0DImJ84lOOOcfl/TaLz7pjU9U/Dmv4IgYkJyHRzQfWDE2ALRxqVdI9MOU1oaPHcc2/594cQ8Ytx/d9B8o9gEkB1IDVY4JfMJjVxfOnfRz9tVD/++8ffX/6rXbYHz7zav/ILGC2ZN+AtWsgipHBY4e4cphOTkvJl/c9//t5y//v3///X/HrgNgDGK/AYqB5EKzsl84ewcpQbUhANDfZSWLZ/w98uQOWAMIr1i9EYxhfJBc8aLpfz1Dosqg2hDALzphft3Wpf+vvX4O15CcUfA/LjkbzgfJgdSA1EK1IYBvRFxX5ep5/88+fwTXsG3Hvv9btu2B8888f/i/YtWc/94RsR1QbQjg6hlknVBX/XbBtaP/v377BdcEwyAxkFx8TeVbkFqoNlTgHRl/sWHniv+b7l78//HLd7hmEBskVr99+X+fiNjzUOWYwMMjUMYvKuFh9foF/6Ze2v9/w50LYDwFyK5cM+8fMEE9AqmBKscOXF0DxXyj4jcGJac/TaiveQPCQUmpz3wi4zaA5KDKCANX1xhud59AIxAGsaHC1AYMDAAihkukriSApAAAAABJRU5ErkJggg==";
+const ICON_DATA_STOP = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHklEQVQ4T2N8Jyj4n4ECwDhqAMNoGDCMhgHDsAgDAOy6IQEZi+WeAAAAAElFTkSuQmCC';
+
+/** This service updates browser tab title */
+class DocumentTitle {
+    constructor() {
+        this.icon = ICON_DEFAULT;
+        this.tag = null;
+    }
+
+    _createElementFromHTML(htmlString) {
+        var div = document.createElement('div');
+        div.innerHTML = htmlString.trim();
+
+        // Change this to div.childNodes to support multiple top-level nodes
+        return div.firstChild;
+    }
+
+
+    updateTitle(title, icon) {
+        if (typeof (document) === "undefined") {
+            // Don't update during server side rendering
+            return;
+        }
+
+        if (icon !== this.icon) {
+            let iconData;
+            if (icon === ICON_RUNNING) {
+                iconData = ICON_DATA_RUNNING;
+            } else if (icon === ICON_STOP) {
+                iconData = ICON_DATA_STOP;
+            }
+            if (this.tag) {
+                this.tag.setAttribute("href", iconData);
+            } else {
+                this.tag = this._createElementFromHTML(`<link id='headLinkIconDone' rel="icon" type="image/png" href=${iconData}>`);
+                document.getElementsByTagName('head')[0].appendChild(this.tag);
+                console.log('Add icon tag');
+            }
+            this.icon = icon;
+        }
+        document.title = title;
+    }
+}
+
 export default class PomodoroPage extends React.Component {
     constructor(props) {
         super(props);
         this.timer = null;
         this.state = this._loadState();
+        this.documentTitle = new DocumentTitle();
 
         if (this.state.mode === RUNNING) {
             this._startTimer();
@@ -46,6 +95,7 @@ export default class PomodoroPage extends React.Component {
 
     componentWillUnmount() {
         this._stopTimer();
+        this.documentTitle.tag = null;
     }
 
     _stopTimer() {
@@ -67,6 +117,7 @@ export default class PomodoroPage extends React.Component {
         this.timer = setInterval(() => this.tick(), _interval);
     }
 
+    /** Method is called each seconds to update the counter*/
     tick() {
         this.setState({});
     }
@@ -80,10 +131,13 @@ export default class PomodoroPage extends React.Component {
         if (!this.state.startTime) {
             return "--:--";
         }
-        let diff = Math.trunc((Date.now() - this.state.startTime) / 1000.0);
-        let min = this._twoDigits(Math.round(diff / 60));
-        let sec = this._twoDigits(diff % 60);
-        return `${min}:${sec}`;
+        let diff = this.state.maxSeconds - Math.trunc((Date.now() - this.state.startTime) / 1000.0);
+        let diffAbs = Math.abs(diff);
+
+        let min = this._twoDigits(Math.trunc(diffAbs / 60));
+        let sec = this._twoDigits(diffAbs % 60);
+        let sign = diff < 0 ? '-' : '';
+        return `${sign}${min}:${sec}`;
     }
 
     _getElapsedSeconds() {
@@ -98,8 +152,9 @@ export default class PomodoroPage extends React.Component {
     }
 
     _renderRunning() {
-        const progressColor = '#ff4136';
         let counter = this._getElapsedSeconds();
+
+        const progressColor = '#ff4136';
         let {maxSeconds} = this.state;
         let deg = counter * 360 / maxSeconds;
         var degMask, maskColor;
@@ -118,11 +173,13 @@ export default class PomodoroPage extends React.Component {
         let backgroundImage = `${maskGradient}, ${processGradient}`;
 
         let elapseText = this._getElapseText();
-        this._updateDocumentTitle(elapseText);
+        this._updateDocumentTitle(counter, elapseText);
+
         return <div className={styles.component}>
-            <div className={styles.container} style={{'backgroundImage': backgroundImage}}>
-                <div className={styles.space}>
-                    <div className={styles.inner}>
+            {this._renderStartButton()}
+            <div className={styles.circleContainer} style={{'backgroundImage': backgroundImage}}>
+                <div className={styles.circleSpace}>
+                    <div className={styles.circleInner}>
                         {elapseText}
                     </div>
                     <div className={styles.maxMinutes}>
@@ -130,14 +187,22 @@ export default class PomodoroPage extends React.Component {
                     </div>
                 </div>
             </div>
-            {this._renderStartButton()}
         </div>;
     }
 
-    _updateDocumentTitle(elapseText) {
-        if (typeof (document) !== "undefined") {
-            document.title = elapseText;
+    _updateDocumentTitle(elapsedSecond, elapseText) {
+        if (typeof (document) === "undefined") return;
+
+        let title, icon;
+        if (elapsedSecond >= this.state.maxSeconds) {
+            title = "DONE";
+            icon = ICON_STOP;
+        } else {
+            title = elapseText;
+            icon = ICON_RUNNING;
         }
+        document.title = title;
+        this.documentTitle.updateTitle(title, icon);
     }
 
     _renderStartButton() {

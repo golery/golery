@@ -2,8 +2,8 @@
     text-align: center;
 }
 
-.container {
-    margin-top: 10rem;
+.circleContainer {
+    margin-top: 4rem;
     display: inline-block;
     width: 300px;
     height: 300px;
@@ -12,11 +12,11 @@
     position: relative;
 }
 
-.space {
+.circleSpace {
     padding: 30px;
 }
 
-.inner {
+.circleInner {
     position: relative;
     display: table-cell;
     width: 240px;
