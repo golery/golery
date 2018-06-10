@@ -4,7 +4,7 @@
 # mongorestore -h ds045054.mongolab.com:45054 -d prod -u admin -p admin2015 outputfolder/prod
 
 # db connection
-. /work/www.credentials/env.sh
+. /work/www.credentials/mongo.env.sh
 
 # output folder
 folder="/work/www.data/db"

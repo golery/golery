@@ -33,6 +33,12 @@ class ApiAuth {
                     if (err) {
                         res.status(400).send(err);
                     } else {
+                        res.cookie('username', user.username);
+                        if (user.username === 'hly') {
+                            /* With this cookie, the google analytics script is not returned
+                             * Ref. PageTemplate.js */
+                            res.cookie('disableStats', 'true');
+                        }
                         res.json(user);
                     }
                 });

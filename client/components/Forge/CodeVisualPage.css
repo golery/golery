@@ -1,0 +1,19 @@
+.component {
+    padding: 2rem;
+}
+
+.hyperlink {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.explain {
+    display: inline-block;
+    max-width: 50rem;
+    border: 1px solid green;
+    padding: 1rem;
+}
+
+.idea {
+    color: red;
+}

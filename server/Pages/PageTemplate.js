@@ -1,9 +1,15 @@
+/** This modules generates boilerplat for a page (ex: google analytics, open graphs tags...) */
 import React from "react";
 import ReactDOM from "react-dom/server";
 import hashes from "./Generated/webpack.manifest.json"
 
-function getGoogleAnalytics() {
-    return `
+function getGoogleAnalytics(req) {
+    /** When run at local, do not use google analytics */
+    if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') return `/*Disable google analytics due to hostname: ${req.hostname}*/`;
+    /** When run with non-user account, do not use google analytics */
+    if (req.cookies.disableStats === 'true') return '/** Disable google analytics due to cookie disableStats */';
+
+    let googleAnalytics = `
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject'] = r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -11,6 +17,7 @@ function getGoogleAnalytics() {
 
         ga('create', 'UA-29120464-3', 'auto');
         ga('send', 'pageview');`;
+    return googleAnalytics;
 }
 
 function generateOpenGraphTags(openGraph) {
@@ -52,9 +59,11 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
         <div id="REACT_ROOT" dangerouslySetInnerHTML={{__html: mainHtml}}/>
         </body>
         <head>
-            <script dangerouslySetInnerHTML={{__html:
-                `var __INITIAL_STATE__=${stateJson}; bootstrapPage('${bootStrap}', __INITIAL_STATE__);`}}/>
-            <script dangerouslySetInnerHTML={{__html: getGoogleAnalytics()}}/>
+            <script dangerouslySetInnerHTML={{
+                __html:
+                    `var __INITIAL_STATE__=${stateJson}; bootstrapPage('${bootStrap}', __INITIAL_STATE__);`
+            }}/>
+            <script dangerouslySetInnerHTML={{__html: getGoogleAnalytics(req)}}/>
         </head>
         </html>
     );

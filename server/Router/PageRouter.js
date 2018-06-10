@@ -23,20 +23,22 @@ export default function (router) {
     pencil.get('/landing', pencilLandingPage);
     pencil.get('/:nodeId', pencilServerPage);
     pencil.get('/:nodeId/:rootId', pencilServerPage);
-    router.use('/pencil', pencil);
 
     let menu = new Router();
     menu.get('/', menuServerPage);
-    router.use('/menu', menu);
 
     let index = new Router();
     index.get('/', mainPage);
     index.get('/landing', mainPage);
     index.get('/sitemap.txt', siteMapPage);
-    index.get('/app', mainPage);
     index.get('/goevent', goEventPage);
     index.get('/unix-timestamp-converter', unixTimePage);
     index.get('/json-formatter', jsonFormatterPage);
-    index.get('/pomodoro', pomodoroPage);
+
+    // install sub routers
+    router.use('/pencil', pencil);
+    router.use('/menu', menu);
+    router.get('/app', mainPage);
+    router.get('/pomodoro', pomodoroPage);
     router.use('/', index);
 }

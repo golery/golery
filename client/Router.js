@@ -21,6 +21,7 @@ import CreatePollSuccessPage from "./components/GoGo/CreatePollSuccessPage";
 import ViewPollPage from "./components/GoGo/View/ViewPollPage";
 import EditEventPage from "./components/GoGo/EditEventPage";
 import ZoomAppView from "./components/Zoom/ZoomAppView";
+import CodeVisualPage from "./components/Forge/CodeVisualPage";
 
 export default
 <Router>
@@ -46,6 +47,13 @@ export default
             <Route path="/app/event/home" component={EventHomePage}/>
             <Route path="/app/counter" component={CounterPage}/>
             <Route path="/app/forge" component={ForgePage}/>
+
+            /**
+            Visualize code. A cheatsheet article. When hover the pointer over a piece of code
+            an explanation is displayed.
+
+            Access URL: http://localhost:8080/app#/app/code */
+            <Route path="/app/code" component={CodeVisualPage}/>
 
             <Route path="/gogo/createPoll" component={CreatePollPage}/>
             <Route path="/gogo/createPollSuccess" component={CreatePollSuccessPage}/>

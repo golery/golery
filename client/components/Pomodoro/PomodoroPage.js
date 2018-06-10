@@ -142,15 +142,14 @@ export default class PomodoroPage extends React.Component {
 
     _renderStartButton() {
         this._saveState();
-        return <div>
-            <div className={styles.textHolder}>
-                <input type='text' className={styles.input} maxLength={2} value={this.state.inputMinutes}
+        return <div className={styles.inputAndStartButtonHolder}>
+            <div className={styles.inputHolder}>
+                <input type='text' className={styles.minuteInput} maxLength={2} value={this.state.inputMinutes}
+                       placeholder='min'
                        onChange={(e) => this.setState({inputMinutes: e.target.value})}
-                /> minutes
+                />
             </div>
-            <div className={styles.buttonHolder}>
-                <div className={styles.button} onClick={() => this._onStart()}>START</div>
-            </div>
+            <div className={styles.buttonStart} onClick={() => this._onStart()}>START</div>
         </div>
     }
 
