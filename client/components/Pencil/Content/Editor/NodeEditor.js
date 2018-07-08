@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './NodeEditor.css';
+import styles from './NodeEditor.scss';
 import HtmlEditor from './HtmlEditor/HtmlEditor';
 import DelayTaskScheduler from "../../DelayTaskScheduler";
 import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
-
+import EditorToolbar from './EditorToolbar';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
 
 // = true: do not save the node data to database (use for dev)
@@ -51,6 +51,9 @@ export default class NodeEditor extends React.Component {
             </div>
             <div className={styles.toolbarHolder}>
                     <div className={styles.toolbarButton} onClick={()=>this._onClickShare()}>Share</div>
+                zzzall2456hiohixxxx
+                <EditorToolbar/>
+                yyy
             </div>
         </div>;
     }

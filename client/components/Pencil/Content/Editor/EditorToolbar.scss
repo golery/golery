@@ -1,0 +1,30 @@
+.component {
+  padding: 5px;
+}
+
+.button {
+  cursor: default;
+  user-select: none;
+  color: #a9a9a9;
+  display: inline-block;
+  line-height: 25px;
+  vertical-align: middle;
+  background: no-repeat center center;
+  background-size: 18px 18px;
+  text-align: center;
+  width: 25px;
+  border-radius: 2px;
+  margin-right: 4px;
+}
+
+.button:hover {
+  color: black;
+}
+
+.themeLight .button {
+  color: #d3d3d3;
+}
+
+.themeLight .button:hover {
+  color: black;
+}

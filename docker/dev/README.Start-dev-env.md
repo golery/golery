@@ -39,9 +39,13 @@ Start docker container with name "dev"
 
 Open 3 console:
 ```
-./run.sh
+./attach.sh
 ./dev.client-watch.sh
+
+./attach.sh
 ./dev.server-pm2.sh
+
+./attach.sh
 ./dev.server-watch.sh
 ```
 
