@@ -4,7 +4,7 @@ This readme explains how to start dev runtime env with dockers
 # DEV RUNTIME ENVIRONMENT EXPLANATION
 The dev runtime env contains 2 docker container
 - "dev" container: dev use docker exec to run expressjs, code watching and auto compile
-- "mongo" container
+- "mongo" container: data are clone to this container, it's not map to host drive
 
 To use DEV RUNTIME ENVIRONMENT, first build it.
 As docker image contains sensitive data, it cannot be pushed to public. We just need to build it only one time after cloning
