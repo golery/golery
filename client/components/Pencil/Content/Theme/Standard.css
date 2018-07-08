@@ -54,6 +54,11 @@
     & ol {
       list-style: decimal;
     }
+
+&
+pre {
+  border: 1px dotted gray;
+}
   }
 }
 

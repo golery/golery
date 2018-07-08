@@ -40,6 +40,7 @@ export default class HtmlEditor extends React.Component {
             'indent': this._onIndent,
             'outdent': this._onOutdent,
             'image': this._onInsertImage,
+            'code': this._onInsertCode
         }
     }
 
@@ -170,6 +171,13 @@ export default class HtmlEditor extends React.Component {
 
     _onOutdent() {
         this._execCommand('outdent');
+    }
+
+    _onInsertCode() {
+        let elm = document.createElement('pre');
+        elm.setAttribute('contenteditable', 'false');
+        elm.innerText = 'public class Main {}';
+        this._insertDomNodeAtCursor(elm);
     }
 
     _onPaste(e) {
