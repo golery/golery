@@ -28,7 +28,9 @@ There are 2 contains
 - Dev docker container
 
 ## Development guides (more)
-[Link](docs/README.md)
+[Start dev env](dev/README.Start-dev-env.md)
+
+[Build with docker](docs/README.md)
 
 ## License
 [Link](LICENSE.txt)
