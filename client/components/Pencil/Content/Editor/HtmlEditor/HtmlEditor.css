@@ -22,11 +22,3 @@
   margin: 0 !important;
   font-weight: 100 !important;
 }
-
-.toolbarHolder {
-  position: fixed;
-  background-color: white;
-  border: 1px solid lightgray;
-  border-radius: 1px;
-  visibility: hidden;
-}

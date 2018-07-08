@@ -23,44 +23,31 @@ export default class HtmlEditor extends React.Component {
         this._onChange = this._onChange.bind(this);
         this._onPaste = this._onPaste.bind(this);
 
-        this.elmToolbarHolder = null;
-
-        this.toolbarCommands = this._buildToolbarCommands();
 
         // when there is no content, the innerHTML can be the placeholder text.
         // we maintain this flag to know if the content is really empty or not
         this.hasContent = false;
         this.placeHolder = !!this.props.placeHolder ? this.props.placeHolder.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-    }
 
-    _buildToolbarCommands() {
-        let map = this._buildToolbarCommandMap();
-        let commands = [];
-        let commandIds = this.props.toolbar || ['header', 'bold', 'italic', 'underline', 'clearFormat', 'number', 'bullet', 'indent', 'outdent', 'image'];
-        for (let commandId of commandIds) {
-            let command = map[commandId];
-            if (command) {
-                commands.push(command);
-            }
+        this._actionListeners = {
+            'header': this._onHeader,
+            'bold': this._onBold,
+            'italic': this._onItalic,
+            'underline': this._onUnderline,
+            'clearFormat': this._onClearFormat,
+            'number': this._onList,
+            'bullet': this._onBullet,
+            'indent': this._onIndent,
+            'outdent': this._onOutdent,
+            'image': this._onInsertImage,
         }
-        return commands;
     }
 
-    _buildToolbarCommandMap() {
-        let commandMap = {};
-
-        commandMap['header'] = Toolbar.createCommand(this, 'Header', this._onHeader, 'fa fa-header');
-        commandMap['bold'] = Toolbar.createCommand(this, 'Bold', this._onBold, 'fa fa-bold');
-        commandMap['italic'] = Toolbar.createCommand(this, 'Italic', this._onItalic, 'fa fa-italic');
-        commandMap['underline'] = Toolbar.createCommand(this, 'Underline', this._onUnderline, 'fa fa-underline');
-        commandMap['clearFormat'] = Toolbar.createCommand(this, 'Clear Format', this._onClearFormat, 'fa fa-eraser');
-
-        commandMap['number'] = Toolbar.createCommand(this, 'Number', this._onList, 'fa fa-list-ol');
-        commandMap['bullet'] = Toolbar.createCommand(this, 'Bullet', this._onBullet, 'fa fa-list-ul');
-        commandMap['indent'] = Toolbar.createCommand(this, 'Indent', this._onIndent, 'fa fa-indent');
-        commandMap['outdent'] = Toolbar.createCommand(this, 'Outdent', this._onOutdent, 'fa fa-outdent');
-        commandMap['image'] = Toolbar.createCommand(this, 'Image', this._onInsertImage, 'fa fa-image');
-        return commandMap;
+    fireAction(action) {
+        let listener = this._actionListeners[action];
+        if (listener) {
+            listener.call(this);
+        }
     }
 
     componentDidUpdate() {
@@ -82,9 +69,6 @@ export default class HtmlEditor extends React.Component {
         // it will generate custom attribute for innerHtml
         let contentEditableClassNames = this._getContentEditableClassName();
         return <div className={styles.component}>
-            <div className={styles.toolbarHolder} ref={elm => this.elmToolbarHolder = elm}>
-                <Toolbar commands={this.toolbarCommands}/>
-            </div>
             <div className={styles.editor}>
                 <div contentEditable
                      className={contentEditableClassNames}

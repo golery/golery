@@ -7,8 +7,9 @@ import DelayTaskScheduler from "../../DelayTaskScheduler";
 import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
-import EditorToolbar from './EditorToolbar';
+import EditorToolbar from './Toolbar/EditorToolbar';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
+import ToolbarController, {ActionSource} from './Toolbar/ToolbarController';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -23,16 +24,29 @@ export default class NodeEditor extends React.Component {
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
+        this._toolbarController = new ToolbarController();
 
+        this._toolbarController.addSource(new ActionSource('nodeEditor', ['share'], () => {
+            this._onClickShare();
+        }));
+        this._toolbarController.addSource(new ActionSource('htmlEditor',
+            ['header', 'bold', 'italic', 'underline', 'clearFormat', 'number', 'bullet', 'indent', 'outdent', 'image', 'code'],
+            (action) => {
+                this.elmNodeHtml.fireAction(action);
+            }));
     }
 
     componentDidMount() {
         this.elmNodeHtml.focus();
     }
 
+    componentWillUnmount() {
+        // TODO : releaes resources
+    }
+
     render() {
         let {node} = this.props;
-
+        let toolbarController = this._toolbarController;
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <div className={styles.contentHolder}>
                 <HtmlEditor html={node.title}
@@ -44,16 +58,17 @@ export default class NodeEditor extends React.Component {
                 <HtmlEditor html={node.html}
                             contentEditableClassName="nodeHtml"
                             onChange={html => this._onChangeNodeHtml(html)}
+                            toolbarController={toolbarController}
                             ref={ref => {
-                                this.elmNodeHtml = ref
+                                this.elmNodeHtml = ref;
+                                //console.log('elmNodeHtml', ref);
                             }}
                 />
             </div>
             <div className={styles.toolbarHolder}>
-                    <div className={styles.toolbarButton} onClick={()=>this._onClickShare()}>Share</div>
-                zzzall2456hiohixxxx
-                <EditorToolbar/>
-                yyy
+                <EditorToolbar toolbarController={toolbarController} ref={ref => {
+                    this._toolbarController.toolbar = ref;
+                }}/>
             </div>
         </div>;
     }
