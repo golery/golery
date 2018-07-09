@@ -18,12 +18,13 @@ export default class CodeView extends React.Component {
     }
 
     _onEdit() {
+        let {code} = this.props;
         let modal = new ModalDialog();
-        let elm = <CodeEditor/>;
+        let elm = <CodeEditor code={code}/>;
         modal.show(elm);
     }
 }
 
 CodeView.propTypes = {
-    //node: PropTypes.object
+    code: PropTypes.string
 };

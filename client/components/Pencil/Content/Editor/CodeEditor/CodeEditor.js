@@ -9,7 +9,11 @@ export default class CodeEditor extends React.Component {
     }
 
     render() {
+        let {code} = this.props;
         return <div className={styles.component}>CodeEditor
+            <pre className={styles.pre} contentEditable={true}>
+                {code}
+            </pre>
         </div>;
     }
 }

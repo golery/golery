@@ -92,13 +92,15 @@ export default class HtmlEditor extends React.Component {
         </div>;
     }
 
+    /** Render code view component */
     _renderComponentsInsideHtml(elm) {
         if (elm == null) return;
 
         console.log(elm);
         let tags = elm.getElementsByClassName('x-pencil-code');
         for (let tag of tags) {
-            ReactDOM.render(<CodeView/>, tag);
+            let code = tag.innerText;
+            ReactDOM.render(<CodeView code={code}/>, tag);
         }
     }
     _getContentEditableClassName() {
