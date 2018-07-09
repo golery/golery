@@ -166,7 +166,7 @@ class ApiNode {
         //FIXME: authentication
         let body = req.body;
 
-        let sanitizedHtml = body.html ? sanitizeHtml(body.html) : null;
+        let sanitizedHtml = this._getSanitizedHtml(body.html);
 
         // clone content to be sure that only contents are updated
         let update = {
@@ -184,6 +184,27 @@ class ApiNode {
         });
 
         return Rest.json(req, res, promise);
+    }
+
+    _getSanitizedHtml(html) {
+        if (!html) return null;
+
+        // keep some special class name (ex: x-pencil-code)
+        // I don't know why the wild card '*' on tag does not work as in specs of library
+        let allowed = Object.assign({
+            'pre': [
+                {
+                    name: 'class',
+                    multiple: true,
+                    values: ['x-pencil-code']
+                }
+            ]
+        }, sanitizeHtml.defaults.allowedAttributes);
+        console.log(allowed);
+
+        return sanitizeHtml(html, {
+            allowedAttributes: allowed
+        });
     }
 
     _generateInitialTree(userId) {

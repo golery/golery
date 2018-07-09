@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 import DOMPurify from 'dompurify';
 
 import styles from './HtmlEditor.css';
@@ -9,6 +10,8 @@ import UploadImageDialog from './UploadImageDialog';
 import TextSelection from './Utils/TextSelection';
 import pastHtmlProcessor from './PasteHtmlProcessor';
 import ClipboardUtils from './Utils/ClipboardUtils';
+import CodeEditor from '../CodeEditor/CodeEditor';
+import CodeView from '../../View/CodeView';
 import PropTypes from 'prop-types';
 
 /**
@@ -81,11 +84,23 @@ export default class HtmlEditor extends React.Component {
                      onMouseUp={(e) => this._onMouseUp(e)}
                      onFocus={(e) => this._onFocus(e)}
                      onBlur={(e) => this._onBlur(e)}
-                     ref={(elmEdit) => this.elmEdit = elmEdit}/>
+                     ref={(elmEdit) => {
+                         this.elmEdit = elmEdit;
+                         this._renderComponentsInsideHtml(elmEdit);
+                     }}/>
             </div>
         </div>;
     }
 
+    _renderComponentsInsideHtml(elm) {
+        if (elm == null) return;
+
+        console.log(elm);
+        let tags = elm.getElementsByClassName('x-pencil-code');
+        for (let tag of tags) {
+            ReactDOM.render(<CodeView/>, tag);
+        }
+    }
     _getContentEditableClassName() {
         let className = this.props.contentEditableClassName || '';
         let classEmpty = this.hasContent ? '' : styles.emptyMinimize;
@@ -175,6 +190,7 @@ export default class HtmlEditor extends React.Component {
 
     _onInsertCode() {
         let elm = document.createElement('pre');
+        elm.className = 'x-pencil-code';
         elm.setAttribute('contenteditable', 'false');
         elm.innerText = 'public class Main {}';
         this._insertDomNodeAtCursor(elm);
