@@ -1,4 +1,4 @@
-import themeStyles from './Content/Theme/Standard.css';
+import themeStyles from './Content/Theme/Standard.scss';
 import styles from "./PencilPage.css";
 
 import React from "react";

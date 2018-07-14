@@ -1,9 +1,24 @@
 .component {
-  min-width: 30rem;
-  min-height: 30rem;
+  position: relative;
+  display: inline-block;
+  background-color: #F4F4EF;
 }
 
 .pre {
-  padding: 2rem;
-  background-color: white;
+  padding: 1rem;
+  min-width: 10rem;
+  min-height: 10rem;
+  display: inline-block;
+  max-width: 80%;
+}
+
+.pre:focus {
+  outline: none;
+}
+
+.threeDots {
+  display: inline-block;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
 }

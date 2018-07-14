@@ -10,7 +10,8 @@ export default class CodeEditor extends React.Component {
 
     render() {
         let {code} = this.props;
-        return <div className={styles.component}>CodeEditor
+        return <div className={styles.component}>
+            <p className={styles.threeDots}>CodeEditor</p>
             <pre className={styles.pre} contentEditable={true}>
                 {code}
             </pre>
@@ -19,5 +20,5 @@ export default class CodeEditor extends React.Component {
 }
 
 CodeEditor.propTypes = {
-    //node: PropTypes.object
+    code: PropTypes.string
 };

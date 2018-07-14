@@ -191,9 +191,8 @@ export default class HtmlEditor extends React.Component {
     }
 
     _onInsertCode() {
-        let elm = document.createElement('pre');
+        let elm = document.createElement('code');
         elm.className = 'x-pencil-code';
-        elm.setAttribute('contenteditable', 'false');
         elm.innerText = 'public class Main {}';
         this._insertDomNodeAtCursor(elm);
     }

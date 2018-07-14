@@ -55,10 +55,11 @@
       list-style: decimal;
     }
 
-&
-pre {
-    border: 1px dotted gray;
-}
+    & code {
+      display: inline-block;
+      background-color: #F4F4EF;
+      padding: 0.8rem;
+    }
   }
 }
 
