@@ -9,6 +9,7 @@ import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
+import Scrollbar from '../../Scrollbar';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -44,20 +45,21 @@ export default class NodeEditor extends React.Component {
             </div>
 
             <div className={styles.contentHolder}>
-                <TitleEditor html={node.title}
-                             placeHolder="<page-title>"
-                             contentEditableClassName="nodeTitle"
-                             onChange={html => this._onChangeTitle(html)}
-                />
+                <Scrollbar>
+                    <TitleEditor html={node.title}
+                                 placeHolder="<page-title>"
+                                 contentEditableClassName="nodeTitle"
+                                 onChange={html => this._onChangeTitle(html)}
+                    />
 
-                <HtmlEditor html={node.html}
-                            contentEditableClassName="nodeHtml"
-                            onChange={html => this._onChangeNodeHtml(html)}
-                            addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
-                            ref={ref => {
-                                this.elmHtmlEditor = ref;
-                            }}
-                />
+                    <HtmlEditor html={node.html}
+                                contentEditableClassName="nodeHtml"
+                                onChange={html => this._onChangeNodeHtml(html)}
+                                addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
+                                ref={ref => {
+                                    this.elmHtmlEditor = ref;
+                                }}/>
+                </Scrollbar>
             </div>
         </div>;
     }

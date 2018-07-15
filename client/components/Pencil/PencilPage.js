@@ -2,7 +2,6 @@ import themeStyles from './Content/Theme/Standard.scss';
 import styles from "./PencilPage.scss";
 
 import React from "react";
-import {Scrollbars} from 'react-custom-scrollbars';
 import Axios from "axios";
 
 import NodeRepo from "../../services/NodeRepo";
@@ -22,6 +21,7 @@ import ContextMenuView from "./ContextMenuView";
 import TermsView from "./TermsView";
 import AppMenu from "./AppMenu";
 import ModalDialog from "../Core/Dialog/ModalDialog";
+import Scrollbar from "./Scrollbar";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -118,7 +118,7 @@ export default class PencilPage extends React.Component {
             {this._buildTreeElm()}
             {this._buildContentElm()}
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
-            <AppMenu onLogout={() => this._onLogout()} onShowTerms={()=>this._onShowTerms()}/>
+            <AppMenu onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()}/>
         </div>;
     }
 
@@ -129,12 +129,10 @@ export default class PencilPage extends React.Component {
 
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
-            <Scrollbars autoHide={false} autoHideTimeout={500} autoHideDuration={100} universal
-                        renderThumbVertical={this._renderThumbVertical}
-                        renderThumbHorizontal={this._renderThumbHorizontal}>
+            <Scrollbar>
                 <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
                           ref={(treeView) => this.treeView = treeView}/>
-            </Scrollbars>
+            </Scrollbar>
             <div className={styles.treeToolTipHolder}>
                 Right click on tree or Double click to edit
             </div>
@@ -147,9 +145,10 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            return <div className={styles.contentPane}>
-                <div className={styles.nodeViewHolder} onDoubleClick={e => this._onShowEditView()}><NodeView
-                    node={this.state.editingNode}/></div>
+            return <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
+                <Scrollbar>
+                    <NodeView node={this.state.editingNode}/>
+                </Scrollbar>
             </div>;
         }
 
