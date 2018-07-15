@@ -1,6 +1,9 @@
 module.exports = {
-    plugins: [
-        require('postcss-smart-import')({/* ...options */}),
-        require('postcss-cssnext')()
-    ]
+    sourceMap: true,
+    plugins: {
+        'postcss-import': {},
+        'postcss-preset-env': {
+            stage: 0
+        }
+    }
 };

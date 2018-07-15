@@ -31,8 +31,7 @@ function generateOpenGraphTags(openGraph) {
  * @param bootStrap: ID of variable in MAIN_COMPONENTS in client/app.js
  * */
 export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, serverState, afterBodyScripts}) {
-    let manifest = "/" + hashes["manifest.js"];
-    let vendor = "/" + hashes["vendor.js"];
+    let vendor = "/" + hashes["vendors~app.js"];
     let app = "/" + hashes["app.js"];
     let css = "/" + hashes["app.css"];
 
@@ -57,7 +56,6 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
             <link href="/font/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,700,900" rel="stylesheet"/>
-            <script src={manifest}></script>
             <script src={vendor}></script>
             <script src={app}></script>
         </head>

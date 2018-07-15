@@ -1,50 +1,90 @@
-const webpack = require('webpack');
-const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const AssetManifestPlugin = require('webpack-assets-manifest');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ManifestPlugin = require('webpack-manifest-plugin');
 
-function minChunk(module) {
-    // this assumes your vendor imports exist in the node_modules directory
-    return module.context && module.context.indexOf('node_modules') !== -1;
-}
+module.exports = function (prod, outputRelativePath) {
+    // useHash=true: Output file with hash
+    // If we set useHash=true, the server needs to be manually restart each time
+    let useHash = prod;
 
-module.exports = function (minify, output) {
-    let root = process.cwd();
+    let output = process.cwd() + outputRelativePath;
+
     // in dev-mode: use random number
-    let outputFilename = minify ? '[name].[chunkhash].js' : '[name].js';
-    let cssFilename = minify ? '[name].[contenthash].css' : '[name].css';
+    /* [hash]: hash for all module. [chunkhash]: hash for each module */
+    let outputFilename = useHash ? '[name].[chunkhash].js' : '[name].js';
+    let cssFilename = useHash ? '[name].[contenthash].css' : '[name].css';
 
-    let localIdentName = '[name]__[local]___[hash:base64:5]';
-
-    let corePlugins = [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: minChunk
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            // output manifest to separate file, so that hash is not changed
-            // when your code "require" a new js file
-            names: ['manifest']
-        }),
-        new ExtractTextPlugin({filename: cssFilename, allChunks: true}),
-    ];
-
-    let pluginList = minify ? [new CleanWebpackPlugin(['.'], {
-        root: root + output + '/client',
+    let cleanWebpackPlugin = new CleanWebpackPlugin([output + '/client'], {
+        root: '/work/golery',
         verbose: true
-    })] : [];
+    });
 
-    let plugins = pluginList.concat(
-        corePlugins,
-        [new AssetManifestPlugin({output: root + output + '/server/Pages/Generated/webpack.manifest.json'}),
-            new webpack.NoEmitOnErrorsPlugin()]);
+    let miniCssExtractPlugin = new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: cssFilename,
+        chunkFilename: "[id].css"
+    });
 
+    /* Output hash of js and css to file webpack.manifest.json which is used by server to generate html file */
+    let manifestPlugin = new ManifestPlugin({
+        fileName: output + '/server/Pages/Generated/webpack.manifest.json'
+    });
+
+    let plugins = [
+        cleanWebpackPlugin,
+        miniCssExtractPlugin,
+        manifestPlugin];
+
+    let ruleJs = {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+    };
+
+    let ruleCss = {
+        test: /\.css|\.scss$/,
+        exclude: /node_modules/,
+        use: [
+            MiniCssExtractPlugin.loader,
+            {
+                loader: 'css-loader',
+                options: {
+                    modules: true,
+                    /* class name in css are transformed to this pattern */
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                    importLoaders: 1
+                }
+            },
+            {
+                /* Using a list of plugins (config in postcss.config.js) to post process scss file */
+                loader: 'postcss-loader'
+            }
+        ]
+    };
+    let ruleCssNodeModules = {
+        test: /\.css|\.scss$/,
+        include: /node_modules/,
+        use: [
+            /* style-loader: For code "import from 'mycss.css'"
+             * - style-loader bundles css to js file directly. the javascript code will insert tag <style> to DOM tree during runtime.
+             * - style-loader does not bundle mycss.css to output folder */
+            {loader: 'style-loader'},
+            {loader: 'css-loader'}
+        ]
+    };
+    let ruleAssetFiles = {
+        /* "import from 'file.svg'" will copy file.svg in output folder and rename it to [hash].svg*/
+        test: /\.(jpe?g|png|gif|svg|otf)$/i,
+        use: [
+            {loader: 'file-loader'}
+        ]
+    };
     let config = {
         name: "***CLIENT SIDE WEBPACK***",
+        devtool: 'cheap-source-map',
         output: {
-            path: process.cwd() + output + '/client',
-            /* [hash]: hash for all module. [chunkhash]: hash for each module */
+            path: output + '/client',
             filename: outputFilename,
         },
         entry: {
@@ -52,67 +92,25 @@ module.exports = function (minify, output) {
         },
         module: {
             rules: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: "babel-loader"
-                },
-                {
-                    test: /\.css|\.scss$/,
-                    exclude: /node_modules/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        //resolve-url-loader may be chained before sass-loader if necessary
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    modules: true,
-                                    localIdentName: localIdentName,
-                                    importLoaders: 1
-                                }
-                            },
-                            {
-                                loader: 'postcss-loader'
-                                /* configuration (ex: list of plugins) is in file postcss.config.js */
-                            }
-                        ]
-                    })
-                },
-                {
-                    test: /\.css|\.scss$/,
-                    include: /node_modules/,
-                    use: [
-                        {loader: 'style-loader'},
-                        {loader: 'css-loader'}
-                    ]
-                },
-                {
-                    test: /\.(jpe?g|png|gif|svg|otf)$/i,
-                    use: [
-                        {loader: 'file-loader'}
-                    ]
-                },
+                ruleJs,
+                ruleCss,
+                ruleCssNodeModules,
+                ruleAssetFiles,
             ],
         },
         resolve: {
             extensions: ['.js', '.jsx']
         },
-        plugins: plugins
+        plugins: plugins,
+        optimization: {
+            /* js in node_modules are packaged into vendors~app.js
+            * Ref. https://wanago.io/2018/06/04/code-splitting-with-splitchunksplugin-in-webpack-4/ */
+            splitChunks: {
+                chunks: 'all'
+            },
+            noEmitOnErrors: true
+        }
     };
 
-    if (!minify) {
-        Object.assign(config, {
-            /* https://webpack.js.org/configuration/devtool/*/
-            // 'eval-source-map': fast but does not have source in stack trace (eval)
-            // 'cheap-source-map': has source map but transformed code
-            // 'source-map': slowest but has original source
-            devtool: 'cheap-source-map',
-            watch: true,
-            watchOptions: {
-                ignored: /node_modules/
-            }
-        });
-    }
     return config;
 };

@@ -1,18 +1,19 @@
-module.exports = function (env) {
-    let minify = null;
+/** This is the entrypoint webpack configure. */
+module.exports = function (env, argv) {
+    console.log('MODE: ', argv.mode);
+    let prod = argv.mode === 'production';
     let output = null;
 
-    if (env === 'prod') {
+    if (prod) {
         minify = true;
         output = "/build/release";
     } else {
         minify = false;
         output = "/build/dev";
     }
-    console.log("WEBPACK with env=", env, "minify=", minify, "output=", output);
 
-    let clientConfig = require('./webpack.config.client.client-render')(minify, output);
-    let serverConfig = require('./webpack.config.client.server-render')(minify, output);
+    let clientConfig = require('./webpack.config.client.client-render')(prod, output);
+    let serverConfig = require('./webpack.config.client.server-render')(prod, output);
     return [clientConfig, serverConfig];
     // return [serverConfig];
 }

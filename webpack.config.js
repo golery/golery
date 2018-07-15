@@ -1,6 +1,6 @@
 "use strict"
 
-/** Intellij read this file */
+/** Intellij read this file, but our build script does not */
 function buildConfig(env) {
     if (typeof env === 'undefined') {
         env = 'dev';

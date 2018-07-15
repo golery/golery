@@ -32,18 +32,13 @@ export default class NodeEditor extends React.Component {
     render() {
         let {node} = this.props;
         let toolbarClassName = styles.topToolbarHolder;
-        let toogleToolbarIconClassName = "fa fa-close";
+        let toggleToolbarButton = "fa fa-close";
         if (!this.state.showToolbar) {
             toolbarClassName += ' ' + styles.displaynone;
-            toogleToolbarIconClassName = "fa fa-css3";
+            toggleToolbarButton = "fa fa-css3";
         }
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <div className={toolbarClassName} ref={ref => this.elmTopToolbarHolder = ref}/>
-
-            <div className={styles.toogleToolbarButton} onClick={() => this._toggleToolbar()}>
-                <i className={toogleToolbarIconClassName}></i>
-            </div>
-
             <div className={styles.contentHolder}>
                 <Scrollbar>
                     <TitleEditor html={node.title}
@@ -60,6 +55,9 @@ export default class NodeEditor extends React.Component {
                                     this.elmHtmlEditor = ref;
                                 }}/>
                 </Scrollbar>
+            </div>
+            <div className={styles.toggleToolbarButton} onClick={() => this._toggleToolbar()}>
+                <i className={toggleToolbarButton}></i>
             </div>
         </div>;
     }

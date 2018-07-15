@@ -1,11 +1,13 @@
-module.exports = function (minify, output) {
-    const root = process.cwd();
+/** Generate ONLY react server-side rendering (ie. ./server/Pages/Components.js)
+ * This webpack does not generate server-side code. These codes are generated directly by babel (ref. server.watch in package.json) */
+module.exports = function (prod, outputRelativePath) {
+    let output = process.cwd() + outputRelativePath;
 
     let localIdentName = '[name]__[local]___[hash:base64:5]';
     let serverConfig = {
         name: "***SERVER SIDE WEBPACK***",
         output: {
-            path: root + output,
+            path: output,
             filename: './server/Pages/Generated/Components.generated.js',
             // Library export module compatible with server nodejs
             libraryTarget: 'commonjs2'
@@ -32,14 +34,11 @@ module.exports = function (minify, output) {
                                 localIdentName: localIdentName,
                                 importLoaders: 1
                             }
-                        },
-                        {
-                            loader: 'postcss-loader'
-                            /* configuration (ex: list of plugins) is in file postcss.config.js */
                         }
                     ]
                 },
                 {
+                    /* Do not copy resource file for server rendering */
                     test: /\.(jpe?g|png|gif|svg|otf)$/i,
                     use: [
                         {
