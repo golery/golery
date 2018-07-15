@@ -1,8 +1,8 @@
 .component {
+    margin-top: 1rem;
 }
 
 .contentEditable {
-    flex: 1;
     min-height: 5rem;
     border: none !important;
     box-shadow: none !important;
@@ -24,17 +24,4 @@
     font-style: italic;
     margin: 0 !important;
     font-weight: 100 !important;
-}
-
-.toolbarHolder {
-    overflow-x: hidden;
-    overflow-y: -moz-scrollbars-none;
-}
-
-.toolbarHolder::-webkit-scrollbar {
-    display: none;
-}
-
-:global(.ck.ck-editor__editable_inline) > :global(:first-child) {
-    margin-top: 0 !important;
 }

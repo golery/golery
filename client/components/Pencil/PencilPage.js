@@ -1,5 +1,5 @@
 import themeStyles from './Content/Theme/Standard.scss';
-import styles from "./PencilPage.css";
+import styles from "./PencilPage.scss";
 
 import React from "react";
 import {Scrollbars} from 'react-custom-scrollbars';
@@ -156,8 +156,8 @@ export default class PencilPage extends React.Component {
         if (this.state.editor === EDITOR_HTML) {
             return <div className={styles.contentPane}>
                 <NodeEditor node={this.state.editingNode}
-                                    listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
-                                    ref={ref => this._nodeEditor = ref}/>,
+                            listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
+                            ref={ref => this._nodeEditor = ref}/>
                 <div className={styles.doneEditButton}
                      onClick={() => this._closeEditor()}>CLOSE
                 </div>

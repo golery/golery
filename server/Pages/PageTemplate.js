@@ -30,7 +30,7 @@ function generateOpenGraphTags(openGraph) {
 /**
  * @param bootStrap: ID of variable in MAIN_COMPONENTS in client/app.js
  * */
-export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, serverState}) {
+export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, serverState, afterBodyScripts}) {
     let manifest = "/" + hashes["manifest.js"];
     let vendor = "/" + hashes["vendor.js"];
     let app = "/" + hashes["app.js"];
@@ -39,6 +39,12 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
     // Fb open graph tags https://developers.facebook.com/docs/sharing/webmasters#markup
     let openGraphElm = generateOpenGraphTags(openGraph);
     let stateJson = JSON.stringify(serverState);
+    let htmlScripts = [];
+    if (afterBodyScripts) {
+        htmlScripts = afterBodyScripts.map((script, index) =>
+            <script key={index} src={script}/>);
+    }
+
     let html = ReactDOM.renderToString(
         <html>
         <head>
@@ -64,6 +70,7 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
                     `var __INITIAL_STATE__=${stateJson}; bootstrapPage('${bootStrap}', __INITIAL_STATE__);`
             }}/>
             <script dangerouslySetInnerHTML={{__html: getGoogleAnalytics(req)}}/>
+            {htmlScripts}
         </head>
         </html>
     );

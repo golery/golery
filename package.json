@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "server.pm2": "export NODE_ENV=development; pm2 start devtools/pm2.json --no-daemon",
-    "server.watch": "babel server -d build/dev/server --copy-files -w",
+    "server.watch": "babel server -d build/dev/server --copy-files -w --source-map --presets=env --ignore Static --source-maps",
     "client.watch": "webpack --env=dev --progress --colors --config devtools/webpack/webpack.config.client.all.js",
     "build": "./devtools/build-prod.sh"
   },
@@ -13,6 +13,7 @@
     "babel-cli": "^6.26.0",
     "babel-loader": "^6.3.2",
     "babel-plugin-css-modules-transform": "^1.2.7",
+    "ckeditor5-build-pencil": "^1.0.2-rc1",
     "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.26.2",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -34,7 +35,9 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-core": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.22.0",
+    "babel-preset-es2016": "^6.22.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.23.0",
     "body-parser": "^1.17.0",

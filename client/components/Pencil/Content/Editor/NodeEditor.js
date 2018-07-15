@@ -3,74 +3,76 @@ import PropTypes from 'prop-types';
 
 import styles from './NodeEditor.scss';
 import HtmlEditor from './HtmlEditor/HtmlEditor';
+import TitleEditor from './HtmlEditor/TitleEditor';
 import DelayTaskScheduler from "../../DelayTaskScheduler";
 import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
-import EditorToolbar from './Toolbar/EditorToolbar';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
-import ToolbarController, {ActionSource} from './Toolbar/ToolbarController';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
-const TITLE_EDITOR_TOOLBAR_COMMANDS = ['bold', 'underline', 'italic'];
 const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
 export default class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.elmNodeHtml = null;
+        this.elmHtmlEditor = null;
+        this.elmTopToolbarHolder = null;
+        this.elmToolbar = null;
+
+        this.state = {showToolbar: false};
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
-        this._toolbarController = new ToolbarController();
-
-        this._toolbarController.addSource(new ActionSource('nodeEditor', ['share'], () => {
-            this._onClickShare();
-        }));
-        this._toolbarController.addSource(new ActionSource('htmlEditor',
-            ['header', 'bold', 'italic', 'underline', 'clearFormat', 'number', 'bullet', 'indent', 'outdent', 'image', 'code'],
-            (action) => {
-                this.elmNodeHtml.fireAction(action);
-            }));
-    }
-
-    componentDidMount() {
-        this.elmNodeHtml.focus();
-    }
-
-    componentWillUnmount() {
-        // TODO : releaes resources
     }
 
     render() {
         let {node} = this.props;
-        let toolbarController = this._toolbarController;
+        let toolbarClassName = styles.topToolbarHolder;
+        let toogleToolbarIconClassName = "fa fa-close";
+        if (!this.state.showToolbar) {
+            toolbarClassName += ' ' + styles.displaynone;
+            toogleToolbarIconClassName = "fa fa-css3";
+        }
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
+            <div className={toolbarClassName} ref={ref => this.elmTopToolbarHolder = ref}/>
+
+            <div className={styles.toogleToolbarButton} onClick={() => this._toggleToolbar()}>
+                <i className={toogleToolbarIconClassName}></i>
+            </div>
+
             <div className={styles.contentHolder}>
-                <HtmlEditor html={node.title}
-                            placeHolder="<page-title>"
-                            contentEditableClassName="nodeTitle"
-                            toolbar={TITLE_EDITOR_TOOLBAR_COMMANDS}
-                            onChange={html => this._onChangeTitle(html)}
+                <TitleEditor html={node.title}
+                             placeHolder="<page-title>"
+                             contentEditableClassName="nodeTitle"
+                             onChange={html => this._onChangeTitle(html)}
                 />
+
                 <HtmlEditor html={node.html}
                             contentEditableClassName="nodeHtml"
                             onChange={html => this._onChangeNodeHtml(html)}
-                            toolbarController={toolbarController}
+                            addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
                             ref={ref => {
-                                this.elmNodeHtml = ref;
-                                //console.log('elmNodeHtml', ref);
+                                this.elmHtmlEditor = ref;
                             }}
                 />
             </div>
-            <div className={styles.toolbarHolder}>
-                <EditorToolbar toolbarController={toolbarController} ref={ref => {
-                    this._toolbarController.toolbar = ref;
-                }}/>
-            </div>
         </div>;
+    }
+
+    _toggleToolbar() {
+        this.setState({showToolbar: !this.state.showToolbar});
+    }
+
+    _addToolbar(elmToolbar) {
+        this.elmToolbar = elmToolbar;
+
+        if (this.elmTopToolbarHolder && this.elmToolbar) {
+            this.elmTopToolbarHolder.appendChild(this.elmToolbar);
+            console.log('Add toolbar', this.elmToolbar);
+        }
     }
 
     _onChangeTitle(html) {
@@ -102,7 +104,7 @@ export default class NodeEditor extends React.Component {
     }
 
     focus() {
-        this.elmNodeHtml.focus();
+        this.elmHtmlEditor.focus();
     }
 
     _onClickShare() {

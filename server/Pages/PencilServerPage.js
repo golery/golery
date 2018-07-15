@@ -27,6 +27,8 @@ function renderPage(req, res, node) {
         options.metaDescription = " " + node.name;
         options.metaKeywords += " " + node.name;
     }
+    // options.afterBodyScripts = ["https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/ckeditor.js"];
+    options.afterBodyScripts = ["/libs/ckeditor.js"];
     page(req, res, mainHtml, 'PencilPage', options);
 }
 

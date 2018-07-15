@@ -23,6 +23,8 @@
   bottom: 50%;
   left: 0.5rem;
   right: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .editing {
@@ -115,7 +117,8 @@
   }
 
   .contentPane {
-    left: 308px;
+    left: 314px;
+    right: 0;
     bottom: 0;
   }
 
