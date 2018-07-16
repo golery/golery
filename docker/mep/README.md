@@ -11,5 +11,5 @@ This image builds and deploys www module to amazon ECS
 Inside container, run step by steps command in mep.sh
 
 #To investigate run container issue
-docker run -it -p 8080:8080 greensuisse/www ./start-server.sh
+docker run -it --rm -p 8080:8080 greensuisse/www ./start-server.sh
 Access http://localhost:8080 

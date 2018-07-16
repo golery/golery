@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "server.pm2": "export NODE_ENV=development; pm2 start devtools/pm2.json --no-daemon",
-    "server.watch": "babel server -d build/dev/server --copy-files -w --source-map --presets=env --ignore Static --source-maps",
+    "server.watch": "babel server -d build/dev/server --copy-files -w --presets=env --ignore Static --source-maps",
     "client.watch": "webpack --mode development --progress --colors --config devtools/webpack/webpack.config.client.all.js --watch",
     "build": "./devtools/build-prod.sh"
   },
@@ -27,7 +27,9 @@
     "svg-url-loader": "^2.3.2",
     "webpack": "^4.16.0",
     "webpack-cli": "^3.0.8",
-    "webpack-manifest-plugin": "^2.0.3"
+    "webpack-manifest-plugin": "^2.0.3",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-swipeable": "^3.9.2"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -56,12 +58,10 @@
     "prompt-sync": "^4.1.6",
     "prop-types": "^15.6.2",
     "react": "^15.6.2",
-    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^15.6.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-select": "^1.2.1",
-    "react-swipeable": "^3.9.2",
     "redux": "^3.7.2",
     "sanitize-html": "^1.18.2",
     "textversionjs": "^1.1.2"
