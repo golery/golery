@@ -11,6 +11,7 @@ import PencilLandingPage from './components/Pencil/PencilLandingPage';
 import MenuPage from './components/Menu/MenuPage';
 import PomodoroPage from './components/Pomodoro/PomodoroPage';
 import Polyfill from './services/Polyfill';
+import DecoupledEditor from 'ckeditor5-build-pencil/build/ckeditor';
 
 const MAIN_COMPONENTS = {
     PencilPage: <PencilPage/>,
@@ -26,6 +27,9 @@ const MAIN_COMPONENTS = {
 // This global method is called to populate correct react component to page
 window.bootstrapPage = function (page, serverState) {
     Polyfill();
+
+    // preload ckeditor so that server side rendering does not try to load it and fail
+    window.DecoupledEditor = DecoupledEditor;
 
     function getMainComponent() {
         if (page === "PencilPage") {

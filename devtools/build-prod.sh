@@ -4,7 +4,7 @@ rm -rf build/release
 # Build client code
 ./node_modules/.bin/webpack --mode=production --progress --colors --config devtools/webpack/webpack.config.client.all.js
 # Build server code
-./node_modules/.bin/babel server -d build/release/server --copy-files --ignore Static
+./node_modules/.bin/babel server -d build/release/server --copy-files
 # Install node modules
 cd /work/www.node-modules/www/prod
 ./npminstall.sh

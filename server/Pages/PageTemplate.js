@@ -27,22 +27,28 @@ function generateOpenGraphTags(openGraph) {
     }
 }
 
+function getPath(file) {
+    return "/" + hashes[file];
+}
+
+function getScripts(extraJs) {
+    let scripts = ["vendors~app.js", "app.js"].concat(extraJs || []);
+    console.log(scripts);
+    return scripts.map(script => {
+        return <script key={script} src={getPath(script)}></script>;
+    });
+}
 /**
  * @param bootStrap: ID of variable in MAIN_COMPONENTS in client/app.js
  * */
-export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, metaDescription, openGraph, serverState, afterBodyScripts}) {
-    let vendor = "/" + hashes["vendors~app.js"];
-    let app = "/" + hashes["app.js"];
-    let css = "/" + hashes["app.css"];
+export default function (req, res, mainHtml, bootStrap,
+                         {title, metaKeywords, metaDescription, openGraph, serverState, extraJs}) {
+    let scripts = getScripts(extraJs);
+    let css = getPath("app.css");
 
     // Fb open graph tags https://developers.facebook.com/docs/sharing/webmasters#markup
     let openGraphElm = generateOpenGraphTags(openGraph);
     let stateJson = JSON.stringify(serverState);
-    let htmlScripts = [];
-    if (afterBodyScripts) {
-        htmlScripts = afterBodyScripts.map((script, index) =>
-            <script key={index} src={script}/>);
-    }
 
     let html = ReactDOM.renderToString(
         <html>
@@ -56,8 +62,7 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
             <link href="/font/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,700,900" rel="stylesheet"/>
-            <script src={vendor}></script>
-            <script src={app}></script>
+            {scripts}
         </head>
         <body>
         <div id="REACT_ROOT" dangerouslySetInnerHTML={{__html: mainHtml}}/>
@@ -68,7 +73,6 @@ export default function (req, res, mainHtml, bootStrap, {title, metaKeywords, me
                     `var __INITIAL_STATE__=${stateJson}; bootstrapPage('${bootStrap}', __INITIAL_STATE__);`
             }}/>
             <script dangerouslySetInnerHTML={{__html: getGoogleAnalytics(req)}}/>
-            {htmlScripts}
         </head>
         </html>
     );

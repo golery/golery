@@ -49,7 +49,11 @@ export default class HtmlEditor extends React.Component {
 
     _createCkEditor(elmContentEditable) {
         console.log('Create ckeditor');
-        let Editor = DecoupledEditor;
+        if (!window) return;
+
+        // ckeditor heavily used browser native object and thus raising exception for server side
+        // rendering. To avoid it, we load it when application start and set to global window object
+        let Editor = window.DecoupledEditor;
         let config = {
             autosave: {
                 save: () => this._onChange()
