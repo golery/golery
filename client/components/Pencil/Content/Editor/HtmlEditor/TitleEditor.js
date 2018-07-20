@@ -21,12 +21,6 @@ import PropTypes from 'prop-types';
 export default class TitleEditor extends React.Component {
     constructor(props) {
         super(props);
-
-        // when there is no content, the innerHTML can be the placeholder text.
-        // we maintain this flag to know if the content is really empty or not
-        this.hasContent = false;
-        this.placeHolder = !!this.props.placeHolder ? this.props.placeHolder.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-
     }
 
     componentDidUpdate() {
@@ -49,42 +43,49 @@ export default class TitleEditor extends React.Component {
                  className={contentEditableClassNames}
                  dangerouslySetInnerHTML={{__html: html}}
                  onInput={() => this._onChange()}
+                 onPaste={(e) => this._onPaste(e)}
                  ref={elmEdit => this.elmEdit = elmEdit}/>
         </div>;
     }
 
+    /** Paste only plain text */
+    _onPaste(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let text = e.clipboardData.getData('text/plain');
+        if (!text) {
+            return;
+        }
+
+        this._insertTextAtCursor(text);
+    }
+
+    _insertTextAtCursor(text) {
+        var sel, range;
+        if (window.getSelection) {
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(document.createTextNode(text));
+            }
+        } else if (document.selection && document.selection.createRange) {
+            document.selection.createRange().text = text;
+        }
+    }
+
     _getContentEditableClassName() {
         let className = this.props.contentEditableClassName || '';
-        let classEmpty = this.hasContent ? '' : styles.emptyMinimize;
-        return [className, styles.contentEditable, classEmpty].join(' ');
+        return [className, styles.contentEditable].join(' ');
     }
 
     _onChange() {
         let innerHtml = this.elmEdit.innerHTML;
-        this.hasContent = innerHtml !== "";
         if (this.props.onChange) {
             this.props.onChange(innerHtml, this.props.editingContext);
         }
     }
-
-    /*
-    TODO: set selection after set text
-    onFocus={(e) => this._onFocus(e)}
-    _onFocus() {
-        console.log('Focus editor');
-        if (!this.hasContent) {
-            this.elmEdit.innerHTML = '';
-            this.elmEdit.classList.remove(styles.emptyMinimize);
-
-            // on mobile, we lose the cursor when chaning innerHtml.
-            // Thus, we recreate it
-            let range = document.createRange();
-            range.selectNodeContents(this.elmEdit);
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }
-    }*/
 
     focus() {
         this.elmEdit.focus();
@@ -93,7 +94,6 @@ export default class TitleEditor extends React.Component {
 
 TitleEditor.propTypes = {
     html: PropTypes.string,
-    placeHolder: PropTypes.string,
     contentEditableClassName: PropTypes.string,
     onChange: PropTypes.func
 };

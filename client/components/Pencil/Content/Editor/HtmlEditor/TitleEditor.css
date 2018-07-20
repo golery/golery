@@ -8,15 +8,12 @@
     box-shadow: none !important;
 }
 
-.contentEditable:global(.nodeTitle ) {
-    min-height: 1rem;
+.contentEditable:empty:before {
+    content: '<no title>';
+    display: block; /* For Firefox */
 }
 
-.contentEditable:focus {
-    outline: none;
-}
-
-.contentEditable.emptyMinimize {
+.contentEditable:empty {
     font-size: 1rem !important;
     padding-top: 0rem;
     padding-bottom: 1rem;
@@ -24,4 +21,13 @@
     font-style: italic;
     margin: 0 !important;
     font-weight: 100 !important;
+}
+
+
+.contentEditable:global(.nodeTitle ) {
+    min-height: 1rem;
+}
+
+.contentEditable:focus {
+    outline: none;
 }
