@@ -5,6 +5,7 @@ import ApiNode from "../Api/ApiNode";
 import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
+import ApiMisc from "../Api/ApiMisc";
 
 function buildApiRouter() {
     let apiRouter = new Router();
@@ -46,6 +47,7 @@ function _buildApiSecureRouter() {
 
     ApiNode.setupRoute(route);
     ApiFile.setupRoute(route);
+    ApiMisc.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
 
     return route;

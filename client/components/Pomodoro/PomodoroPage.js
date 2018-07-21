@@ -3,10 +3,17 @@ import PropTypes from 'prop-types';
 
 import styles from './PomodoroPage.css';
 
+// Set not null to force a specific short duration for development
+const DEBUG_FORCE_SECONDS = 3;
+
 const _interval = 1000;
 const LOCAL_STORAGE_KEY = "STATE";
 const STOPPED = 'STOPPED';
 const RUNNING = 'RUNNING';
+/** Finish pomodoro and a musing is playing */
+const DONE_MUSIC = 'DONE_MUSIC';
+/** Finish pomodoro and music stopped playing */
+const DONE_AFTER_MUSIC = 'DONE_AFTER_MUSIC';
 
 const ICON_DEFAULT = 'DEFAULT';
 const ICON_RUNNING = 'RUNNING';
@@ -78,7 +85,12 @@ export default class PomodoroPage extends React.Component {
             }
         }
         if (!settings) {
-            settings = {startTime: null, maxSeconds: 25 * 60, mode: STOPPED, inputMinutes: 25};
+            settings = {
+                startTime: null,
+                maxSeconds: 25 * 60,
+                mode: STOPPED,
+                inputMinutes: 25
+            };
         }
         console.log('Loaded settings:', settings);
         return settings;
@@ -108,8 +120,13 @@ export default class PomodoroPage extends React.Component {
         this._stopTimer();
 
         let maxMinutes = parseInt(this.state.inputMinutes);
+        let maxSeconds = maxMinutes * 60;
 
-        this.setState({startTime: Date.now(), maxSeconds: maxMinutes * 60, mode: RUNNING});
+        if (DEBUG_FORCE_SECONDS) {
+            maxSeconds = DEBUG_FORCE_SECONDS;
+        }
+
+        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: RUNNING});
         this._startTimer();
     }
 
@@ -152,35 +169,29 @@ export default class PomodoroPage extends React.Component {
     }
 
     _renderRunning() {
-        let counter = this._getElapsedSeconds();
-
-        const progressColor = '#ff4136';
-        let {maxSeconds} = this.state;
-        let deg = counter * 360 / maxSeconds;
-        var degMask, maskColor;
-        if (deg > 180) {
-            degMask = 270;
-            maskColor = progressColor;
-        } else {
-            degMask = 90;
-            maskColor = "#ccc";
+        let elapseSeconds = this._getElapsedSeconds();
+        if (elapseSeconds >= this.state.maxSeconds) {
+            if (this.state.mode === RUNNING) {
+                this.state.mode = DONE_MUSIC;
+                this._playMusic();
+            }
         }
-        let maskGradient = `linear-gradient(${degMask}deg, ${maskColor}, ${maskColor} 50%, transparent 50%, transparent)`;
 
-
-        let degProcess = 90 + deg;
-        let processGradient = `linear-gradient(${degProcess}deg, ${progressColor}, ${progressColor} 49%, orangered 49.5%, #ccc 50%)`;
-        let backgroundImage = `${maskGradient}, ${processGradient}`;
-
+        let backgroundImage = this._getBackgroundImage(elapseSeconds);
         let elapseText = this._getElapseText();
-        this._updateDocumentTitle(counter, elapseText);
+
+        this._updateDocumentTitle(elapseSeconds, elapseText);
+
+        let done = this.state.mode === DONE_AFTER_MUSIC || this.state.mode === DONE_MUSIC;
+        let $circleInnerText = done ? <div className={styles.doneText}>DONE</div> : elapseText;
+
 
         return <div className={styles.component}>
             {this._renderStartButton()}
             <div className={styles.circleContainer} style={{'backgroundImage': backgroundImage}}>
                 <div className={styles.circleSpace}>
                     <div className={styles.circleInner}>
-                        {elapseText}
+                        {$circleInnerText}
                     </div>
                     <div className={styles.maxMinutes}>
                         {this.state.maxSeconds / 60}m
@@ -188,6 +199,36 @@ export default class PomodoroPage extends React.Component {
                 </div>
             </div>
         </div>;
+    }
+
+    _playMusic() {
+        let audio = new Audio('/audio/ukulele.mp3');
+        audio.onended = () => {
+            if (this.state.mode === DONE_MUSIC) {
+                this.setState({mode: DONE_AFTER_MUSIC})
+            }
+        };
+        audio.play();
+    }
+
+    _getBackgroundImage(elapseSeconds) {
+        const progressColor = '#ff4136';
+        let {maxSeconds} = this.state;
+        let deg = elapseSeconds * 360 / maxSeconds;
+        let degMask, maskColor;
+        if (deg > 180) {
+            degMask = 270;
+            maskColor = progressColor;
+        } else {
+            degMask = 90;
+            maskColor = "#ccc";
+        }
+
+        let maskGradient = `linear-gradient(${degMask}deg, ${maskColor}, ${maskColor} 50%, transparent 50%, transparent)`;
+        let degProcess = 90 + deg;
+        let processGradient = `linear-gradient(${degProcess}deg, ${progressColor}, ${progressColor} 49%, orangered 49.5%, #ccc 50%)`;
+        let backgroundImage = `${maskGradient}, ${processGradient}`;
+        return backgroundImage;
     }
 
     _updateDocumentTitle(elapsedSecond, elapseText) {

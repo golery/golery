@@ -5,6 +5,7 @@ mongoose.Promise = Promise;
 
 import NodeModel from "../Models/NodeModel";
 import PencilModel from "../Models/PencilModel";
+import UserModel from "../user/user.model";
 import Rest from "./Rest";
 import NodeService from "./Node/NodeService";
 
@@ -68,9 +69,13 @@ class ApiNode {
             return {publicNodes: nodes};
         });
 
-        let all = Promise.all([p1, p2]).then(values => {
-            let [v1, v2] = values;
-            return Object.assign({}, v1, v2);
+        let p3 = UserModel.find({}, 'username email').then(users => {
+            return {users: users};
+        });
+
+        let all = Promise.all([p1, p2, p3]).then(values => {
+            let [v1, v2, v3] = values;
+            return Object.assign({}, v1, v2, v3);
         });
 
         Rest.json(req, res, all);

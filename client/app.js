@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import './css/fonts/font.montserrat.css';
 import './css/reset.css';
-import MainRouter from './Router';
+import AppPage from './AppPage';
 import GoGoPage from './components/GoGo/GoGoPage';
 import UnixTimePage from './components/Tools/UnixTime/UnixTimePage';
 import JsonFormatterPage from './components/Tools/JsonFormatter/JsonFormatterPage';
@@ -14,9 +14,10 @@ import Polyfill from './services/Polyfill';
 import DecoupledEditor from 'ckeditor5-build-pencil/build/ckeditor';
 
 const MAIN_COMPONENTS = {
+    AppPage: AppPage,
+
     PencilPage: <PencilPage/>,
     GoEventPage: <GoGoPage/>,
-    MainRouter: MainRouter,
     UnixTimePage: <UnixTimePage/>,
     JsonFormatterPage: <JsonFormatterPage/>,
     PencilLandingPage: <PencilLandingPage/>,

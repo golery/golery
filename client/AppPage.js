@@ -1,6 +1,8 @@
 import React from "react";
 import {HashRouter as Router, Route, Switch} from "react-router-dom";
 
+import AdminPage from "./components/Admin/AdminPage";
+import PencilAdminPage from "./components/Pencil/Admin/AdminPage";
 import ViewCardPage from "./components/card/ViewCardPage";
 import AddCardPage from "./components/card/AddCardPage";
 import EditCardView from "./components/edit/edit-card-view";
@@ -10,7 +12,6 @@ import BudgetView from "./components/group/budget-view";
 import GroupHomePage from "./components/group/home-page";
 import LoginPage from "./components/Login/LoginPage";
 import LandingPage from "./components/Landing/LandingPage";
-import AdminPage from "./components/Pencil/Admin/AdminPage";
 import PlanPage from "./components/PlanEvent/PlanPage";
 import EventHomePage from "./components/PlanEvent/EventHomePage";
 import AccreditPage from "./components/Accredit/AccreditPage";
@@ -23,10 +24,15 @@ import EditEventPage from "./components/GoGo/EditEventPage";
 import ZoomAppView from "./components/Zoom/ZoomAppView";
 import CodeVisualPage from "./components/Forge/CodeVisualPage";
 
+/** The main page for www.golery.com/app. There is no server side rendering */
 export default
 <Router>
     <div>
         <Switch>
+            <Route path="/admin" component={AdminPage}/>
+            <Route path="/pencil/admin" component={PencilAdminPage}/>
+
+
             <Route exact path="/" component={LandingPage}/>
             <Route path="/card/add" component={AddCardPage}/>
             <Route path="/card/:rootId/:nodeId" component={ViewCardPage}/>
@@ -41,7 +47,6 @@ export default
             <Route path="/group/main" component={GroupView}/>
             <Route path="/group/budget" component={BudgetView}/>
             <Route path="/login" component={LoginPage}/>
-            <Route path="/pencil/admin" component={AdminPage}/>
             <Route path="/accredit" component={AccreditPage}/>
             <Route path="/app/event/payment" component={PlanPage}/>
             <Route path="/app/event/home" component={EventHomePage}/>

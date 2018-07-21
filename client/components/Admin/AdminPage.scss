@@ -1,0 +1,38 @@
+.component {
+  padding: 2rem;
+  & h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.tableHeader {
+  background-color: #ffaf00;
+  & .cell {
+    padding: 1rem !important;
+    text-align: center;
+  }
+}
+
+.row {
+  display: table-row;
+  border-collapse: collapse;
+}
+
+.cell {
+  display: table-cell;
+  padding: 0.3rem;
+  border: 1px solid gray;
+}
+
+.button {
+  display: inline-block;
+  background-color: #001f3f;
+  color: white;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #3b5998;
+}

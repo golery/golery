@@ -3,15 +3,10 @@ import React from "react";
 import page from "./PageTemplate";
 import {GoGoPage} from "./Generated/Components.generated";
 
+/** The main page for www.golery.com/app. There is no server side rendering */
 export default function (req, res) {
-    let mainHtml = "";
-    page(req, res, mainHtml, 'MainRouter',
+    page(req, res, "<div>Loading...</div>", 'AppPage',
         {
-            title: 'Golery',
-            metaKeywords: 'Doodle Schedule event poll vote opinion choose a date GoEvent',
-            metaDescription: 'Best way to schedule an event with your friends - GoEvent',
-            openGraph: {
-                'og:image': 'http://www.golery.com/images/GoGo/GoGoFacebookOpenGraphImage.jpg'
-            }
+            title: 'App'
         });
 }
