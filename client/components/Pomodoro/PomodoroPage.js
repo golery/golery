@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './PomodoroPage.css';
 
 // Set not null to force a specific short duration for development
-const DEBUG_FORCE_SECONDS = 3;
+const DEBUG_FORCE_SECONDS = null;
 
 const _interval = 1000;
 const LOCAL_STORAGE_KEY = "STATE";
