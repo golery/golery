@@ -6,6 +6,7 @@ import jsonFormatterPage from "../Pages/JsonFormatterPage";
 import siteMapPage from "../Pages/SiteMapPage";
 import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
 import menuServerPage from "../Pages/MenuServerPage";
+import flonServerPage from "../Pages/FlonServerPage";
 import pomodoroPage from "../Pages/PomodoroPage";
 import passport from "passport";
 
@@ -40,5 +41,6 @@ export default function (router) {
     router.use('/menu', menu);
     router.get('/app', mainPage);
     router.get('/pomodoro', pomodoroPage);
+    router.get('/flon', flonServerPage);
     router.use('/', index);
 }

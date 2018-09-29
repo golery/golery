@@ -10,6 +10,7 @@ import PencilPage from './components/Pencil/PencilPage';
 import PencilLandingPage from './components/Pencil/PencilLandingPage';
 import MenuPage from './components/Menu/MenuPage';
 import PomodoroPage from './components/Pomodoro/PomodoroPage';
+import FlonPage from './components/Flon/FlonPage';
 import Polyfill from './services/Polyfill';
 import DecoupledEditor from 'ckeditor5-build-pencil/build/ckeditor';
 
@@ -22,7 +23,8 @@ const MAIN_COMPONENTS = {
     JsonFormatterPage: <JsonFormatterPage/>,
     PencilLandingPage: <PencilLandingPage/>,
     MenuPage: <MenuPage/>,
-    PomodoroPage: <PomodoroPage/>
+    PomodoroPage: <PomodoroPage/>,
+    FlonPage: <FlonPage/>
 };
 
 // This global method is called to populate correct react component to page
