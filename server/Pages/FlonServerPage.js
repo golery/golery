@@ -19,8 +19,8 @@ function renderPage(req, res, node) {
     let options = getPageOptions();
     options.serverState = {initialNode: node};
 
-    let mainHtml = ReactDOM.renderToString(<FlonPage serverState={options.serverState}/>);
-    page(req, res, mainHtml, 'MenuPage', options);
+    let mainHtml = ReactDOM.renderToString(<div/>);
+    page(req, res, mainHtml, 'FlonPage', options);
 }
 
 export default function (req, res) {

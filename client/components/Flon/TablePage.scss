@@ -1,0 +1,30 @@
+.component {
+  padding: 1rem;
+}
+
+.tableName {
+  text-align: center;
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.fieldListSection {
+
+}
+
+.field {
+  display: table-row;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.columnDescription {
+  display: table-cell;
+  margin-left: 2rem;
+}
+
+.columnName {
+  display: table-cell;
+  font-weight: bold;
+  padding: 0.5rem;
+}
