@@ -22,6 +22,7 @@ import TermsView from "./TermsView";
 import AppMenu from "./AppMenu";
 import ModalDialog from "../Core/Dialog/ModalDialog";
 import Scrollbar from "./Scrollbar";
+import Sandbox from "./Sandbox";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -107,6 +108,10 @@ export default class PencilPage extends React.Component {
     }
 
     render() {
+        if (Sandbox) {
+            return <Sandbox/>
+        }
+
         if (!this.treeModel && typeof window !== "undefined" && window.location.pathname === ("/pencil")) {
             // only show loading if there is no initial nodeId
             return <LoadingPage/>;
