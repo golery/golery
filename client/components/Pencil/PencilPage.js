@@ -22,7 +22,7 @@ import TermsView from "./TermsView";
 import AppMenu from "./AppMenu";
 import ModalDialog from "../Core/Dialog/ModalDialog";
 import Scrollbar from "./Scrollbar";
-import Sandbox from "./Sandbox";
+import Sandbox from "./Sandbox/Sandbox";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
