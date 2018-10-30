@@ -19,3 +19,5 @@ export default class Sandbox extends React.Component {
 Sandbox.propTypes = {
     //node: PropTypes.object
 };
+
+Sandbox = undefined;
