@@ -4,6 +4,13 @@ module.exports = function (prod, outputRelativePath) {
     let output = process.cwd() + outputRelativePath;
 
     let localIdentName = '[name]__[local]___[hash:base64:5]';
+    let ruleCssNodeModules = {
+        test: /\.css|\.scss$/,
+        include: /node_modules/,
+        use: [
+            {loader: 'css-loader'}
+        ]
+    };
     let serverConfig = {
         name: "***SERVER SIDE WEBPACK***",
         output: {
@@ -37,6 +44,7 @@ module.exports = function (prod, outputRelativePath) {
                         }
                     ]
                 },
+                ruleCssNodeModules,
                 {
                     /* Do not copy resource file for server rendering */
                     test: /\.(jpe?g|png|gif|svg|otf)$/i,
