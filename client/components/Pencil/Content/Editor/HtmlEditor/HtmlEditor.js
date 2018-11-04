@@ -3,16 +3,27 @@ import DOMPurify from 'dompurify';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
+import GoleryEditor, {SlateHtmlSerializer, SlateEditorHtmlDefaultRule, SlateValue} from "golery-editor";
+
+import "antd/dist/antd.css";
+
+const serializer = new SlateHtmlSerializer({ rules: SlateEditorHtmlDefaultRule });
+
 /**
  * Pure Html editor. It does not know about the node data
  * */
 export default class HtmlEditor extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         console.log('Create HtmlEditor Object');
         this.editor = null;
         this.elmToolbarHolder = null;
         this.elmContentEditableWithCkEditor = null;
+
+        let {html} = this.props;
+        this.state = {
+            value: serializer.deserialize(html)
+        };
     }
 
     componentDidMount() {
@@ -37,13 +48,16 @@ export default class HtmlEditor extends React.Component {
         this.hasContent = !!html;
         html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
 
+        const onChange = ({ value }) => this.setState({ value });
+
         return <div className={styles.component}>
             <div className={styles.toolbarHolder} ref={ref => this.elmToolbarHolder = ref}/>
-            <div className={this._getContentEditableClassName()}
-                 dangerouslySetInnerHTML={{__html: html}}
-                 ref={(elmContentEditable) => {
-                     this.elmContentEditable = elmContentEditable;
-                 }}/>
+            <GoleryEditor value={this.state.value} onChange={onChange} readOnly={false} />
+            {/*<div className={this._getContentEditableClassName()}*/}
+                 {/*dangerouslySetInnerHTML={{__html: html}}*/}
+                 {/*ref={(elmContentEditable) => {*/}
+                     {/*this.elmContentEditable = elmContentEditable;*/}
+                 {/*}}/>*/}
         </div>;
     }
 
