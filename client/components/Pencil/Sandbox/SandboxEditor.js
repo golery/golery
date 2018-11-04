@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import CannerEditor, {SlateHtmlSerializer, SlateEditorHtmlDefaultRule, SlateValue} from "golery-editor/dist/index";
+import GoleryEditor, {SlateHtmlSerializer, SlateEditorHtmlDefaultRule, SlateValue} from "golery-editor/dist/index.dev";
 
 import "antd/dist/antd.css";
 
@@ -42,18 +42,8 @@ class SandboxEditor extends React.Component {
         const onChange = ({ value }) => this.setState({ value });
 
         return (
-            <div style={{ margin: "20px" }}>
-                <div id={"sample"}>
-                    This is test<ol>
-                    <li>
-                        first<br />firt of firts
-                    </li>
-                    <li>second</li>
-                </ol>
-                </div>
-                <button onClick={() => this._setHtml()}>SetHtml</button>
-                <button onClick={() => this._getHtml()}>GetHtml</button>
-                <CannerEditor value={value} onChange={onChange} readOnly={false} />
+            <div>
+                <GoleryEditor value={value} onChange={onChange} readOnly={false} debug={true}/>
             </div>
         );
     }

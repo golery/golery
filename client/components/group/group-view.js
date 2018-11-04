@@ -1,5 +1,6 @@
 import React from 'react';
-import {Router, Route, Link, hashHistory} from 'react-router'
+import {Router, Route, hashHistory} from 'react-router'
+import { Link } from 'react-router-dom';
 import styles from './styles.css';
 
 export default class GroupView extends React.Component {

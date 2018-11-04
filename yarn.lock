@@ -2680,9 +2680,9 @@ globby@^3.0.1:
     pify "^2.0.0"
     pinkie-promise "^1.0.0"
 
-golery-editor@^1.1.0-alpha.0:
-  version "1.1.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/golery-editor/-/golery-editor-1.1.0-alpha.0.tgz#5df3ac59d60501934bbf93e7285960a145d3f499"
+golery-editor@^1.1.0-alpha.6:
+  version "1.1.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/golery-editor/-/golery-editor-1.1.0-alpha.6.tgz#6a20916cd7bc1820e7330d4d5a554d5f79dfaa4f"
 
 got@^6.7.1:
   version "6.7.1"
