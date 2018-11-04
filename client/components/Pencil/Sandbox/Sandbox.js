@@ -4,6 +4,8 @@ import React from 'react';
 import styles from './Sandbox.scss';
 import SandboxEditor from './SandboxEditor';
 
+let enableSandbox = null;
+
 export default class Sandbox extends React.Component {
     constructor(props) {
         super(props);
@@ -18,9 +20,14 @@ export default class Sandbox extends React.Component {
     }
 
     static isEnabled() {
-        /*if (typeof window === "undefined") return false;
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('sandbox') != null;*/
-        return true;
+        if (enableSandbox == null) {
+            if (typeof window === "undefined") {
+                enableSandbox = false;
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                enableSandbox = urlParams.get('sandbox') !== null;
+            }
+        }
+        return enableSandbox !== false;
     }
 }
