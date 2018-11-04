@@ -1,5 +1,7 @@
 import Rest from "./Rest";
-import {default as mongoose, Objectid, Schema} from "mongoose";
+import mongoose from 'mongoose';
+
+const Schema = mongoose.Schema;
 
 mongoose.Promise = Promise;
 const TYPE_TEXT = 'TEXT';

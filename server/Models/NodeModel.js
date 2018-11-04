@@ -1,5 +1,7 @@
 // Ref. https://github.com/KunalKapadia/express-mongoose-es6-rest-api/blob/develop/server/models/user.model.js
-import mongoose, {Schema} from 'mongoose';
+import mongoose from 'mongoose';
+
+const Schema = mongoose.Schema;
 
 /** NODE */
 const schema = new Schema({
