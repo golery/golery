@@ -52,9 +52,12 @@ export default class HtmlEditor extends React.Component {
 
 
     _onChange(change) {
-        this.setState({value: change.value});
-        let innerHtml = serializer.serialize(this.state.value);
+        let value = change.value;
+        let innerHtml = serializer.serialize(value);
         console.log('OnChange', innerHtml);
+
+        this.setState({value: value});
+
         this.hasContent = innerHtml !== "";
         if (this.props.onChange) {
             this.props.onChange(innerHtml, this.props.editingContext);
