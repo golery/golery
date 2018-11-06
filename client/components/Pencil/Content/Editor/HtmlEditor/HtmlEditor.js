@@ -3,11 +3,10 @@ import DOMPurify from 'dompurify';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
-import GoleryEditor, {SlateHtmlSerializer, SlateEditorHtmlDefaultRule, SlateValue} from "golery-editor/dist/index.dev";
+import {GoleryEditor} from "golery-editor/dist/index.dev";
 
 import "antd/dist/antd.css";
 
-const serializer = new SlateHtmlSerializer({ rules: SlateEditorHtmlDefaultRule });
 
 /**
  * Pure Html editor. It does not know about the node data
@@ -18,23 +17,18 @@ export default class HtmlEditor extends React.Component {
         console.log('Create HtmlEditor Object');
         this.elmToolbarHolder = null;
 
-        let {html} = this.props;
-        this.state = {
-            value: serializer.deserialize(html)
-        };
-
         this.goleryEditor = React.createRef();
     }
 
     render() {
-        let {html} = this.props;
+        let {html, value, onChange} = this.props;
         this.hasContent = !!html;
-        html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
+        // html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
 
         return <div className={styles.component}>
             <div className={styles.toolbarHolder} ref={ref => this.elmToolbarHolder = ref}/>
-            <GoleryEditor value={this.state.value}
-                          onChange={(change)=> this._onChange(change)}
+            <GoleryEditor value={value}
+                          onChange={onChange}
                           readOnly={false}
                           autoFocus={true}
                           className={this._getContentEditableClassName()}

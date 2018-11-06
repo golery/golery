@@ -16,6 +16,8 @@ const DISABLE_SAVE = false;
 const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
+import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor/dist/index.dev";
+
 export default class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -23,7 +25,8 @@ export default class NodeEditor extends React.Component {
         this.elmTopToolbarHolder = null;
         this.elmToolbar = null;
 
-        this.state = {showToolbar: false};
+        let {node} = this.props;
+        this.state = {showToolbar: false, slateValue : htmlSerializer.deserialize(node.html)};
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
@@ -37,8 +40,14 @@ export default class NodeEditor extends React.Component {
             toolbarClassName += ' ' + styles.displaynone;
             toggleToolbarButton = "fa fa-css3";
         }
+        let {slateValue} = this.state;
+        const onChange = (change)=> this._onChangeHtml(change);
+        console.log(EditorToolbar);
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <div className={toolbarClassName} ref={ref => this.elmTopToolbarHolder = ref}/>
+            <div>
+                <EditorToolbar value={slateValue} onChange={onChange}/>
+            </div>
             <div className={styles.contentHolder}>
                 <Scrollbar>
                     <TitleEditor html={node.title}
@@ -47,9 +56,9 @@ export default class NodeEditor extends React.Component {
                                  onChange={html => this._onChangeTitle(html)}
                     />
 
-                    <HtmlEditor html={node.html}
+                    <HtmlEditor value={slateValue}
                                 contentEditableClassName="nodeHtml"
-                                onChange={html => this._onChangeNodeHtml(html)}
+                                onChange={onChange}
                                 addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
                                 ref={ref => {
                                     this.elmHtmlEditor = ref;
@@ -104,12 +113,20 @@ export default class NodeEditor extends React.Component {
     }
 
     focus() {
-        this.elmHtmlEditor.focus();
+        // this.elmHtmlEditor.focus();
     }
 
     _onClickShare() {
         let modal = new ModalDialog();
         modal.show(<div><ShareEditor node={this.props.node}/></div>);
+    }
+
+    _onChangeHtml(change) {
+        let value = change.value;
+        let innerHtml = htmlSerializer.serialize(value);
+        console.log('OnChange', innerHtml);
+
+        this.setState({slateValue: value});
     }
 }
 

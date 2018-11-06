@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import GoleryEditor, {SlateHtmlSerializer, SlateEditorHtmlDefaultRule, SlateValue} from "golery-editor/dist/index.dev";
+import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor/dist/index.dev";
 
 import "antd/dist/antd.css";
 
@@ -27,8 +27,6 @@ const initialValue = SlateValue.fromJSON({
     }
 });
 
-const serializer = new SlateHtmlSerializer({ rules: SlateEditorHtmlDefaultRule });
-
 class SandboxEditor extends React.Component {
     constructor() {
         super();
@@ -50,13 +48,13 @@ class SandboxEditor extends React.Component {
 
     _setHtml() {
         let html = document.getElementById("sample").innerHTML;
-        const v = serializer.deserialize(html);
+        const v = htmlSerializer.deserialize(html);
         this.setState({ value: v });
         console.log(v);
     }
 
     _getHtml() {
-        console.log("Out:", serializer.serialize(this.state.value));
+        console.log("Out:", htmlSerializer.serialize(this.state.value));
     }
 }
 
