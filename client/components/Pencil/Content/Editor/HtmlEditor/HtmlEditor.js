@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import {GoleryEditor} from "golery-editor/dist/index.dev";
 
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
 
 
 /**
@@ -25,22 +25,19 @@ export default class HtmlEditor extends React.Component {
         this.hasContent = !!html;
         // html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
 
-        return <div className={styles.component}>
-            <div className={styles.toolbarHolder} ref={ref => this.elmToolbarHolder = ref}/>
+        return <div className={this._getContentEditableClassName()}>
             <GoleryEditor value={value}
                           onChange={onChange}
                           readOnly={false}
                           autoFocus={true}
-                          className={this._getContentEditableClassName()}
-                          ref={this.goleryEditor}
-            />
+                          ref={this.goleryEditor}/>
         </div>;
     }
 
 
     _getContentEditableClassName() {
         let className = this.props.contentEditableClassName || '';
-        let classEmpty = this.hasContent ? '' : styles.emptyMinimize;
+        let classEmpty = '';//this.hasContent ? '' : styles.emptyMinimize;
         return [className, styles.contentEditable, classEmpty].join(' ');
     }
 

@@ -57,7 +57,7 @@ export default class NodeEditor extends React.Component {
                     />
 
                     <HtmlEditor value={slateValue}
-                                contentEditableClassName="nodeHtml"
+                                contentEditableClassName="nodeHtml pencilTheme"
                                 onChange={onChange}
                                 addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
                                 ref={ref => {

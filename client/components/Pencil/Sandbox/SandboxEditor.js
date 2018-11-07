@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor/dist/index.dev";
 
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
 
 
 const initialValue = SlateValue.fromJSON({
