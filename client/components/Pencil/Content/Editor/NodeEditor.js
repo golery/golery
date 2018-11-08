@@ -34,19 +34,21 @@ export default class NodeEditor extends React.Component {
 
     render() {
         let {node} = this.props;
-        let toolbarClassName = styles.topToolbarHolder;
         let toggleToolbarButton = "fa fa-close";
-        if (!this.state.showToolbar) {
-            toolbarClassName += ' ' + styles.displaynone;
-            toggleToolbarButton = "fa fa-css3";
-        }
         let {slateValue} = this.state;
         const onChange = (change)=> this._onChangeHtml(change);
-        console.log(EditorToolbar);
+
+        let elmToolbar;
+        if (this.state.showToolbar) {
+            elmToolbar = <EditorToolbar value={slateValue} onChange={onChange}/>;
+        } else {
+            elmToolbar = null;
+            toggleToolbarButton = "fa fa-css3";
+        }
+
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            <div className={toolbarClassName} ref={ref => this.elmTopToolbarHolder = ref}/>
             <div>
-                <EditorToolbar value={slateValue} onChange={onChange}/>
+                {elmToolbar}
             </div>
             <div className={styles.contentHolder}>
                 <Scrollbar>
@@ -123,8 +125,8 @@ export default class NodeEditor extends React.Component {
 
     _onChangeHtml(change) {
         let value = change.value;
-        let innerHtml = htmlSerializer.serialize(value);
-        console.log('OnChange', innerHtml);
+        let html = htmlSerializer.serialize(value);
+        this._onChangeNodeHtml(html);
 
         this.setState({slateValue: value});
     }

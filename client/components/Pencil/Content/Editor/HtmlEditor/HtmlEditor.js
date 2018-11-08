@@ -1,12 +1,8 @@
 import React from 'react';
-import DOMPurify from 'dompurify';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
 import {GoleryEditor} from "golery-editor/dist/index.dev";
-
-// import "antd/dist/antd.css";
-
 
 /**
  * Pure Html editor. It does not know about the node data
@@ -14,18 +10,12 @@ import {GoleryEditor} from "golery-editor/dist/index.dev";
 export default class HtmlEditor extends React.Component {
     constructor(props) {
         super(props);
-        console.log('Create HtmlEditor Object');
-        this.elmToolbarHolder = null;
-
         this.goleryEditor = React.createRef();
     }
 
     render() {
-        let {html, value, onChange} = this.props;
-        this.hasContent = !!html;
-        // html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
-
-        return <div className={this._getContentEditableClassName()}>
+        let {value, onChange, contentEditableClassName} = this.props;
+        return <div className={contentEditableClassName}>
             <GoleryEditor value={value}
                           onChange={onChange}
                           readOnly={false}
@@ -33,14 +23,6 @@ export default class HtmlEditor extends React.Component {
                           ref={this.goleryEditor}/>
         </div>;
     }
-
-
-    _getContentEditableClassName() {
-        let className = this.props.contentEditableClassName || '';
-        let classEmpty = '';//this.hasContent ? '' : styles.emptyMinimize;
-        return [className, styles.contentEditable, classEmpty].join(' ');
-    }
-
 
     _onChange(change) {
         let value = change.value;
