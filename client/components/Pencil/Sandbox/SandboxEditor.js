@@ -3,33 +3,32 @@ import ReactDOM from "react-dom";
 
 import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor/dist/index.dev";
 
-// import "antd/dist/antd.css";
 
+class SandboxEditor extends React.Component {
+    constructor() {
+        super();
 
-const initialValue = SlateValue.fromJSON({
-    document: {
-        nodes: [
-            {
-                object: "block",
-                type: "paragraph",
+        const initialValue = SlateValue.fromJSON({
+            document: {
                 nodes: [
                     {
-                        object: "text",
-                        leaves: [
+                        object: "block",
+                        type: "paragraph",
+                        nodes: [
                             {
-                                text: "A line of text in a paragraph."
+                                object: "text",
+                                leaves: [
+                                    {
+                                        text: "A line of text in a paragraph."
+                                    }
+                                ]
                             }
                         ]
                     }
                 ]
             }
-        ]
-    }
-});
+        });
 
-class SandboxEditor extends React.Component {
-    constructor() {
-        super();
         this.state = {
             value: initialValue
         };

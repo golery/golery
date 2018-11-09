@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
-import {GoleryEditor} from "golery-editor/dist/index.dev";
+import GoleryEditorLib from "golery-editor/dist/index.dev";
+let {GoleryEditor} = GoleryEditorLib;
 
 /**
  * Pure Html editor. It does not know about the node data
