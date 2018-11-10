@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
-import GoleryEditorLib from "golery-editor/dist/index.dev";
+import GoleryEditorLib from "golery-editor/dist/index.min";
 let {GoleryEditor} = GoleryEditorLib;
 
 /**

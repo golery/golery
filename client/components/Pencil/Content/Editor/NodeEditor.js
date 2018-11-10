@@ -16,7 +16,7 @@ const DISABLE_SAVE = false;
 const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
-import GoleryEditorLib from "golery-editor/dist/index.dev";
+import GoleryEditorLib from "golery-editor/dist/index.min";
 let {EditorToolbar, htmlSerializer} = GoleryEditorLib;
 
 export default class NodeEditor extends React.Component {

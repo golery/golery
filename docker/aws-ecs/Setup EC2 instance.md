@@ -1,56 +1,110 @@
+What is free?
+-------------
+https://aws.amazon.com/free/
+Read the end of page.
+- Ec2 instance type: t2.micro (1 memory)
+- ECR (docker repository): 500MB/month - Don't use it
+
+What is not free?
+- Route 53
+- Unbound Elastic IP address
+- Secret manager (not quite sure) for loading automatically the docker image
+
+Basic architecture 
+------------------
+A cluster with 1 *EC2 instance*. 
+This instance is created with special image and register with cluster. It's called *ECS Instances*.
+EC2 instance has agent docker which can load and run other dockers
+
 Create ECS cluster
 -----------------
-1. Type: EC2 + network.
-   This will create an EC2 instance with correct configuration which allows EC2 instance to register automatically to 
-   ECS cluster
+1. Start with ECS service. 
+   Create cluster. 
+   Choose EC2 linux + networking
+   Cluster name: default
+   Ec2 instance type: t2.micro
+   Important: Load public key (You cannot do that later)
+   Choose existing VPC (virtual private cloud)
    
-Configure EC2 instance
-----------------------
-1. Configure DNS with Elastic IP address (don't use Route 53)  
-[http://techgenix.com/namecheap-aws-ec2-linux/](http://www.golery.com/undefined)
-Update script ./ssh.sh with new IP address
-2. Update security group: Allow inbound port 22 (for SSH to EC2 instance), 80, 443
+   This create a cluster with 1 EC2 instance + SSH key pair for access 
+  
+Create new Task definition 
+--------------------------
+Go to ECS > Task definitions.
+1. Type: EC2 (not Fargate)
+2. Task name: www
+3. Network mode: bridge
+4. Role: create role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
+   Choose role: AmazonECSTaskExecutionRolePolicy. Allow task to auth with Amazon ECS service on Golery behalf
+5. Create Container: 
+   - Name: www (whatever)
+   - Image: greensuisse/www
+   - Private repository authentication: No. Secret manager is not free.
+   - Port mapping: 443=>8443, 80=>8080
+   - CPU unit: 512 (ie. Half of 1 CPU core)
+   - Memory limit: Hard limit: 300MB
+   - Entry point: none
+   - Command: ./start-server.sh
+   - Mount: /data => data
+6. Run task
+   - There is error: Cannot pull container error    
+  
+Setup EC2 instance from browser
+-------------------------------
+1. Cluster > ECS instance
+   This is a list of EC2 instance which is registered to cluster.
+   For free tier, there is only one instance. Open it.
+2. Menu security group. 
+   Add inbound port 22 (for SSH to EC2 instance). Remember to change the source to Anywhere
+   Add inbound port 80, 443 
+3. Menu Elastic IP:
+   Allocate new.Associate with instance.
+   Note:
+   - Don't use Route 53. It's not free
+   - Must associate the elastic IP to instance right away. If you drop EC2 instance, delete the elastic IP.  
+   [http://techgenix.com/namecheap-aws-ec2-linux/](http://www.golery.com/undefined)
+   - Update script /work/www.credential/amazon/ssh.sh with new IP address
+   
 
-In EC2 instance:
-----------------
-1. Allow EC2 instance to connect to dockerhub private repository
+Setup EC2 instance by ssh to instance
+--------------------------------------
+1. Connect to EC2 instance and update
+   /work/www.credential/amazon/ssh.sh
+   sudo yum install nano   (Yum is package manager by redhat)
+2. Allow EC2 instance to connect to dockerhub private repository
     1. Generate auth hash:
-       SSH to EC2 instance    
        docker login
        This generate ~/.docker/config.json
        with authentication. However, it's used for command line only.
        The ecs agent does not use it.
     2. Add dockerhub authentication to ecs-agent /etc/ecs/ecs.config
        https://docs.aws.amazon.com/AmazonECS/latest/developerguide/private-auth-container-instances.html
-       
-       - Edit /etc/ecs/ecs.config
+       - sudo nano /etc/ecs/ecs.config
        
          ECS_ENGINE_AUTH_TYPE=dockercfg
          ECS_ENGINE_AUTH_DATA={"https://index.docker.io/v1/":{"auth":"<auth>","email":"greensuisse@gmail.com"}}
          ECS_CONTAINER_STOP_TIMEOUT=3s
          with <auth> copy from ~/.docker/config.json
        - Restart ecs agent
-         sudo ecs stop && sudo ecs start
+         sudo stop ecs 
+         sudo start ecs
          curl http://localhost:51678/v1/metadata
 2. Create a data folder
     - sudo mkdir /data 
     - sudo mkdir /data/upload
-    - sudo chmod 777 -R /data permisison 777
+    - sudo mkdir /data/ssl-certs
+    - sudo chmod 777 -R /data 
 
-Create ECS task 
----------------
-Task www:
-Go to ECS > Task definitions, create task www
-    1. Volumes: data => /data
-    2. Container: greensuisse/www
-       - Port mapping: 443=>8443, 80=>8080
-       - Mount: /data => data
-    3. Run task
-    4. Validate with HTTP: http://ec2-18-211-50-118.compute-1.amazonaws.com/
-    5. If there is problem ssh to EC2 instance investigate logs of docker
-    
 
 Configure Domain name and HTTPS
 -------------------------------
-Namecheap, points to new IP. Ensure that http://www.golery.com/ response.
-Generate SSL certificate: In docker www on EC2 instance, run /softwares/golery/acme/cron-renew.sh
+Namecheap
+Choose Advanced DNS.
+Points to new IP from EC2 instance > Public IP v4
+Ensure that http://www.golery.com/ response.
+
+Generate SSL ceritificate
+-------------------------
+Generate SSL certificate: 
+In docker www on EC2 instance, run /softwares/golery/acme/cron-renew.sh
+Check that there is files in /data/ssl-certs
