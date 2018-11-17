@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styles from './NodeView.css';
 import HtmlView from './Html/HtmlView';
-import GoleryEditorLib from "golery-editor/dist/index.dev";
+import GoleryEditorLib from "golery-editor";
 let {GoleryEditor, htmlSerializer} = GoleryEditorLib;
 
 

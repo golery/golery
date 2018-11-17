@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor/dist/index.min";
+import {GoleryEditor, EditorToolbar, htmlSerializer, SlateValue} from "golery-editor";
 
 
 class SandboxEditor extends React.Component {
