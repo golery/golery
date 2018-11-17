@@ -101,10 +101,21 @@ Configure Domain name and HTTPS
 Namecheap
 Choose Advanced DNS.
 Points to new IP from EC2 instance > Public IP v4
-Ensure that http://www.golery.com/ response.
+Ensure that http://www.golerFy.com/ response.
 
 Generate SSL ceritificate
 -------------------------
 Generate SSL certificate: 
 In docker www on EC2 instance, run /softwares/golery/acme/cron-renew.sh
 Check that there is files in /data/ssl-certs
+
+Monitoring
+----------
+Setup Billing budget monitor: 0.1$
+
+Shutdown 
+--------
+1. Check there is budget monitoring
+2. Delete elastic IP. Delete Ec2 instance. Delete Ecs cluster
+3. Make payment
+4. Close account

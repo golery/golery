@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
-import GoleryEditorLib from "golery-editor/dist/index.min";
+import GoleryEditorLib from "golery-editor/dist/index.dev";
 let {GoleryEditor} = GoleryEditorLib;
 
 /**
@@ -16,6 +16,7 @@ export default class HtmlEditor extends React.Component {
 
     render() {
         let {value, onChange, contentEditableClassName} = this.props;
+        console.log("HtmlEditor.Value=", value);
         return <div className={contentEditableClassName}>
             <GoleryEditor value={value}
                           onChange={onChange}

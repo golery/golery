@@ -16,7 +16,7 @@ const DISABLE_SAVE = false;
 const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
-import GoleryEditorLib from "golery-editor/dist/index.min";
+import GoleryEditorLib from "golery-editor/dist/index.dev";
 let {EditorToolbar, htmlSerializer} = GoleryEditorLib;
 
 export default class NodeEditor extends React.Component {
@@ -27,7 +27,14 @@ export default class NodeEditor extends React.Component {
         this.elmToolbar = null;
 
         let {node} = this.props;
-        this.state = {showToolbar: false, slateValue : htmlSerializer.deserialize(node.html)};
+        let html = node.html || "";
+        let value = htmlSerializer.deserialize(html);
+        if (value.texts.size === 0) {
+            // This is a bug in slate: if the text is empty. There is exception
+            value = htmlSerializer.deserialize(" ");
+        }
+
+        this.state = {showToolbar: false, slateValue : value};
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();

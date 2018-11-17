@@ -207,7 +207,9 @@ export default class PencilPage extends React.Component {
     _onShowEditView() {
         this.setState({contentMode: CONTENT_MODE_EDIT});
         window.setTimeout(() => {
-            this._nodeEditor.focus();
+            if (this._nodeEditor) {
+                this._nodeEditor.focus();
+            }
         });
     }
 
