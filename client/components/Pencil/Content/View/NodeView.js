@@ -19,10 +19,12 @@ export default class NodeView extends React.Component{
         console.log(html);
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <HtmlView html={node.title} className="nodeTitle"/>
+            <div className={"nodeHtml"}>
             <GoleryEditor value={value}
                           readOnly={true}
                           autoFocus={true}
                           ref={this.goleryEditor}/>
+            </div>
             {/*<HtmlView html={node.html} className="nodeHtml"/>*/}
         </div>;
     }
