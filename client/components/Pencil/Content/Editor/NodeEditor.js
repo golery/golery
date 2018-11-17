@@ -134,6 +134,7 @@ export default class NodeEditor extends React.Component {
     _onChangeHtml(change) {
         let value = change.value;
         let html = htmlSerializer.serialize(value);
+        console.log("CHanged:", html);
         this._onChangeNodeHtml(html);
 
         this.setState({slateValue: value});

@@ -203,6 +203,9 @@ class ApiNode {
                     multiple: true,
                     values: ['x-pencil-code']
                 }
+            ],
+            'code': [
+               'class'
             ]
         }, sanitizeHtml.defaults.allowedAttributes);
         console.log(allowed);
