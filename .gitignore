@@ -8,3 +8,4 @@
 /proxy/node_modules
 /proxy/build
 /server/Pages/Generated/
+yarn-error.log

@@ -13,3 +13,8 @@ Inside container, run step by steps command in mep.sh
 #To PROD www container at local
 docker run -it --rm -p 8080:8080 greensuisse/www ./start-server.sh
 Access http://localhost:8080 
+
+# Configs
+1. Aws access key/access secret. 
+   Create: /work/golery/docker/aws-cli/README.md
+2. 
