@@ -1,9 +1,18 @@
- {
-   "presets": [
-     "@babel/preset-env",
-     "@babel/preset-react"
-   ],
-   "ignore": [
-     "Components.generated.js"
-   ]
+{
+  "plugins": [
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        loose: true
+      }
+    ]
+  ],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "ignore": [
+    "Components.generated.js"
+  ]
 }

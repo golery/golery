@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import styles from './NodeView.css';
 import HtmlView from './Html/HtmlView';
 import GoleryEditorLib from "golery-editor";
-let {GoleryEditor, htmlSerializer} = GoleryEditorLib;
+let {GoleryEditor, EditorController, htmlSerializer} = GoleryEditorLib;
 
 
 export default class NodeView extends React.Component{
     constructor(props) {
         super(props);
+        this.editorController = new EditorController();
     }
     render()
     {
@@ -18,12 +19,12 @@ export default class NodeView extends React.Component{
         let value = htmlSerializer.deserialize(html);
         console.log(html);
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            <HtmlView html={node.title} className="nodeTitle"/>
+            {/*<HtmlView html={node.title} className="nodeTitle"/>*/}
             <div className={"nodeHtml"}>
             <GoleryEditor value={value}
                           readOnly={true}
                           autoFocus={true}
-                          ref={this.goleryEditor}/>
+                          controller={this.editorController}/>
             </div>
             {/*<HtmlView html={node.html} className="nodeHtml"/>*/}
         </div>;

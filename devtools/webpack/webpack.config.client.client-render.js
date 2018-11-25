@@ -82,7 +82,8 @@ module.exports = function (prod, outputRelativePath) {
     };
     let config = {
         name: "***CLIENT SIDE WEBPACK***",
-        devtool: 'cheap-source-map',
+        devtool: 'eval-source-map',
+
         output: {
             path: output + '/client',
             filename: outputFilename,
