@@ -11,22 +11,35 @@ export default class NodeView extends React.Component{
     constructor(props) {
         super(props);
         this.editorController = new EditorController();
+        this.state = {html: null};
     }
+
+    static getDerivedStateFromProps(props, state) {
+        let {node} = props;
+        let html = node.html || "";
+        if (state.html !== html) {
+            let value = htmlSerializer.deserialize(html);
+            return {
+                html: html,
+                value: value,
+                title: node.title || ""
+            };
+        }
+        // when null is returned no update is made to the state
+        return null;
+    }
+
     render()
     {
-        let {node} = this.props;
-        let html = node.html || "";
-        let value = htmlSerializer.deserialize(html);
-        console.log(html);
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            {/*<HtmlView html={node.title} className="nodeTitle"/>*/}
+            <HtmlView html={this.props.node.title} className="nodeTitle"/>
             <div className={"nodeHtml"}>
-            <GoleryEditor value={value}
+            <GoleryEditor value={this.state.value}
+                          onChange={(c) => this.setState({value: c.value})}
                           readOnly={true}
                           autoFocus={true}
                           controller={this.editorController}/>
             </div>
-            {/*<HtmlView html={node.html} className="nodeHtml"/>*/}
         </div>;
     }
 }
