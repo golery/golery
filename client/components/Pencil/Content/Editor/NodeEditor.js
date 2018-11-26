@@ -17,7 +17,7 @@ const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
 import GoleryEditorLib from "golery-editor";
-let {EditorToolbar, htmlSerializer} = GoleryEditorLib;
+let {EditorToolbar, htmlSerializer, EditorController} = GoleryEditorLib;
 
 export default class NodeEditor extends React.Component {
     constructor(props) {
@@ -38,6 +38,8 @@ export default class NodeEditor extends React.Component {
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
+        this.controller = new EditorController();
+        this.editorToolbarOptions = this.controller.getToolbarOptions();
     }
 
     render() {
@@ -48,7 +50,7 @@ export default class NodeEditor extends React.Component {
 
         let elmToolbar;
         if (this.state.showToolbar) {
-            elmToolbar = <EditorToolbar value={slateValue} onChange={onChange}/>;
+            elmToolbar = <EditorToolbar value={slateValue} onChange={onChange} options={this.editorToolbarOptions}/>;
         } else {
             elmToolbar = null;
             toggleToolbarButton = "fa fa-css3";

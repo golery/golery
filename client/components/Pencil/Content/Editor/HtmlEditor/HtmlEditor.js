@@ -16,7 +16,7 @@ export default class HtmlEditor extends React.Component {
     }
 
     render() {
-        let {value, onChange, contentEditableClassName} = this.props;
+        let {value, onChange, contentEditableClassName, ...rest} = this.props;
         console.log("HtmlEditor.Value=", value, this.controller);
         return <div className={contentEditableClassName}>
             <GoleryEditor value={value}
@@ -24,6 +24,7 @@ export default class HtmlEditor extends React.Component {
                           controller={this.controller}
                           readOnly={false}
                           autoFocus={true}
+                          {...rest}
                           ref={this.goleryEditor}/>
         </div>;
     }
