@@ -10,6 +10,7 @@ import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
 import Scrollbar from '../../Scrollbar';
+import "@babel/polyfill";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -17,6 +18,7 @@ const DELAY_UPDATE_TITLE_MS = 400;
 const DELAY_SAVE_MS = 3000;
 
 import GoleryEditorLib from "golery-editor";
+
 let {EditorToolbar, htmlSerializer, EditorController} = GoleryEditorLib;
 
 export default class NodeEditor extends React.Component {
@@ -34,19 +36,23 @@ export default class NodeEditor extends React.Component {
             value = htmlSerializer.deserialize(" ");
         }
 
-        this.state = {showToolbar: false, slateValue : value};
+        this.state = {showToolbar: false, slateValue: value};
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
         this.controller = new EditorController();
-        this.editorToolbarOptions = this.controller.getToolbarOptions();
+        this.editorToolbarOptions = this.controller.getToolbarOptions({
+            async getImageUrl() {
+                return "https://jaspergilhuis.files.wordpress.com/2018/07/logo.png"
+            }
+        });
     }
 
     render() {
         let {node} = this.props;
         let toggleToolbarButton = "fa fa-close";
         let {slateValue} = this.state;
-        const onChange = (change)=> this._onChangeHtml(change);
+        const onChange = (change) => this._onChangeHtml(change);
 
         let elmToolbar;
         if (this.state.showToolbar) {
