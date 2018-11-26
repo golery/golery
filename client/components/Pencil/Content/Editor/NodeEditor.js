@@ -72,6 +72,7 @@ export default class NodeEditor extends React.Component {
                                 contentEditableClassName="nodeHtml pencilTheme"
                                 onChange={onChange}
                                 addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
+                                controller={this.controller}
                                 ref={ref => {
                                     this.elmHtmlEditor = ref;
                                 }}/>

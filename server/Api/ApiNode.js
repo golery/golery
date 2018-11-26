@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import sanitizeHtml from 'sanitize-html';
+import getSanitizedHtml from './Node/HtmlSanitize';
 
 mongoose.Promise = Promise;
 
@@ -22,7 +22,6 @@ function findNode(allNodes, nodeId) {
 }
 
 function findDescendants(nodeId, allNodes) {
-    console.log("Find descedant ", nodeId);
     let node = findNode(allNodes, nodeId);
     if (!node) return [];
 
@@ -171,7 +170,7 @@ class ApiNode {
         //FIXME: authentication
         let body = req.body;
 
-        let sanitizedHtml = this._getSanitizedHtml(body.html);
+        let sanitizedHtml = getSanitizedHtml(body.html);
 
         // clone content to be sure that only contents are updated
         let update = {
@@ -189,30 +188,6 @@ class ApiNode {
         });
 
         return Rest.json(req, res, promise);
-    }
-
-    _getSanitizedHtml(html) {
-        if (!html) return null;
-
-        // keep some special class name (ex: x-pencil-code)
-        // I don't know why the wild card '*' on tag does not work as in specs of library
-        let allowed = Object.assign({
-            'pre': [
-                {
-                    name: 'class',
-                    multiple: true,
-                    values: ['x-pencil-code']
-                }
-            ],
-            'code': [
-               'class'
-            ]
-        }, sanitizeHtml.defaults.allowedAttributes);
-        console.log(allowed);
-
-        return sanitizeHtml(html, {
-            allowedAttributes: allowed
-        });
     }
 
     _generateInitialTree(userId) {
