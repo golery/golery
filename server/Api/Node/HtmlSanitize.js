@@ -19,8 +19,8 @@ function getSanitizedHtml(html) {
         selfClosing: sanitizeHtml.defaults.selfClosing
     });
 
-    console.log("Before Sanitized Html: ", html);
-    console.log("Sanitized Html: ", clean);
+    // console.log("Before Sanitized Html: ", html);
+    // console.log("Sanitized Html: ", clean);
     return clean;
 }
 

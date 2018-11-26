@@ -2015,17 +2015,9 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-detect-indent@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-5.0.0.tgz#3871cc0a6a002e8c3e5b3cf7f336264675f06b9d"
-
 detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
-
-detect-newline@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
 
 detect-passive-events@^1.0.4:
   version "1.0.4"
@@ -2179,10 +2171,6 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.1.tgz#ed29634d19baba463b6ce6b80a37213eab71ec43"
   dependencies:
     once "^1.4.0"
-
-ends-with@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ends-with/-/ends-with-1.0.1.tgz#5265697706c6ac5150d6649a89ec2d019c25af90"
 
 enhanced-resolve@^4.1.0:
   version "4.1.0"
@@ -2729,26 +2717,9 @@ globby@^3.0.1:
     pify "^2.0.0"
     pinkie-promise "^1.0.0"
 
-golery-editor@^1.3.0-alpha.0:
-  version "1.3.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/golery-editor/-/golery-editor-1.3.0-alpha.0.tgz#8d495935d22ce60ceaac58ae128fcc792fd7248b"
-  dependencies:
-    golery-slate-code-block "^0.16.0-golery.0"
-    golery-slate-prism "^0.6.0-golery.1"
-    slate-schema-violations "^0.1.39"
-
-golery-slate-code-block@^0.16.0-golery.0:
-  version "0.16.0-golery.0"
-  resolved "https://registry.yarnpkg.com/golery-slate-code-block/-/golery-slate-code-block-0.16.0-golery.0.tgz#deb4d086791a08d786c7cc1747fee2417b55f0b0"
-  dependencies:
-    detect-indent "^5.0.0"
-    detect-newline "^2.1.0"
-    ends-with "^1.0.1"
-    is-hotkey "^0.1.3"
-
-golery-slate-prism@^0.6.0-golery.1:
-  version "0.6.0-golery.1"
-  resolved "https://registry.yarnpkg.com/golery-slate-prism/-/golery-slate-prism-0.6.0-golery.1.tgz#1e1ab5896658560dc27563663872e4052f3c34a9"
+golery-editor@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/golery-editor/-/golery-editor-1.3.0.tgz#2c6050f5f496d040d43d2d45bfb9909a3615531b"
 
 got@^6.7.1:
   version "6.7.1"
@@ -3164,10 +3135,6 @@ is-glob@^4.0.0:
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.0.tgz#9521c76845cc2610a85203ddf080a958c2ffabc0"
   dependencies:
     is-extglob "^2.1.1"
-
-is-hotkey@^0.1.3:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/is-hotkey/-/is-hotkey-0.1.4.tgz#c34d2c85d6ec8d09a871dcf71931c8067a824c7d"
 
 is-installed-globally@^0.1.0:
   version "0.1.0"
@@ -5868,10 +5835,6 @@ slash@^1.0.0:
 slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
-
-slate-schema-violations@^0.1.39:
-  version "0.1.39"
-  resolved "https://registry.yarnpkg.com/slate-schema-violations/-/slate-schema-violations-0.1.39.tgz#854ab5624136419cef4c803b1823acabe11f1c15"
 
 sliced@1.0.1:
   version "1.0.1"
