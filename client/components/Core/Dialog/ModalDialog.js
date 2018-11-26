@@ -15,7 +15,6 @@ class ModalComponent extends React.Component {
         return <div className={styles.backdrop} onClick={this._onCancel}>
             <div className={styles.modal}
                  onClick={(e) => {
-                     console.log('xxx');
                      e.preventDefault();
                      e.stopPropagation();
                  }}>

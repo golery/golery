@@ -4,9 +4,19 @@ import Axios from "axios";
 import styles from './UploadImageDialog.css';
 
 import ClipboardUtils from './Utils/ClipboardUtils';
+import ModalDialog from "../../../../Core/Dialog/ModalDialog";
+import TextSelection from "./Utils/TextSelection";
 
 const MAX_IMAGE_WIDTH = 1000;
 const MAX_IMAGE_HEIGHT = 800;
+
+export async function openUploadImageDialog(blobUrl) {
+    let modal = new ModalDialog();
+    let elm = <UploadImageDialog blobUrl={blobUrl} resolve={modal.resolve} reject={modal.reject}/>;
+
+    let save = TextSelection.saveSelection();
+    return modal.show(elm);
+}
 
 // Ref. https://www.lucidchart.com/techblog/2014/12/02/definitive-guide-copying-pasting-javascript/
 export default class UploadImageDialog extends React.Component {

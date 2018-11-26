@@ -11,6 +11,7 @@ import NodeRepo from '../../../../services/NodeRepo';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
 import Scrollbar from '../../Scrollbar';
 import "@babel/polyfill";
+import {openUploadImageDialog} from "./HtmlEditor/UploadImageDialog";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -41,11 +42,8 @@ export default class NodeEditor extends React.Component {
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
         this.controller = new EditorController();
-        this.editorToolbarOptions = this.controller.getToolbarOptions({
-            async getImageUrl() {
-                return "https://jaspergilhuis.files.wordpress.com/2018/07/logo.png"
-            }
-        });
+
+        this.editorToolbarOptions = this.controller.getToolbarOptions({getImageUrl: openUploadImageDialog});
     }
 
     render() {
