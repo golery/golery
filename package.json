@@ -51,7 +51,7 @@
     "express-session": "^1.15.6",
     "flux": "^3.1.3",
     "global": "^4.3.2",
-    "golery-editor": "^1.3.1-alpha.1",
+    "golery-editor": "^1.3.3-alpha.1",
     "lodash": "^4.17.11",
     "lru-cache": "^4.1.3",
     "moment": "^2.22.2",
