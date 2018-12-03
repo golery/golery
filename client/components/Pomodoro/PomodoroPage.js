@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './PomodoroPage.css';
 
 // Set not null to force a specific short duration for development
-const DEBUG_FORCE_SECONDS = 3;
+const DEBUG_FORCE_SECONDS = 30;
 
 const _interval = 1000;
 const LOCAL_STORAGE_KEY = "STATE";
@@ -116,20 +116,6 @@ export default class PomodoroPage extends React.Component {
         }
     }
 
-    _onStart() {
-        this._stopTimer();
-
-        let maxMinutes = parseInt(this.state.inputMinutes);
-        let maxSeconds = maxMinutes * 60;
-
-        if (DEBUG_FORCE_SECONDS) {
-            maxSeconds = DEBUG_FORCE_SECONDS;
-        }
-
-        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: MODE_RUNNING, elapsedSec: 0});
-        this._saveState();
-        this._startTimer();
-    }
 
     _startTimer() {
         this.timer = setInterval(() => this.tick(), _interval);
@@ -176,7 +162,8 @@ export default class PomodoroPage extends React.Component {
         if (!this.state.startTime) {
             return 0;
         }
-        let elapsedSeconds = (Date.now() - this.state.startTime) / 1000;
+        let secBeforeLastPause = this.state.secBeforeLastPause || 0;
+        let elapsedSeconds = (Date.now() - this.state.startTime) / 1000 + secBeforeLastPause;
         if (elapsedSeconds > this.state.maxSeconds) {
             elapsedSeconds = this.state.maxSeconds;
         }
@@ -323,14 +310,31 @@ export default class PomodoroPage extends React.Component {
         </div>
     }
 
+    _onStart() {
+        this._stopTimer();
+
+        let maxMinutes = parseInt(this.state.inputMinutes);
+        let maxSeconds = maxMinutes * 60;
+
+        if (DEBUG_FORCE_SECONDS) {
+            maxSeconds = DEBUG_FORCE_SECONDS;
+        }
+
+        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: MODE_RUNNING, elapsedSec: 0, secBeforeLastPause: 0});
+        this._saveState();
+        this._startTimer();
+    }
+
     _onPause() {
-        this.setState({mode : MODE_PAUSE});
+        this._stopTimer();
+        this.setState({mode : MODE_PAUSE, secBeforeLastPause: this._getElapsedSeconds()});
         this._saveState();
     }
 
     _onResume() {
-        this.setState({mode : MODE_RUNNING});
+        this.setState({mode : MODE_RUNNING, startTime: Date.now()});
         this._saveState();
+        this._startTimer();
     }
 
     _onIFail() {
