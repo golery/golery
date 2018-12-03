@@ -85,6 +85,23 @@
     cursor: pointer
 }
 
+.button {
+    height: 3rem;
+    line-height: 3rem;
+    border-radius: 6px;
+    margin: 3px;
+    padding: 0 1rem;
+    background-color: #ff4136;
+    color: white;
+    cursor: pointer;
+    min-width: 8rem;
+}
+
+.button.green {
+     background-color: #14A76C;
+}
+
+
 .doneText {
     display: inline-block;
     animation-name: shake;

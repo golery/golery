@@ -4,16 +4,14 @@ import PropTypes from 'prop-types';
 import styles from './PomodoroPage.css';
 
 // Set not null to force a specific short duration for development
-const DEBUG_FORCE_SECONDS = null;
+const DEBUG_FORCE_SECONDS = 3;
 
 const _interval = 1000;
 const LOCAL_STORAGE_KEY = "STATE";
-const STOPPED = 'STOPPED';
-const RUNNING = 'RUNNING';
-/** Finish pomodoro and a musing is playing */
-const DONE_MUSIC = 'DONE_MUSIC';
-/** Finish pomodoro and music stopped playing */
-const DONE_AFTER_MUSIC = 'DONE_AFTER_MUSIC';
+const MODE_READY_TO_START = 'STOPPED';
+const MODE_RUNNING = 'RUNNING';
+const MODE_PAUSE = 'PAUSE';
+const MODE_DONE = 'DONE';
 
 const ICON_DEFAULT = 'DEFAULT';
 const ICON_RUNNING = 'RUNNING';
@@ -67,10 +65,11 @@ export default class PomodoroPage extends React.Component {
     constructor(props) {
         super(props);
         this.timer = null;
-        this.state = this._loadState();
         this.documentTitle = new DocumentTitle();
 
-        if (this.state.mode === RUNNING) {
+        this.state = this._loadState();
+        // user comes back at running state
+        if (this.state.mode === MODE_RUNNING) {
             this._startTimer();
         }
     }
@@ -80,7 +79,7 @@ export default class PomodoroPage extends React.Component {
         if (typeof(window) !== "undefined") {
             let json = window.localStorage.getItem(LOCAL_STORAGE_KEY);
             console.log('Loaded state:', json);
-            if (json != null) {
+            if (json !== null) {
                 settings = JSON.parse(json);
             }
         }
@@ -88,8 +87,9 @@ export default class PomodoroPage extends React.Component {
             settings = {
                 startTime: null,
                 maxSeconds: 25 * 60,
-                mode: STOPPED,
-                inputMinutes: 25
+                mode: MODE_READY_TO_START,
+                inputMinutes: 25,
+                elapsedSec: 0
             };
         }
         console.log('Loaded settings:', settings);
@@ -126,17 +126,32 @@ export default class PomodoroPage extends React.Component {
             maxSeconds = DEBUG_FORCE_SECONDS;
         }
 
-        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: RUNNING});
+        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: MODE_RUNNING, elapsedSec: 0});
+        this._saveState();
         this._startTimer();
     }
 
     _startTimer() {
         this.timer = setInterval(() => this.tick(), _interval);
+
     }
 
     /** Method is called each seconds to update the counter*/
     tick() {
-        this.setState({});
+        if (this.state.mode !== MODE_RUNNING) {
+            console.error("Timer is running when not in mode running");
+            this._stopTimer();
+            return;
+        }
+
+        let elapsedSec = this._getElapsedSeconds();
+        if (elapsedSec >= this.state.maxSeconds) {
+            this._stopTimer();
+            this._playMusic();
+            this.setState({elapsedSec: elapsedSec, mode: MODE_DONE});
+        } else {
+            this.setState({elapsedSec: elapsedSec, mode: MODE_RUNNING});
+        }
     }
 
     /** @return number in text with 2 digits (for seconds and minutes) */
@@ -144,11 +159,11 @@ export default class PomodoroPage extends React.Component {
         return ("0" + v).slice(-2);
     }
 
-    _getElapseText() {
+    _getElapseText(elapseSec) {
         if (!this.state.startTime) {
             return "--:--";
         }
-        let diff = this.state.maxSeconds - Math.trunc((Date.now() - this.state.startTime) / 1000.0);
+        let diff = this.state.maxSeconds - Math.trunc(elapseSec);
         let diffAbs = Math.abs(diff);
 
         let min = this._twoDigits(Math.trunc(diffAbs / 60));
@@ -168,53 +183,97 @@ export default class PomodoroPage extends React.Component {
         return elapsedSeconds;
     }
 
-    _renderRunning() {
-        let elapseSeconds = this._getElapsedSeconds();
-        if (elapseSeconds >= this.state.maxSeconds) {
-            if (this.state.mode === RUNNING) {
-                this.state.mode = DONE_MUSIC;
-                this._playMusic();
-            }
-        }
-
-        let backgroundImage = this._getBackgroundImage(elapseSeconds);
-        let elapseText = this._getElapseText();
-
-        this._updateDocumentTitle(elapseSeconds, elapseText);
-
-        let done = this.state.mode === DONE_AFTER_MUSIC || this.state.mode === DONE_MUSIC;
-        let $circleInnerText = done ? <div className={styles.doneText}>DONE</div> : elapseText;
-
-
-        return <div className={styles.component}>
-            {this._renderStartButton()}
+    _renderCircle({percentage, text1, text2}) {
+        let backgroundImage = this._getCircleBackgroundImage(percentage);
+        return (
             <div className={styles.circleContainer} style={{'backgroundImage': backgroundImage}}>
                 <div className={styles.circleSpace}>
                     <div className={styles.circleInner}>
-                        {$circleInnerText}
+                        {text1}
                     </div>
                     <div className={styles.maxMinutes}>
-                        {this.state.maxSeconds / 60}m
+                        {text2}
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    _renderReadyToStart() {
+        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+            text1: "00:00",
+            text2: null});
+        return <div className={styles.component}>
+            {this._renderStartButton()}
+            {circle}
+        </div>;
+    }
+
+    _renderRunning() {
+        let elapseSeconds = this._getElapsedSeconds();
+        let elapseText = this._getElapseText(elapseSeconds);
+
+        this._updateDocumentTitle(this.state.elapsedSec, elapseText);
+
+        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+            text1: elapseText,
+            text2: this._getCircleText2()});
+        return <div className={styles.component}>
+            {this._renderButtonOnRunning()}
+            {circle}
+        </div>;
+    }
+
+    _getCircleText2() {
+        return `${this.state.maxSeconds / 60}m`;
+    }
+
+    _renderOnPause() {
+        let elapseSec = this._getElapsedSeconds();
+        let elapseText = this._getElapseText(elapseSec);
+
+        let buttons = (
+            (<div className={styles.inputAndStartButtonHolder}>
+                <div className={styles.button} onClick={() => this._onSuccess()}>DONE</div>
+                <div className={styles.button} onClick={() => this._onResume()}>RESUME</div>
+                <div className={styles.button} onClick={() => this._onIFail()}>I FAIL</div>
+            </div>)
+        );
+        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+            text1: elapseText,
+            text2: this._getCircleText2()});
+
+        return <div className={styles.component}>
+            {buttons}
+            {circle}
+        </div>;
+    }
+
+    _renderOnDone() {
+        this.documentTitle.updateTitle("DONE", ICON_STOP);
+
+        let buttons = (
+            <div className={styles.inputAndStartButtonHolder}>
+                <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>SUCCESS</div>
+                <div className={styles.button} onClick={() => this._onIFail()}>FAIL</div>
+            </div>);
+        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+            text1: <div className={styles.doneText}>DONE</div>,
+            text2: this._getCircleText2()});
+        return <div className={styles.component}>
+            {buttons}
+            {circle}
         </div>;
     }
 
     _playMusic() {
         let audio = new Audio('/audio/ukulele.mp3');
-        audio.onended = () => {
-            if (this.state.mode === DONE_MUSIC) {
-                this.setState({mode: DONE_AFTER_MUSIC})
-            }
-        };
         audio.play();
     }
 
-    _getBackgroundImage(elapseSeconds) {
+    _getCircleBackgroundImage(percentage) {
         const progressColor = '#ff4136';
-        let {maxSeconds} = this.state;
-        let deg = elapseSeconds * 360 / maxSeconds;
+        let deg = percentage * 360;
         let degMask, maskColor;
         if (deg > 180) {
             degMask = 270;
@@ -246,8 +305,13 @@ export default class PomodoroPage extends React.Component {
         this.documentTitle.updateTitle(title, icon);
     }
 
+    _renderButtonOnRunning() {
+        return (<div className={styles.inputAndStartButtonHolder}>
+            <div className={styles.button} onClick={() => this._onPause()}>PAUSE</div>
+        </div>);
+    }
+
     _renderStartButton() {
-        this._saveState();
         return <div className={styles.inputAndStartButtonHolder}>
             <div className={styles.inputHolder}>
                 <input type='text' className={styles.minuteInput} maxLength={2} value={this.state.inputMinutes}
@@ -259,8 +323,40 @@ export default class PomodoroPage extends React.Component {
         </div>
     }
 
+    _onPause() {
+        this.setState({mode : MODE_PAUSE});
+        this._saveState();
+    }
+
+    _onResume() {
+        this.setState({mode : MODE_RUNNING});
+        this._saveState();
+    }
+
+    _onIFail() {
+        this.setState({mode : MODE_READY_TO_START});
+        this._saveState();
+    }
+
+    _onSuccess() {
+        this.setState({mode : MODE_READY_TO_START});
+        this._saveState();
+    }
+
     render() {
-        return this._renderRunning();
+        let {mode} = this.state;
+        console.log("Render with mode ", mode);
+        if (mode === MODE_READY_TO_START) {
+            return this._renderReadyToStart();
+        } else if (mode === MODE_RUNNING) {
+            return this._renderRunning();
+        } else if (mode === MODE_DONE) {
+            return this._renderOnDone();
+        } else if (mode === MODE_PAUSE) {
+            return this._renderOnPause();
+        } else {
+            return <div>Something is wrong please contact golery.team@gmail.com (State {mode})</div>
+        }
     }
 }
 
