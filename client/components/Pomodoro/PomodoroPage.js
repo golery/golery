@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './PomodoroPage.css';
 
 // Set not null to force a specific short duration for development
-const DEBUG_FORCE_SECONDS = 30;
+const DEBUG_FORCE_SECONDS = null;
 
 const _interval = 1000;
 const LOCAL_STORAGE_KEY = "STATE";
@@ -222,7 +222,7 @@ export default class PomodoroPage extends React.Component {
 
         let buttons = (
             (<div className={styles.inputAndStartButtonHolder}>
-                <div className={styles.button} onClick={() => this._onSuccess()}>DONE</div>
+                <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>DONE</div>
                 <div className={styles.button} onClick={() => this._onResume()}>RESUME</div>
                 <div className={styles.button} onClick={() => this._onIFail()}>I FAIL</div>
             </div>)
