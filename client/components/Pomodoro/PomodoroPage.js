@@ -67,14 +67,22 @@ export default class PomodoroPage extends React.Component {
         this.timer = null;
         this.documentTitle = new DocumentTitle();
 
-        this.state = this._loadState();
+        this.state = {
+            mode: MODE_READY_TO_START,
+            startTime: null,
+            pomoDurationSec: 25 * 60,
+            inputMinutes: 25,
+            lastResume: null,
+            msFromLastPause: null,
+            elapsedMsBeforeLastPause: null};
+        this.state = this._loadState(this.state);
         // user comes back at running state
         if (this.state.mode === MODE_RUNNING) {
             this._startTimer();
         }
     }
 
-    _loadState() {
+    _loadState(currentState) {
         let settings = null;
         if (typeof(window) !== "undefined") {
             let json = window.localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -82,26 +90,18 @@ export default class PomodoroPage extends React.Component {
             if (json !== null) {
                 settings = JSON.parse(json);
             }
+            console.log('Loaded settings:', settings);
         }
-        if (!settings) {
-            settings = {
-                startTime: null,
-                maxSeconds: 25 * 60,
-                mode: MODE_READY_TO_START,
-                inputMinutes: 25,
-                elapsedSec: 0
-            };
+        if (!settings || !settings.pomoDurationSec || (settings.mode === MODE_RUNNING && !settings.startTime)) {
+            settings = currentState;
         }
-        console.log('Loaded settings:', settings);
         return settings;
     }
 
     _saveState() {
         // don't save at server side
         if (typeof(window) === "undefined") return;
-        let {startTime, maxSeconds, mode, inputMinutes} = this.state;
-        let store = {startTime, maxSeconds, mode, inputMinutes};
-        let json = JSON.stringify(store);
+        let json = JSON.stringify(this.state);
         window.localStorage.setItem(LOCAL_STORAGE_KEY, json);
     }
 
@@ -119,24 +119,25 @@ export default class PomodoroPage extends React.Component {
 
     _startTimer() {
         this.timer = setInterval(() => this.tick(), _interval);
-
     }
 
     /** Method is called each seconds to update the counter*/
     tick() {
         if (this.state.mode !== MODE_RUNNING) {
-            console.error("Timer is running when not in mode running");
+            console.error("Timer is running when not in mode running.Mode=",this.state.mode);
             this._stopTimer();
             return;
         }
 
-        let elapsedSec = this._getElapsedSeconds();
-        if (elapsedSec >= this.state.maxSeconds) {
+        let elapsedMs = this._getElapseMs();
+        if (elapsedMs >= this.state.pomoDurationSec*1000) {
             this._stopTimer();
             this._playMusic();
-            this.setState({elapsedSec: elapsedSec, mode: MODE_DONE});
+            this.setState({mode: MODE_DONE});
         } else {
-            this.setState({elapsedSec: elapsedSec, mode: MODE_RUNNING});
+            // elapseSec is not used, it just a variable to avoid update if elapse sec is not changed
+            // Method render() recomputes the elapse time for more precision
+            this.setState({elapseSec: elapsedMs/1000});
         }
     }
 
@@ -145,11 +146,11 @@ export default class PomodoroPage extends React.Component {
         return ("0" + v).slice(-2);
     }
 
-    _getElapseText(elapseSec) {
+    _getElapseText(elapseMs) {
         if (!this.state.startTime) {
             return "--:--";
         }
-        let diff = this.state.maxSeconds - Math.trunc(elapseSec);
+        let diff = this.state.pomoDurationSec - Math.trunc(elapseMs/1000);
         let diffAbs = Math.abs(diff);
 
         let min = this._twoDigits(Math.trunc(diffAbs / 60));
@@ -158,16 +159,16 @@ export default class PomodoroPage extends React.Component {
         return `${sign}${min}:${sec}`;
     }
 
-    _getElapsedSeconds() {
+    _getElapseMs() {
         if (!this.state.startTime) {
             return 0;
         }
-        let secBeforeLastPause = this.state.secBeforeLastPause || 0;
-        let elapsedSeconds = (Date.now() - this.state.startTime) / 1000 + secBeforeLastPause;
-        if (elapsedSeconds > this.state.maxSeconds) {
-            elapsedSeconds = this.state.maxSeconds;
+        let elapsedMsBeforeLastPause = this.state.elapsedMsBeforeLastPause || 0;
+        let elapsedMs = Date.now() - this.state.lastResume + elapsedMsBeforeLastPause;
+        if (elapsedMs > this.state.pomoDurationSec*1000) {
+            elapsedMs = this.state.pomoDurationSec*1000;
         }
-        return elapsedSeconds;
+        return elapsedMs;
     }
 
     _renderCircle({percentage, text1, text2}) {
@@ -187,7 +188,7 @@ export default class PomodoroPage extends React.Component {
     }
 
     _renderReadyToStart() {
-        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: "00:00",
             text2: null});
         return <div className={styles.component}>
@@ -197,12 +198,12 @@ export default class PomodoroPage extends React.Component {
     }
 
     _renderRunning() {
-        let elapseSeconds = this._getElapsedSeconds();
-        let elapseText = this._getElapseText(elapseSeconds);
+        let elapseMs = this._getElapseMs();
+        let elapseText = this._getElapseText(elapseMs);
 
-        this._updateDocumentTitle(this.state.elapsedSec, elapseText);
+        this._updateDocumentTitle(this.state.msFromLastPause, elapseText);
 
-        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: elapseText,
             text2: this._getCircleText2()});
         return <div className={styles.component}>
@@ -212,12 +213,12 @@ export default class PomodoroPage extends React.Component {
     }
 
     _getCircleText2() {
-        return `${this.state.maxSeconds / 60}m`;
+        return `${this.state.pomoDurationSec / 60}m`;
     }
 
     _renderOnPause() {
-        let elapseSec = this._getElapsedSeconds();
-        let elapseText = this._getElapseText(elapseSec);
+        let elapseMs = this.state.elapsedMsBeforeLastPause;
+        let elapseText = this._getElapseText(elapseMs);
 
         let buttons = (
             (<div className={styles.inputAndStartButtonHolder}>
@@ -226,7 +227,7 @@ export default class PomodoroPage extends React.Component {
                 <div className={styles.button} onClick={() => this._onIFail()}>I FAIL</div>
             </div>)
         );
-        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: elapseText,
             text2: this._getCircleText2()});
 
@@ -244,7 +245,7 @@ export default class PomodoroPage extends React.Component {
                 <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>SUCCESS</div>
                 <div className={styles.button} onClick={() => this._onIFail()}>FAIL</div>
             </div>);
-        let circle = this._renderCircle({percentage: this.state.elapsedSec/this.state.maxSeconds,
+        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: <div className={styles.doneText}>DONE</div>,
             text2: this._getCircleText2()});
         return <div className={styles.component}>
@@ -277,11 +278,11 @@ export default class PomodoroPage extends React.Component {
         return backgroundImage;
     }
 
-    _updateDocumentTitle(elapsedSecond, elapseText) {
+    _updateDocumentTitle(msFromLastPauseond, elapseText) {
         if (typeof (document) === "undefined") return;
 
         let title, icon;
-        if (elapsedSecond >= this.state.maxSeconds) {
+        if (msFromLastPauseond >= this.state.pomoDurationSec) {
             title = "DONE";
             icon = ICON_STOP;
         } else {
@@ -314,40 +315,51 @@ export default class PomodoroPage extends React.Component {
         this._stopTimer();
 
         let maxMinutes = parseInt(this.state.inputMinutes);
-        let maxSeconds = maxMinutes * 60;
+        let pomoDurationSec = maxMinutes * 60;
 
         if (DEBUG_FORCE_SECONDS) {
-            maxSeconds = DEBUG_FORCE_SECONDS;
+            pomoDurationSec = DEBUG_FORCE_SECONDS;
         }
 
-        this.setState({startTime: Date.now(), maxSeconds: maxSeconds, mode: MODE_RUNNING, elapsedSec: 0, secBeforeLastPause: 0});
+        let now = Date.now();
+        this.setState({startTime: now, pomoDurationSec: pomoDurationSec, mode: MODE_RUNNING,
+            lastResume: now,
+            msFromLastPause: 0,
+            elapsedMsBeforeLastPause: 0});
         this._saveState();
         this._startTimer();
     }
 
     _onPause() {
         this._stopTimer();
-        this.setState({mode : MODE_PAUSE, secBeforeLastPause: this._getElapsedSeconds()});
+        this.setState({mode : MODE_PAUSE,
+            lastResume: null,
+            msFromLastPause: null,
+            elapsedMsBeforeLastPause: this._getElapseMs()});
         this._saveState();
     }
 
     _onResume() {
-        this.setState({mode : MODE_RUNNING, startTime: Date.now()});
+        this.setState({mode : MODE_RUNNING,
+            lastResume: Date.now(),
+            msFromLastPause: 0});
         this._saveState();
         this._startTimer();
     }
 
     _onIFail() {
+        this._stopTimer();
         this.setState({mode : MODE_READY_TO_START});
         this._saveState();
     }
 
     _onSuccess() {
+        this._stopTimer();
         this.setState({mode : MODE_READY_TO_START});
         this._saveState();
     }
 
-    render() {
+    _renderBody() {
         let {mode} = this.state;
         console.log("Render with mode ", mode);
         if (mode === MODE_READY_TO_START) {
@@ -361,6 +373,14 @@ export default class PomodoroPage extends React.Component {
         } else {
             return <div>Something is wrong please contact golery.team@gmail.com (State {mode})</div>
         }
+    }
+    render() {
+        if (typeof(window) === "undefined") {
+            return <div>Loading...</div>
+        }
+        return <div className={styles.component}>
+            {this._renderBody()}
+        </div>;
     }
 }
 

@@ -102,7 +102,7 @@ module.exports = function (prod, outputRelativePath) {
         resolve: {
             extensions: ['.js', '.jsx'],
             alias: {
-                "golery-editor":  process.cwd() + "/node_modules/golery-editor/dist/dev"
+                "golery-editor":  process.cwd() + "/node_modules/golery-editor/dist/min"
             }
         },
         plugins: plugins,
