@@ -101,6 +101,10 @@
      background-color: #14A76C;
 }
 
+.button.grey {
+    background-color: #DDDDDD;
+    color: #666;
+}
 
 .doneText {
     display: inline-block;

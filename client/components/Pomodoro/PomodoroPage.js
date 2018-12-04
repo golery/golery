@@ -207,7 +207,9 @@ export default class PomodoroPage extends React.Component {
             text1: elapseText,
             text2: this._getCircleText2()});
         return <div className={styles.component}>
-            {this._renderButtonOnRunning()}
+            <div className={styles.inputAndStartButtonHolder}>
+                <div className={[styles.button, styles.grey].join(' ')} onClick={() => this._onPause()}>PAUSE</div>
+            </div>
             {circle}
         </div>;
     }
@@ -223,7 +225,7 @@ export default class PomodoroPage extends React.Component {
         let buttons = (
             (<div className={styles.inputAndStartButtonHolder}>
                 <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>DONE</div>
-                <div className={styles.button} onClick={() => this._onResume()}>RESUME</div>
+                <div className={[styles.button, styles.grey].join(' ')} onClick={() => this._onResume()}>RESUME</div>
                 <div className={styles.button} onClick={() => this._onIFail()}>I FAIL</div>
             </div>)
         );
@@ -291,12 +293,6 @@ export default class PomodoroPage extends React.Component {
         }
         document.title = title;
         this.documentTitle.updateTitle(title, icon);
-    }
-
-    _renderButtonOnRunning() {
-        return (<div className={styles.inputAndStartButtonHolder}>
-            <div className={styles.button} onClick={() => this._onPause()}>PAUSE</div>
-        </div>);
     }
 
     _renderStartButton() {
