@@ -58,6 +58,7 @@
     "monk": "^4.1.0",
     "morgan": "^1.9.0",
     "mousetrap": "^1.6.2",
+    "node-fetch": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "postcss-preset-env": "^5.2.2",
