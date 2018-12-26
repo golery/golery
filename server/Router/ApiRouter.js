@@ -45,7 +45,7 @@ function _buildApiSecureRouter() {
     let route = new Router();
     configGetUser(route);
 
-    ApiNode.setupRoute(route);
+    ApiNode.setupSecureRoute(route);
     ApiFile.setupRoute(route);
     ApiMisc.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
@@ -58,6 +58,7 @@ function _buildApiPublicRouter() {
     let route = new Router();
     ApiGoEvent.setupRoute(route);
     ApiAuth.setupPublicRoute(route);
+    ApiNode.setupPublicRoute(route);
     return route;
 }
 

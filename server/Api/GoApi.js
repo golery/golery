@@ -5,7 +5,7 @@ const host = 'http://172.17.0.1:8100';
 // TODO PERFORMANCE This proxy add 100ms (at dev local env)
 /** Forward requests to API service */
 function goApi(req, res) {
-    let user = req.user.id;
+    let user = req.user && req.user.id;
     let headers = req.headers;
     let url = host + req.originalUrl;
 

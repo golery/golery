@@ -38,7 +38,13 @@ function findDescendants(nodeId, allNodes) {
 }
 
 class ApiNode {
-    setupRoute(route) {
+    /** Available at /api/pubic/... */
+    setupPublicRoute(route) {
+        route.all('/pencil/*', (req, res) => goApi(req, res));
+    }
+
+    /** Available at /api/secure/... */
+    setupSecureRoute(route) {
         route.get('/node/test', (req, res) => this._test(req, res));
 
         route.put('/node/move/:nodeId/:parentId/:position',
