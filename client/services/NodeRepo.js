@@ -109,7 +109,7 @@ class NodeRepo {
     }
 
     moveNode(nodeId, newParentId, newPosition) {
-        return Axios.put("/api/secure/node/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
+        return Axios.put("/api/secure/pencil/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
             console.log("Move node", o.data);
         });
     }
