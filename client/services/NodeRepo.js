@@ -88,7 +88,7 @@ class NodeRepo {
     }
 
     create(parentId, position) {
-        return Axios.post("/api/secure/node/" + parentId + "?position=" + position).then(o => {
+        return Axios.post("/api/secure/pencil/add/" + parentId + "?position=" + position).then(o => {
             let node = o.data;
             console.log("Created node ", node);
             if (!node.id) {

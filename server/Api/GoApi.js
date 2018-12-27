@@ -8,21 +8,20 @@ function goApi(req, res) {
     let user = req.user && req.user.id;
     let headers = req.headers;
     let url = host + req.originalUrl;
-    let contentType = headers['content-type'];
+    let contentType = headers['content-type'] || 'application/json';
     let method = req.method;
     let options = {
         method: method,
         headers: {
             "accept": headers.accept,
             "user": user,
+            'content-type': contentType
         }
     };
     if (method !== 'GET') {
-        // TODO PERFORMANCE expressjs conver to json then here we convert back to text
+        // TODO PERFORMANCE expressjs convert to json then here we convert back to text. Double conversion for nothing
+        // But it's for Post body only, so it does not cost much
         options.body = JSON.stringify(req.body);
-    }
-    if (contentType) {
-        options.headers['content-type'] = contentType;
     }
     console.log("===", headers, contentType);
     console.log('Proxy to GoAPI: ', url, options);
