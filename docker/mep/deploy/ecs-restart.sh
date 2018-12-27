@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #This requires install awscli and apt-get install jq
-TASKID=$(aws ecs list-tasks | jq -r '.taskArns[0]')
+TASKID=$(aws ecs list-tasks --family www| jq -r '.taskArns[0]')
 echo TASK: $TASKID
 if [ $TASKID != null ]
 then echo "STOP task"

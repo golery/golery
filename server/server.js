@@ -11,18 +11,14 @@ import apiRouter from "./Router/ApiRouter";
 import pageRouter from "./Router/PageRouter";
 
 import {MAX_UPLOAD_FILE_SIZE} from "./Api/ApiFile";
+import Config from "./config";
 
-
-const ENV = process.env.NODE_ENV || 'development';
-const IS_PRODUCTION = ENV === 'production';
-const EXPRESS_PORT = 443;
-const MONGO_URL = process.env.MONGOLAB_URI || 'mongodb://mongo/mean-dev';
 const WEBAPP_PATH = '/';
 
 function connectMongo() {
     // use ES6 promise
     mongoose.Promise = global.Promise;
-    let mongoUrl = MONGO_URL;
+    let mongoUrl = Config.mongoUrl;
     console.log('Connecting to database...', mongoUrl);
     return mongoose.connect(mongoUrl);
 }
@@ -59,8 +55,8 @@ function startServer() {
         configExpressMiddleware(app, mongoose.connection.db);
         configExpressRouter(app);
 
-        app.listen(8080, function () {
-            console.log('Access at http://localhost:8080');
+        app.listen(Config.httpPort, function () {
+            console.log('Access at http://localhost:', Config.httpPort);
         });
 
         try {
@@ -69,8 +65,8 @@ function startServer() {
                 cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
             };
 
-            https.createServer(sslOptions, app).listen(8443, function () {
-                console.log('Access at http://localhost:8443');
+            https.createServer(sslOptions, app).listen(Config.httpsPort, function () {
+                console.log('Access at http://localhost:', Config.httpsPort);
             });
         } catch (e) {
             console.error('Fail to load ssl certs in /data/ssl-certs', e);
