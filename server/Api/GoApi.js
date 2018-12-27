@@ -8,16 +8,18 @@ function goApi(req, res) {
     let user = req.user && req.user.id;
     let headers = req.headers;
     let url = host + req.originalUrl;
-
+    let contentType = headers['content-type'];
     let options = {
         method: req.method,
         headers: {
             "accept": headers.accept,
-            "content-type": headers['content-type'],
             "user": user,
         }
     };
-
+    if (contentType) {
+        options['content-type'] = contentType;
+    }
+    console.log(headers);
     console.log('Proxy to GoAPI: ', url, options);
     fetch(url, options)
         .then(apiRes => {
