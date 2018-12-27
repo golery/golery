@@ -18,4 +18,4 @@ pm2 start --name 'www' server/server.js
 #cd /softwares/golery/proxy
 #pm2 start --name 'proxy' server/server.js
 
-pm2 logs
+pm2 logs | tee /data/www.log
