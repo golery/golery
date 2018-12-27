@@ -42,15 +42,7 @@ class NodeRepo {
             console.log('Reuse node repo. Do not fetch');
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
-
-        let opts = {
-            headers: {
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            },
-            responseType: 'application/json'
-        };
-        return Axios.get('/api/secure/pencil/query', opts).then(response => {
+        return Axios.get('/api/secure/pencil/query').then(response => {
             let nodes = response.data;
             if (!rootId) {
                 rootId = response.data[0].id;
@@ -84,21 +76,13 @@ class NodeRepo {
 
     save(node) {
         console.log('Start save node....');
-        let opts = {
-            url: '/api/secure/pencil/update',
-            method: 'PUT',
-            headers: {
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            },
-            data: {
-                id: node.id,
-                name: node.name,
-                html: node.html,
-                title: node.title
-            }
+        let data = {
+            id: node.id,
+            name: node.name,
+            html: node.html,
+            title: node.title
         };
-        return Axios(opts).then(result => {
+        return Axios.put('/api/secure/pencil/update', data).then(result => {
             console.log('DONE save.', result);
         });
     }
