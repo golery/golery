@@ -99,7 +99,7 @@ class NodeRepo {
     }
 
     delete(nodeId) {
-        return Axios.delete("/api/secure/node/" + nodeId).then(o => {
+        return Axios.put("/api/secure/pencil/delete/" + nodeId).then(o => {
             let body = o.data;
             console.log("Deleted node ", o.data.deleted);
             if (!body.parent.id) {
