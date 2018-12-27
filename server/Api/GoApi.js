@@ -9,17 +9,22 @@ function goApi(req, res) {
     let headers = req.headers;
     let url = host + req.originalUrl;
     let contentType = headers['content-type'];
+    let method = req.method;
     let options = {
-        method: req.method,
+        method: method,
         headers: {
             "accept": headers.accept,
             "user": user,
         }
     };
-    if (contentType) {
-        options['content-type'] = contentType;
+    if (method !== 'GET') {
+        // TODO PERFORMANCE expressjs conver to json then here we convert back to text
+        options.body = JSON.stringify(req.body);
     }
-    console.log(headers);
+    if (contentType) {
+        options.headers['content-type'] = contentType;
+    }
+    console.log("===", headers, contentType);
     console.log('Proxy to GoAPI: ', url, options);
     fetch(url, options)
         .then(apiRes => {
@@ -33,4 +38,16 @@ function goApi(req, res) {
     }).catch(err => console.log(err));
 }
 
-export {goApi};
+class GoApi {
+    /** Available at /api/pubic/... */
+    static setupPublicRoute(route) {
+        route.all('/pencil/*', (req, res) => goApi(req, res));
+    }
+
+    /** Available at /api/secure/... */
+    static setupSecureRoute(route) {
+        route.all('/pencil/*', (req, res) => goApi(req, res));
+    }
+}
+
+export default GoApi;

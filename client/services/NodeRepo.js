@@ -47,8 +47,8 @@ class NodeRepo {
             headers: {
                 'accept': 'application/json',
                 'content-type': 'application/json'
-                },
-            responseType:'application/json'
+            },
+            responseType: 'application/json'
         };
         return Axios.get('/api/secure/pencil/query', opts).then(response => {
             let nodes = response.data;
@@ -84,25 +84,34 @@ class NodeRepo {
 
     save(node) {
         console.log('Start save node....');
-        return Axios.put('/api/secure/node', {
-            id: node.id,
-            name: node.name,
-            html: node.html,
-            title: node.title
-        }).then(result => {
+        let opts = {
+            url: '/api/secure/pencil/update',
+            method: 'PUT',
+            headers: {
+                'accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            data: {
+                id: node.id,
+                name: node.name,
+                html: node.html,
+                title: node.title
+            }
+        };
+        return Axios(opts).then(result => {
             console.log('DONE save.', result);
         });
     }
 
-    create(parentId,position) {
-        return Axios.post("/api/secure/node/" + parentId+"?position="+position).then(o => {
+    create(parentId, position) {
+        return Axios.post("/api/secure/node/" + parentId + "?position=" + position).then(o => {
             let node = o.data;
             console.log("Created node ", node);
             if (!node.id) {
                 throw "Fail to create node";
             }
             return node;
-        })
+        });
     }
 
     delete(nodeId) {
@@ -124,7 +133,7 @@ class NodeRepo {
     /**
      * @param access - 0: private 1: public  */
     setAccess(nodeId, access) {
-        return Axios.put("/api/secure/node/access/" + nodeId + "/" + access).then(o=> {
+        return Axios.put("/api/secure/node/access/" + nodeId + "/" + access).then(o => {
             console.log("Set acess", o.data);
             return o.data;
         });

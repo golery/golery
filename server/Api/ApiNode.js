@@ -38,12 +38,7 @@ function findDescendants(nodeId, allNodes) {
 }
 
 class ApiNode {
-    /** Available at /api/pubic/... */
-    setupPublicRoute(route) {
-        route.all('/pencil/*', (req, res) => goApi(req, res));
-    }
-
-    /** Available at /api/secure/... */
+    /* Available at /api/secure/...
     setupSecureRoute(route) {
         route.get('/node/test', (req, res) => this._test(req, res));
 
@@ -55,8 +50,9 @@ class ApiNode {
         route.put('/node', this._updateNode.bind(this));
         route.get('/node/stats', (req, res) => this._stats(req, res));
         route.put('/node/access/:nodeId/:access', (req, res) => this._onSetAccess(req, res, req.user.id, req.params.nodeId, req.params.access));
+
         route.all('/pencil/*', (req, res) => goApi(req, res));
-    }
+    }*/
 
     _onSetAccess(req, res, userId, nodeId, access) {
         Rest.json(req, res, NodeService.setAccess(userId, nodeId, access));

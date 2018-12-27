@@ -6,6 +6,7 @@ import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
 import ApiMisc from "../Api/ApiMisc";
+import GoApi from "../Api/GoApi";
 
 function buildApiRouter() {
     let apiRouter = new Router();
@@ -45,10 +46,10 @@ function _buildApiSecureRouter() {
     let route = new Router();
     configGetUser(route);
 
-    ApiNode.setupSecureRoute(route);
     ApiFile.setupRoute(route);
     ApiMisc.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
+    GoApi.setupSecureRoute(route);
 
     return route;
 }
@@ -58,7 +59,7 @@ function _buildApiPublicRouter() {
     let route = new Router();
     ApiGoEvent.setupRoute(route);
     ApiAuth.setupPublicRoute(route);
-    ApiNode.setupPublicRoute(route);
+    GoApi.setupPublicRoute(route);
     return route;
 }
 
