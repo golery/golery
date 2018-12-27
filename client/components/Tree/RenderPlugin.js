@@ -25,7 +25,7 @@ export default class RenderPlugin {
      * @return subtree node view. This node view is not attached to DOM tree */
     createSubTreeNodeView(node, parent) {
         if (parent === undefined) {
-            parent = this.treeModel.getParentNode(node._id);
+            parent = this.treeModel.getParentNode(node.id);
         }
         let rootNodeView = this._renderNode(node, parent);
 
@@ -44,7 +44,7 @@ export default class RenderPlugin {
     }
 
     static _isLastChild(parent, root) {
-        return parent && parent.children[parent.children.length - 1] === root._id;
+        return parent && parent.children[parent.children.length - 1] === root.id;
     }
 
     static _updateConnectorBox(child, view, open) {

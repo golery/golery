@@ -1,14 +1,14 @@
 /**
  * The library does not know about the structure of Node.
- * All access and manipulate are done via TreeModel (including _id, children).
+ * All access and manipulate are done via TreeModel (including id, children).
  * The application who uses the TreeComponent and override method in TreeModel to have a customized node structure
  * WARN ! This is the only class who has direct access to Node object
  * */
 class Node {
     // Only TreeModel can directly access and manipulate the attribute via method
-    // Ex: access to _id must be go through getId();
-    constructor(_id) {
-        this._id = _id;
+    // Ex: access to id must be go through getId();
+    constructor(id) {
+        this.id = id;
         // a list of node ID (not node object)
         // there is a method TreeModel.findById() to find the node object
         this.children = null;
@@ -25,10 +25,10 @@ export default class TreeModel {
         this.listeners = listeners || {};
     }
 
-    delete(_id) {
-        let parentId = this.getParentId(_id);
+    delete(id) {
+        let parentId = this.getParentId(id);
         let parent = this.findById(parentId);
-        let index = parent.children.indexOf(_id);
+        let index = parent.children.indexOf(id);
         if (index >= 0) {
             parent.children.splice(index, index + 1);
         }
@@ -37,7 +37,7 @@ export default class TreeModel {
     _buildMap(nodes) {
         let map = {};
         for (let node of nodes) {
-            map[node._id] = node;
+            map[node.id] = node;
         }
         return map;
     }
@@ -47,7 +47,7 @@ export default class TreeModel {
         for (let node of nodes) {
             if (node.children) {
                 for (let childrenId of node.children) {
-                    map[childrenId] = node._id;
+                    map[childrenId] = node.id;
                 }
             }
         }
@@ -59,7 +59,7 @@ export default class TreeModel {
     }
 
     getParentNode(nodeId) {
-        if (nodeId._id) throw 'Need id rather than node object';
+        if (nodeId.id) throw 'Need id rather than node object';
 
         let parentId = this.getParentId(nodeId);
         if (!parentId) return null;
@@ -69,7 +69,7 @@ export default class TreeModel {
     getChildPosition(parent, node) {
         if (!parent.children) return null;
 
-        let id = node._id;
+        let id = node.id;
         for (let i = 0; i < parent.children.length; i++) {
             if (parent.children[i] === id) return i;
         }
@@ -81,14 +81,14 @@ export default class TreeModel {
     }
 
     addChild(parent, newNode, position) {
-        let newNodeId = newNode._id;
+        let newNodeId = newNode.id;
         if (!parent.children) {
             parent.children = [newNodeId];
         } else {
             parent.children.splice(position, position, newNodeId);
         }
         this.map[newNodeId] = newNode;
-        this._parentMap[newNodeId] = parent._id;
+        this._parentMap[newNodeId] = parent.id;
     }
 
     findById(id) {
@@ -114,19 +114,19 @@ export default class TreeModel {
             return true;
         }
 
-        let id = node._id;
+        let id = node.id;
         let open = localStorage.getItem(this._getLocalStorageKey(id));
         return open === "true";
     }
 
     setOpen(node, open) {
         if (this._isRoot(node)) return;
-        localStorage.setItem(this._getLocalStorageKey(node._id), open);
+        localStorage.setItem(this._getLocalStorageKey(node.id), open);
     }
 
     _isRoot(node) {
         if (!node) return false;
-        return node._id === this.root._id;
+        return node.id === this.root.id;
     }
 
     _getLocalStorageKey(nodeId) {
@@ -134,20 +134,20 @@ export default class TreeModel {
     }
 
     getId(node) {
-        return node._id;
+        return node.id;
     }
 
     moveNode(node, newParent, newPosition) {
-        let id = node._id;
+        let id = node.id;
         let curParent = this.getParentNode(id);
-        if (curParent._id !== newParent._id) {
+        if (curParent.id !== newParent.id) {
             this._changeParent(node, newParent, newPosition);
         } else {
             this._changePosition(node, curParent, newPosition);
         }
 
         if (this.listeners.onMoveNode) {
-            this.listeners.onMoveNode(id, newParent._id, newPosition);
+            this.listeners.onMoveNode(id, newParent.id, newPosition);
         }
     }
 
@@ -156,7 +156,7 @@ export default class TreeModel {
             throw 'Cannot set a node to be a child of its child node. This cause a loop';
         }
 
-        let id = node._id;
+        let id = node.id;
         let curParent = this.getParentNode(id);
 
         // remove from current parent
@@ -169,13 +169,13 @@ export default class TreeModel {
         newParent.children.splice(newPosition, 0, id);
 
         // update index
-        this._parentMap[id] = newParent._id;
+        this._parentMap[id] = newParent.id;
     }
 
     _changePosition(node, parent, newIndex) {
         console.log("Change position to ", newIndex);
         // new index is the index without removing dragged node§
-        let id = node._id;
+        let id = node.id;
         let childrenIds = parent.children;
         let curIndex = childrenIds.indexOf(id);
 
@@ -196,9 +196,9 @@ export default class TreeModel {
         if (!childrenIds || childrenIds.length === 0) return false;
 
         // iterate up to root of tree
-        let id = node._id;
+        let id = node.id;
         while (id) {
-            if (id === ancestor._id) {
+            if (id === ancestor.id) {
                 return true;
             }
             id = this.getParentId(id);
@@ -208,15 +208,15 @@ export default class TreeModel {
 
     /** After create node, replace temporary nodeId by new one from server side */
     updateNodeId(node, parentNode, newId) {
-        let oldId = node._id;
+        let oldId = node.id;
         let index = parentNode.children.indexOf(oldId);
         parentNode.children[index] = newId;
-        node._id = newId;
+        node.id = newId;
 
         // update index
         this.map[newId] = node;
         delete this.map[oldId];
-        this._parentMap[newId] = parentNode._id;
+        this._parentMap[newId] = parentNode.id;
         delete this._parentMap[oldId];
     }
 }

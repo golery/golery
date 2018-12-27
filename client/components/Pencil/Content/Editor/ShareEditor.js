@@ -11,7 +11,7 @@ export default class ShareEditor extends React.Component {
         const {node} = this.props;
         const access = node.access || 0;
         this.state = {access: access};
-        this.shareUrl = this._buildShareUrl(props.node._id);
+        this.shareUrl = this._buildShareUrl(props.node.id);
     }
 
     render() {
@@ -44,7 +44,7 @@ export default class ShareEditor extends React.Component {
     _onSave() {
         const node = this.props.node;
         const access = this.state.access;
-        NodeRepo.setAccess(node._id, access).then((o)=> {
+        NodeRepo.setAccess(node.id, access).then((o)=> {
             console.log(o);
             node.access = access;
             this.forceUpdate();

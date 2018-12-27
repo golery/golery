@@ -9,7 +9,7 @@ class NodeRepo {
 
     _findNode(nodes, id) {
         for (let node of nodes) {
-            if (node._id === id) {
+            if (node.id === id) {
                 return node;
             }
         }
@@ -38,15 +38,22 @@ class NodeRepo {
 
     // example rootId. 57550b912c8eede6f1fc5fce
     load(rootId) {
-        if (this.rootNode && (!rootId || this.rootNode._id === rootId)) {
+        if (this.rootNode && (!rootId || this.rootNode.id === rootId)) {
             console.log('Reuse node repo. Do not fetch');
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
 
-        return Axios.get('/api/secure/node').then(response => {
+        let opts = {
+            headers: {
+                'accept': 'application/json',
+                'content-type': 'application/json'
+                },
+            responseType:'application/json'
+        };
+        return Axios.get('/api/secure/pencil/query', opts).then(response => {
             let nodes = response.data;
             if (!rootId) {
-                rootId = response.data[0]._id;
+                rootId = response.data[0].id;
             }
 
             let rootNode = this._findNode(nodes, rootId);
@@ -68,7 +75,7 @@ class NodeRepo {
         }
 
         for (let node of this.nodes) {
-            if (node._id === nodeId) {
+            if (node.id === nodeId) {
                 return Promise.resolve(node);
             }
         }
@@ -78,7 +85,7 @@ class NodeRepo {
     save(node) {
         console.log('Start save node....');
         return Axios.put('/api/secure/node', {
-            _id: node._id,
+            id: node.id,
             name: node.name,
             html: node.html,
             title: node.title
@@ -91,7 +98,7 @@ class NodeRepo {
         return Axios.post("/api/secure/node/" + parentId+"?position="+position).then(o => {
             let node = o.data;
             console.log("Created node ", node);
-            if (!node._id) {
+            if (!node.id) {
                 throw "Fail to create node";
             }
             return node;
@@ -102,7 +109,7 @@ class NodeRepo {
         return Axios.delete("/api/secure/node/" + nodeId).then(o => {
             let body = o.data;
             console.log("Deleted node ", o.data.deleted);
-            if (!body.parent._id) {
+            if (!body.parent.id) {
                 throw "Fail to delete node";
             }
         });

@@ -32,8 +32,8 @@ const CONTENT_MODE_VIEW = "VIEW";
 const CONTENT_MODE_EDIT = "EDIT";
 
 class Node {
-    constructor(_id, name) {
-        this._id = _id;
+    constructor(id, name) {
+        this.id = id;
         // short name to be displayed in tree
         this.name = name;
         // full title
@@ -220,12 +220,12 @@ export default class PencilPage extends React.Component {
     _load(rootId) {
         if (typeof window === 'undefined') return;
         return NodeRepo.load(rootId).then(({nodes, rootNode}) => {
-            this.treeModel = new PencilTreeModel(nodes, rootNode._id, {
+            this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
                 onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
             });
             this.treeViewModel = new TreeViewModel();
 
-            let state = {nodes: nodes, rootId: rootNode._id};
+            let state = {nodes: nodes, rootId: rootNode.id};
             this.setState(state);
         })
     }
@@ -252,10 +252,10 @@ export default class PencilPage extends React.Component {
         this._onShowEditView();
 
         // save async
-        NodeRepo.create(parentNode._id, position).then(createdNode => {
-            let newId = createdNode._id;
+        NodeRepo.create(parentNode.id, position).then(createdNode => {
+            let newId = createdNode.id;
             console.log("Create new node successfully at server side ", newId);
-            console.log("Replace nodeId ", newNode._id, " by ", newId);
+            console.log("Replace nodeId ", newNode.id, " by ", newId);
             this.treeModel.updateNodeId(newNode, parentNode, newId);
             nodeView.changeNodeId(newId);
         });
@@ -284,7 +284,7 @@ export default class PencilPage extends React.Component {
         let selectedNode = this.treeViewModel.selectedNode;
         if (!selectedNode) return;
         console.log(selectedNode);
-        let id = selectedNode._id;
+        let id = selectedNode.id;
         window.open("#/card/" + id, '_blank');
     }
 

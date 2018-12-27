@@ -27,7 +27,7 @@ export default class TreeView extends React.Component {
 
     getSelectedNodeId() {
         let {selectedNode} = this.treeViewModel;
-        return !selectedNode ? null : selectedNode._id;
+        return !selectedNode ? null : selectedNode.id;
     }
 
     addNewNodeAsChildren(newNode) {
@@ -41,13 +41,13 @@ export default class TreeView extends React.Component {
         let {selectedNode} = this.treeViewModel;
         if (!selectedNode) return;
 
-        let parent = this.treeModel.getParentNode(selectedNode._id);
+        let parent = this.treeModel.getParentNode(selectedNode.id);
         if (!parent) {
             console.log("Parent node not found");
             return;
         }
 
-        let index = parent.children.indexOf(selectedNode._id);
+        let index = parent.children.indexOf(selectedNode.id);
         const position = index + 1;
 
         return this._addChild(parent, newNode, position);
@@ -62,7 +62,7 @@ export default class TreeView extends React.Component {
         this._renderNodeView(newNodeView, newNode);
 
         // update parent node view
-        let parentNodeView = TreeNodeView.findByNodeId(parentNode._id);
+        let parentNodeView = TreeNodeView.findByNodeId(parentNode.id);
         parentNodeView.addChildAtPosition(newNodeView, position);
 
         // update selected node
@@ -74,7 +74,7 @@ export default class TreeView extends React.Component {
         let {selectedNode, selectedNodeView} = this.treeViewModel;
         if (!selectedNodeView || !selectedNode) return;
 
-        this.treeModel.delete(selectedNode._id);
+        this.treeModel.delete(selectedNode.id);
         selectedNodeView.deleteElement();
     }
 
@@ -83,7 +83,7 @@ export default class TreeView extends React.Component {
     }
 
     _createTreeNodeView(node) {
-        return TreeNodeView.create(node._id,
+        return TreeNodeView.create(node.id,
             (e) => this.nodeSelectionPlugin.onMouseDownNodeConnector(e, node),
             (e) => this.nodeSelectionPlugin.onClickNodeTextHolder(e, node),
             (e) => this.nodeSelectionPlugin.onMouseDownNodeTextHolder(e, node),
@@ -98,7 +98,7 @@ export default class TreeView extends React.Component {
     }
 
     updateText(node) {
-        let view = TreeNodeView.findByNodeId(node._id);
+        let view = TreeNodeView.findByNodeId(node.id);
         if (!view) {
             return;
         }

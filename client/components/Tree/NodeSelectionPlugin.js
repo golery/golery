@@ -12,13 +12,13 @@ export default class NodeSelectionPlugin {
     /** When mouse down (even if user intends to drag node), select the node immediately.
      * Note that we only toggle the node when user fully clicks node */
     onMouseDownNodeTextHolder(e, node) {
-        console.log('Select ', node._id);
+        console.log('Select ', node.id);
         e.preventDefault();
 
         // Was target selected? If not, select node
 
-        if (this._wasNodeSelected(node._id)) {
-            this.nodeIdToToggle = node._id;
+        if (this._wasNodeSelected(node.id)) {
+            this.nodeIdToToggle = node.id;
         } else {
             this.selectNode(node);
             this.nodeIdToToggle = null;
@@ -29,7 +29,7 @@ export default class NodeSelectionPlugin {
         e.preventDefault();
 
         // when mouse down on selected node and user didn't drag the node then toggle node
-        if (child._id && child._id === this.nodeIdToToggle) {
+        if (child.id && child.id === this.nodeIdToToggle) {
             this._toggleNode(child);
         }
     }
@@ -39,7 +39,7 @@ export default class NodeSelectionPlugin {
 
         // Was target selected? If not, select node
 
-        if (!this._wasNodeSelected(child._id)) {
+        if (!this._wasNodeSelected(child.id)) {
             this.selectNode(child);
         }
         this._toggleNode(child);
@@ -61,7 +61,7 @@ export default class NodeSelectionPlugin {
 
     _wasNodeSelected(nodeId) {
         let {selectedNode, selectedNodeView} = this.treeViewModel;
-        return selectedNodeView && selectedNode._id === nodeId;
+        return selectedNodeView && selectedNode.id === nodeId;
     }
 
     _toggleNode(node) {
@@ -88,7 +88,7 @@ export default class NodeSelectionPlugin {
         }
 
         this.treeViewModel.selectedNode = node;
-        this.treeViewModel.selectedNodeView = TreeNodeView.findByNodeId(node._id);
+        this.treeViewModel.selectedNodeView = TreeNodeView.findByNodeId(node.id);
         this.treeViewModel.selectedNodeView.setElementAsSelected();
         this.onSelectListener(node);
         return this.treeViewModel.selectedNodeView;

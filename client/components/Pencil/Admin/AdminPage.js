@@ -31,8 +31,8 @@ export default class AdminPage extends React.Component {
     _getPublicNodeElm(nodes) {
         let list = [];
         for (let node of nodes) {
-            list.push(<div key={node._id}><a href={"https://www.golery.com/pencil/" + node._id}
-                                             target="_blank">{node._id}</a> {node.name}</div>)
+            list.push(<div key={node.id}><a href={"https://www.golery.com/pencil/" + node.id}
+                                             target="_blank">{node.id}</a> {node.name}</div>)
         }
         return list;
     }
