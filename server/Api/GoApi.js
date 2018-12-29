@@ -69,10 +69,12 @@ class GoApi {
             method: (opts && opts.method) || "GET",
             headers: Object.assign({
                 "accept": "application/json",
-                "user": user,
                 'content-type': "application/json"
             }, opts && opts.headers)
         };
+        if (user) {
+            options.headers.user = user;
+        }
         console.log("Call API ", url, options);
         return fetch(goApiServiceHost + url, options).then(res => res.json()).catch(err => {
             console.log(err);
