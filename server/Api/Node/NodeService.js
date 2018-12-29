@@ -18,7 +18,7 @@ class NodeService {
     }
 
     findById(userId, nodeId62) {
-        return GoApi.queryId62(userId, nodeId62, false);
+        return GoApi.query(userId, nodeId62, false);
     }
 
     /** @return List of node. The first element is the root node */

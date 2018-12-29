@@ -60,8 +60,8 @@ export default class PencilPage extends React.Component {
     constructor(props) {
         super(props);
 
-        let {rootId, nodeId} = this.props.match ? this.props.match.params : {rootId: null, nodeId: null};
-        let {initialNode} = this.props.serverState || {initialNode: null};
+        let {nodeId} = this.props.match ? this.props.match.params : {rootId: null, nodeId: null};
+        let {initialNode, rootId} = this.props.serverState || {initialNode: null};
         initialNode = initialNode || null;
 
         this.state = {

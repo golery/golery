@@ -56,8 +56,8 @@ class GoApi {
     }
 
     /** @return promise of array of nodes */
-    queryId62(user, id62, tree) {
-        return this._call(user, "/api/public/pencil/query/id62/" + id62 + "?tree=" + tree);
+    query(user, rootId62, tree) {
+            return this._call(user, "/api/public/pencil/query?rootId=" + rootId62 + "&tree=" + tree);
     }
 
     findNodeId62ForSiteMap() {

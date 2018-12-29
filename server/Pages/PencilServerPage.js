@@ -16,9 +16,9 @@ function getPageOptions() {
     };
 }
 
-function renderPage(req, res, node) {
+function renderPage(req, res, rootId, node) {
     let options = getPageOptions();
-    options.serverState = {initialNode: node};
+    options.serverState = {initialNode: node, rootId: rootId};
 
     let mainHtml = ReactDOM.renderToString(<PencilPage serverState={options.serverState}/>);
 
@@ -27,8 +27,6 @@ function renderPage(req, res, node) {
         options.metaDescription = " " + node.name;
         options.metaKeywords += " " + node.name;
     }
-    // options.afterBodyScripts = ["https://cdn.ckeditor.com/ckeditor5/10.1.0/classic/ckeditor.js"];
-    options.afterBodyScripts = ["/libs/ckeditor.js"];
     page(req, res, mainHtml, 'PencilPage', options);
 }
 
@@ -38,21 +36,18 @@ export function pencilLandingPage(req, res) {
 }
 
 export default function (req, res) {
+    // Ref. PageRouter for url patterns
     let {rootId, nodeId} = req.params;
 
     if (!nodeId) {
         if (req.user) {
             console.log("User in req.user=", req.user._id);
-            renderPage(req, res, null);
+            renderPage(req, res, null, null);
         } else {
             pencilLandingPage(req, res);
         }
         return;
     }
-
-    console.log(req.user, "#########", req.user && req.user._id);
-
-
 
     nodeService.findById(req.user && req.user._id, nodeId).then(nodes => {
         if (nodes === null || !nodes[0]) {
@@ -60,7 +55,7 @@ export default function (req, res) {
             return;
         }
 
-        let node = nodes[0];
-        renderPage(req, res, node);
+
+        renderPage(req, res, rootId, nodes[0]);
     });
 }

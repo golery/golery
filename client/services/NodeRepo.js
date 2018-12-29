@@ -42,17 +42,11 @@ class NodeRepo {
             console.log('Reuse node repo. Do not fetch');
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
-        return Axios.get('/api/secure/pencil/query').then(response => {
+        let rootParam = rootId ? "&rootId="+rootId : "";
+        return Axios.get('/api/secure/pencil/query?tree=true'+rootParam).then(response => {
             let nodes = response.data;
-            if (!rootId) {
-                rootId = response.data[0].id;
-            }
-
-            let rootNode = this._findNode(nodes, rootId);
-            this.rootNode = rootNode;
-            this.nodes = nodes = this._filter(nodes, rootNode);
             console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
-            return {nodes: this.nodes, rootNode: this.rootNode};
+            return {nodes: nodes, rootNode: nodes[0]};
         });
     }
 

@@ -23,7 +23,7 @@ export default function (router) {
     pencil.get('/', pencilServerPage);
     pencil.get('/landing', pencilLandingPage);
     pencil.get('/:nodeId', pencilServerPage);
-    pencil.get('/:nodeId/:rootId', pencilServerPage);
+    pencil.get('/:rootId/:nodeId', pencilServerPage);
 
     let menu = new Router();
     menu.get('/', menuServerPage);
