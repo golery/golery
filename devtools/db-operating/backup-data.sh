@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-#WARN ! For first use, on ec2. Run "sudo yum install rsync"
+# This script backup /data/app-data on remote server
+# - copy to /data/awsbackup
+# - create new branch, commit, push
+# WARN ! For first use, on ec2. Run "sudo yum install rsync"
 
 EC2_INSTANCE=18.224.97.10
 
