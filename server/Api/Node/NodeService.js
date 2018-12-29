@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import GoApi from "../GoApi";
 
 mongoose.Promise = Promise;
 
@@ -13,20 +14,11 @@ class NodeService {
     }
 
     findAllPublicNodeId() {
-        return NodeModel.find({access: 1, deleted: { $ne: true}}, '_id');
+        return GoApi.findNodeId62ForSiteMap();
     }
 
-    findById(nodeId) {
-        if (!nodeId) {
-            return Promise.resolve(null);
-        }
-
-        return NodeModel.findById({
-            _id: nodeId,
-            deleted: {
-                $ne: true
-            }
-        });
+    findById(userId, nodeId62) {
+        return GoApi.queryId62(userId, nodeId62, false);
     }
 
     /** @return List of node. The first element is the root node */

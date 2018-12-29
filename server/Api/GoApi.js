@@ -2,16 +2,16 @@ import fetch from "node-fetch";
 import Config from "../config";
 
 // To connect to GoApi run in host machine, use the following
-const host = Config.goApiHost;
+const goApiServiceHost = Config.goApiHost;
 // To connect to local docker use the following
 // const host = 'http://goapi:8100';
 
 // TODO PERFORMANCE This proxy add 100ms (at dev local env)
 /** Forward requests to API service */
-function goApi(req, res) {
+function proxyToGoApi(req, res) {
     let user = req.user && req.user.id;
     let headers = req.headers;
-    let url = host + req.originalUrl;
+    let url = goApiServiceHost + req.originalUrl;
     let contentType = headers['content-type'] || 'application/json';
     let method = req.method;
     let options = {
@@ -42,14 +42,44 @@ function goApi(req, res) {
 
 class GoApi {
     /** Available at /api/pubic/... */
-    static setupPublicRoute(route) {
-        route.all('/pencil/*', (req, res) => goApi(req, res));
+    setupPublicRoute(route) {
+        route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
     }
 
     /** Available at /api/secure/... */
-    static setupSecureRoute(route) {
-        route.all('/pencil/*', (req, res) => goApi(req, res));
+    setupSecureRoute(route) {
+        route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
+    }
+
+    constructor(userId) {
+        this._user = userId;
+    }
+
+    /** @return promise of array of nodes */
+    queryId62(user, id62, tree) {
+        return this._call(user, "/api/public/pencil/query/id62/" + id62 + "?tree=" + tree);
+    }
+
+    findNodeId62ForSiteMap() {
+        return this._call(null, "/api/public/pencil/sitemap/nodeId62");
+    }
+
+    _call(user, url, opts) {
+        let options = {
+            method: (opts && opts.method) || "GET",
+            headers: Object.assign({
+                "accept": "application/json",
+                "user": user,
+                'content-type': "application/json"
+            }, opts && opts.headers)
+        };
+        console.log("Call API ", url, options);
+        return fetch(goApiServiceHost + url, options).then(res => res.json()).catch(err => {
+            console.log(err);
+            throw err;
+        });
     }
 }
 
-export default GoApi;
+
+export default new GoApi();

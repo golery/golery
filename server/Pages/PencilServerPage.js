@@ -50,20 +50,17 @@ export default function (req, res) {
         return;
     }
 
-    nodeService.findById(nodeId).then(node => {
-        if (node === null) {
+    console.log(req.user, "#########", req.user && req.user._id);
+
+
+
+    nodeService.findById(req.user && req.user._id, nodeId).then(nodes => {
+        if (nodes === null || !nodes[0]) {
             res.json("Page was moved");
             return;
         }
 
-        // 0: private, 1: public
-        const userId = req.user ? req.user.id : null;
-        if (node.access === 1 || (node.access === 0 && req.user && node.user.equals(userId))) {
-            console.log("Render pencil page with node ", nodeId);
-            renderPage(req, res, node);
-        } else {
-            console.log("Block access to node ", nodeId, '. Node.access=', node.access, ', node.user=', node.user, ', req user=', userId);
-            res.json("This page was set to private access");
-        }
+        let node = nodes[0];
+        renderPage(req, res, node);
     });
 }

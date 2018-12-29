@@ -2,22 +2,24 @@
 import React from "react";
 import nodeService from "../Api/Node/NodeService";
 
+const host = "https://www.golery.com";
+
 function getStatic() {
     let s = "";
-    s += "http://www.golery.com" + "\n";
-    s += "http://www.golery.com/landing" + "\n";
-    s += "http://www.golery.com/pencil" + "\n";
-    s += "http://www.golery.com/goevent" + "\n";
-    s += "http://www.golery.com/unix-timestamp-converter" + "\n";
-    s += "http://www.golery.com/json-formatter" + "\n";
-    s += "http://www.golery.com/pomodoro" + "\n";
+    s += host + "\n";
+    s += host + "/landing" + "\n";
+    s += host + "/pencil" + "\n";
+    s += host + "/goevent" + "\n";
+    s += host + "/unix-timestamp-converter" + "\n";
+    s += host + "/json-formatter" + "\n";
+    s += host + "/pomodoro" + "\n";
     return s;
 }
 
 function getLinksToNodes(nodeIds) {
     let s = "";
     for (let node of nodeIds) {
-        s += "http://www.golery.com/pencil/" + node._id + "\n";
+        s += host + "/pencil/" + node + "\n";
     }
     return s;
 }
