@@ -11,6 +11,7 @@ import PencilLandingPage from './components/Pencil/PencilLandingPage';
 import MenuPage from './components/Menu/MenuPage';
 import PomodoroPage from './components/Pomodoro/PomodoroPage';
 import FlonPage from './components/Flon/FlonPage';
+import SandboxPage from './components/Sandbox/SandboxPage';
 import Polyfill from './services/Polyfill';
 
 const MAIN_COMPONENTS = {
@@ -23,7 +24,8 @@ const MAIN_COMPONENTS = {
     PencilLandingPage: <PencilLandingPage/>,
     MenuPage: <MenuPage/>,
     PomodoroPage: <PomodoroPage/>,
-    FlonPage: <FlonPage/>
+    FlonPage: <FlonPage/>,
+    SandboxPage: <SandboxPage/>
 };
 
 // This global method is called to populate correct react component to page
@@ -42,5 +44,5 @@ window.bootstrapPage = function (page, serverState) {
         component = <div>Component {page} is not defined in app.js</div>
     }
     console.log('Server state', serverState);
-    ReactDOM.render(component, document.getElementById('REACT_ROOT'));
+    ReactDOM.hydrate(component, document.getElementById('REACT_ROOT'));
 };

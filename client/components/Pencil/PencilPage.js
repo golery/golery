@@ -22,7 +22,6 @@ import TermsView from "./TermsView";
 import AppMenu from "./AppMenu";
 import ModalDialog from "../Core/Dialog/ModalDialog";
 import Scrollbar from "./Scrollbar";
-import Sandbox, {ENABLE_SANDBOX} from "./Sandbox/Sandbox";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -80,8 +79,6 @@ export default class PencilPage extends React.Component {
         // ref to treeView element
         this.treeView = null;
 
-        this._load(rootId);
-
         this.onSelect = this.onSelect.bind(this);
 
         let commands = this.toolbarCommands = [];
@@ -107,12 +104,17 @@ export default class PencilPage extends React.Component {
         this._registerShortcutKeys();
     }
 
-    render() {
-        if (Sandbox.isEnabled()) {
-            return <Sandbox/>
-        }
+    componentDidMount() {
+        let {rootId} = this.props.serverState || {};
+        // delay loading to test loading wheel
+        // setTimeout(() => {
+        //     this._load(rootId);
+        // }, 2000);
+        this._load(rootId);
+    }
 
-        if (!this.treeModel && typeof window !== "undefined" && window.location.pathname === ("/pencil")) {
+    render() {
+        if (!this.treeModel) {
             // only show loading if there is no initial nodeId
             return <LoadingPage/>;
         }

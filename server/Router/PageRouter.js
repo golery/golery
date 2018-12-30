@@ -8,7 +8,11 @@ import pencilServerPage, {pencilLandingPage} from "../Pages/PencilServerPage";
 import menuServerPage from "../Pages/MenuServerPage";
 import flonServerPage from "../Pages/FlonServerPage";
 import pomodoroPage from "../Pages/PomodoroPage";
+import {SandboxPage} from "../Pages/Generated/Components.generated";
 import passport from "passport";
+import ReactDOM from "react-dom/server";
+import page from "../Pages/PageTemplate";
+import React from "react";
 
 /* TO ADD A NEW PAGE
 - Add a router in RootRouter.js
@@ -16,6 +20,8 @@ import passport from "passport";
 - Add a map from server ID to components in app.js
 - Update sitemap.txt
  */
+
+let sandboxPage =(req, res) => {page(req, res, ReactDOM.renderToString(<SandboxPage/>), 'SandboxPage', {})};
 
 export default function (router) {
     let pencil = new Router();
@@ -42,5 +48,6 @@ export default function (router) {
     router.get('/app', mainPage);
     router.get('/pomodoro', pomodoroPage);
     router.get('/flon', flonServerPage);
+    router.get('/sandbox', sandboxPage);
     router.use('/', index);
 }
