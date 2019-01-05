@@ -15,6 +15,7 @@ cd $FOLDER/app-data
 
 # Create branch, commit and push
 BRANCH="backup-$DATE"
+git checkout master
 git checkout -b $BRANCH
 git add --all && git commit -m "$BRANCH"
 git push --set-upstream origin $BRANCH
