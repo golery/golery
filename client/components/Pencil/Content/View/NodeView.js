@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import styles from './NodeView.css';
 import HtmlView from './Html/HtmlView';
 import GoleryEditorLib from "golery-editor";
+
 let {GoleryEditor, EditorController, htmlSerializer} = GoleryEditorLib;
 
 
-export default class NodeView extends React.Component{
+export default class NodeView extends React.Component {
     constructor(props) {
         super(props);
         this.editorController = new EditorController();
@@ -29,18 +30,26 @@ export default class NodeView extends React.Component{
         return null;
     }
 
-    render()
-    {
-        return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            <HtmlView html={this.props.node.title} className="nodeTitle"/>
-            <div className={"nodeHtml"}>
-            <GoleryEditor value={this.state.value}
-                          onChange={(c) => this.setState({value: c.value})}
-                          readOnly={true}
-                          autoFocus={true}
-                          controller={this.editorController}/>
-            </div>
-        </div>;
+    render() {
+        let editor;
+        if (typeof(window) === "undefined") {
+            // server side render html
+            editor = <div dangerouslySetInnerHTML={{__html:this.state.html}}/>;
+        } else {
+            editor = <GoleryEditor value={this.state.value}
+                                   onChange={(c) => this.setState({value: c.value})}
+                                   readOnly={true}
+                                   autoFocus={true}
+                                   controller={this.editorController}/>;
+        }
+        return (
+            <div
+                className={[styles.component, "pencilTheme"].join(' ')}>
+                <HtmlView html={this.props.node.title} className="nodeTitle"/>
+                <div className={"nodeHtml"}>
+                    {editor}
+                </div>
+            </div>);
     }
 }
 
