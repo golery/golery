@@ -34,6 +34,8 @@ export default class NodeView extends React.Component {
         let editor;
         if (typeof(window) === "undefined") {
             // server side render html
+            // This cause mismatch the html tag, potentially cause problem.
+            // Later, we can update the golery editor to generate exact match html tags
             editor = <div dangerouslySetInnerHTML={{__html:this.state.html}}/>;
         } else {
             editor = <GoleryEditor value={this.state.value}
