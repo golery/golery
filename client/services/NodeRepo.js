@@ -43,7 +43,8 @@ class NodeRepo {
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
         let rootParam = rootId ? "&rootId="+rootId : "";
-        return Axios.get('/api/secure/pencil/query?tree=true'+rootParam).then(response => {
+        let secure = rootId ? "public" : "secure";
+        return Axios.get(`/api/${secure}/pencil/query?tree=true${rootParam}`).then(response => {
             let nodes = response.data;
             console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
             return {nodes: nodes, rootNode: nodes[0]};

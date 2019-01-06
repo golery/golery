@@ -59,15 +59,14 @@ export default class PencilPage extends React.Component {
     constructor(props) {
         super(props);
 
-        let {nodeId} = this.props.match ? this.props.match.params : {rootId: null, nodeId: null};
-        let {initialNode, rootId} = this.props.serverState || {initialNode: null};
+        let {initialNode} = this.props.serverState || {initialNode: null};
         initialNode = initialNode || null;
 
         this.state = {
             nodes: null,
             // view or edit
             contentMode: CONTENT_MODE_VIEW,
-            editingId: nodeId,
+            // editingId: nodeId,
             editor: EDITOR_HTML,
             editingNode: initialNode || null,
             showTree: initialNode === null,
@@ -105,12 +104,12 @@ export default class PencilPage extends React.Component {
     }
 
     componentDidMount() {
-        let {rootId} = this.props.serverState || {};
+        let {id62} = this.state.editingNode || { id62: null};
         // delay loading to test loading wheel
         // setTimeout(() => {
         //     this._load(rootId);
         // }, 2000);
-        this._load(rootId);
+        this._load(id62);
     }
 
     render() {

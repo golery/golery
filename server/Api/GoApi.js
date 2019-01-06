@@ -18,10 +18,12 @@ function proxyToGoApi(req, res) {
         method: method,
         headers: {
             "accept": headers.accept,
-            "user": user,
             'content-type': contentType
         }
     };
+    if (user) {
+        options.headers.user = user;
+    }
     if (method !== 'GET') {
         // TODO PERFORMANCE expressjs convert to json then here we convert back to text. Double conversion for nothing
         // But it's for Post body only, so it does not cost much

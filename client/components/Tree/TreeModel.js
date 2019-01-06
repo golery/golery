@@ -98,9 +98,9 @@ export default class TreeModel {
         }
 
         let node = this.map[id];
-        if (!node) {
-            console.log('Node ', id, ' not found');
-        }
+        // if (!node) {
+        //     console.log('Node ', id, ' not found');
+        // }
         return node;
     }
 

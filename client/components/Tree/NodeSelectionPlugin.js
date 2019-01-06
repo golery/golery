@@ -12,7 +12,7 @@ export default class NodeSelectionPlugin {
     /** When mouse down (even if user intends to drag node), select the node immediately.
      * Note that we only toggle the node when user fully clicks node */
     onMouseDownNodeTextHolder(e, node) {
-        console.log('Select ', node.id);
+        console.log('Select ', node.id, node.id62);
         e.preventDefault();
 
         // Was target selected? If not, select node

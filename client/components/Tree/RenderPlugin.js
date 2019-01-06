@@ -34,7 +34,7 @@ export default class RenderPlugin {
         for (let childId of node.children) {
             let child = this.treeModel.findById(childId);
             if (!child) {
-                console.log('Child Id not found', childId);
+                // console.log('Child Id not found', childId);
             } else {
                 let childNodeView = this.createSubTreeNodeView(child, node);
                 rootNodeView.appendChild(childNodeView);
