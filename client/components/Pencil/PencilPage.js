@@ -59,7 +59,8 @@ export default class PencilPage extends React.Component {
     constructor(props) {
         super(props);
 
-        let {initialNode} = this.props.serverState || {initialNode: null};
+        // sererState is passed by ssr and also injected (with the same data) during client side rendering
+        let {initialNode} = this.props.serverState;
         initialNode = initialNode || null;
 
         this.state = {
@@ -107,16 +108,21 @@ export default class PencilPage extends React.Component {
         let {id62} = this.state.editingNode || { id62: null};
         // delay loading to test loading wheel
         // setTimeout(() => {
-        //     this._load(rootId);
+        //     this._load(id62);
         // }, 2000);
         this._load(id62);
     }
 
     render() {
-        if (!this.treeModel) {
+        let currentNode = this.state.editingNode;
+
+        console.log(currentNode, this.treeModel);
+        if (!currentNode && !this.treeModel) {
+            console.log("Render Loading....");
             // only show loading if there is no initial nodeId
             return <LoadingPage/>;
         }
+        console.log("Render Pages");
         let styleEditing = '';
         if (this.state.contentMode === CONTENT_MODE_EDIT) styleEditing = styles.editing;
 

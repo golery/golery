@@ -55,7 +55,7 @@ export default function (req, res) {
             return;
         }
 
-
+        console.log("Render page ", nodeId);
         renderPage(req, res, rootId, nodes[0]);
     });
 }
