@@ -26,10 +26,8 @@
   width: 3rem;
   height: 3rem;
   position: absolute;
-  right: 0.2rem;
-  top: 3.2em;
-  border: 1px solid gray;
-  border-radius: 50%;
+  right: 2.5rem;
+  top: 0.2em;
   justify-content: center;
   align-items: center;
   background-color: white;
@@ -37,6 +35,10 @@
     width: 1rem;
     height: 1rem;
   }
+}
+
+.toggleToolbarButton:hover {
+  background-color: #eee;
 }
 
 .toogleToolbarButton:hover {

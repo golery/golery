@@ -46,7 +46,7 @@ export default class NodeEditor extends React.Component {
 
     render() {
         let {node} = this.props;
-        let toggleToolbarButton = "fa fa-close";
+        let toggleToolbarButton = "fas fa-minus";
         let {slateValue} = this.state;
         const onChange = (change) => this._onChangeHtml(change);
 
@@ -55,7 +55,7 @@ export default class NodeEditor extends React.Component {
             elmToolbar = <EditorToolbar value={slateValue} onChange={onChange} options={this.editorToolbarOptions}/>;
         } else {
             elmToolbar = null;
-            toggleToolbarButton = "fa fa-css3";
+            toggleToolbarButton = "fas fa-grip-horizontal";
         }
 
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
