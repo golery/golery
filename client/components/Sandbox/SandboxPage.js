@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './SandboxPage.css';
 import LoadingPage from '../Pencil/LoadingPage';
+import SandboxUploadImage from './SandboxUploadImage';
 
 export default class SandboxPage extends React.Component {
     constructor(props) {
@@ -8,8 +9,10 @@ export default class SandboxPage extends React.Component {
     }
 
     _getSandbox() {
-        return <LoadingPage/>;
+        console.log(SandboxUploadImage);
+        return <SandboxUploadImage/>;
     }
+
     render() {
         let sandbox = typeof (window) === "undefined" ? null : this._getSandbox();
         return (

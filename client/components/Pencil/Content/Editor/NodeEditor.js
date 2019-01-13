@@ -9,9 +9,7 @@ import HeadLineParser from "../../HeadLineParser";
 import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
-import Scrollbar from '../../Scrollbar';
-import "@babel/polyfill";
-import {openUploadImageDialog} from "./HtmlEditor/UploadImageDialog";
+import {openUploadImageDialog} from "./HtmlEditor/Image/UploadImageDialog";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;

@@ -3,7 +3,7 @@ import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
 import GoleryEditorLib from "golery-editor";
-let {GoleryEditor, EditorToolbar, SlateValue, htmlSerializer, EditorController} = GoleryEditorLib;
+let {GoleryEditor, EditorController} = GoleryEditorLib;
 
 /**
  * Pure Html editor. It does not know about the node data

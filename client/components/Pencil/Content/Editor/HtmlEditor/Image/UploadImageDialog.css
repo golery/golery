@@ -1,15 +1,22 @@
 .component {
-    min-width: 20rem;
-    min-height: 20rem;
+    min-width: 30rem;
+    min-height: 18rem;
 }
 
 .textControlV {
     font-size: 40px;
 }
 
-.textPasteFromClipboard {
+.dropZone {
     font-size: 16px;
     margin-top: 1rem;
+    border: 4px dashed #ddd;
+    min-height: 15rem;
+    padding: 1rem;
+    line-height: 2rem;
+}
+.dropZone:hover {
+    border: 4px dashed #aaa;
 }
 
 .textPaste {
@@ -56,4 +63,11 @@
 
 .resizeSlider {
   display: inline-block;
+}
+
+.uploadIcon {
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 3rem;
+    color: #aaa;
 }

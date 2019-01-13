@@ -3,12 +3,30 @@ import Axios from "axios";
 
 import styles from './UploadImageDialog.css';
 
-import ClipboardUtils from './Utils/ClipboardUtils';
-import ModalDialog from "../../../../Core/Dialog/ModalDialog";
-import TextSelection from "./Utils/TextSelection";
+import ClipboardUtils from '../Utils/ClipboardUtils';
+import ModalDialog from "../../../../../Core/Dialog/ModalDialog";
+import TextSelection from "../Utils/TextSelection";
 
 const MAX_IMAGE_WIDTH = 1000;
 const MAX_IMAGE_HEIGHT = 800;
+
+function getFileFromDrop(onDropEvent) {
+    let ev = onDropEvent;
+    if (ev.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+            // If dropped items aren't files, reject them
+            if (ev.dataTransfer.items[i].kind === 'file') {
+                return ev.dataTransfer.items[i].getAsFile();
+            }
+        }
+    } else {
+        // Use DataTransfer interface to access the file(s)
+        for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+            return ev.dataTransfer.files[i];
+        }
+    }
+}
 
 export async function openUploadImageDialog(blobUrl) {
     let modal = new ModalDialog();
@@ -47,6 +65,22 @@ export default class UploadImageDialog extends React.Component {
         document.removeEventListener('paste', this._pasteListener);
     }
 
+    async _onDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let file = getFileFromDrop(e);
+        // let blobUrl = await readBlob(file);
+        let blobUrl = URL.createObjectURL(file);
+        this._copyToCanvas(blobUrl);
+    }
+
+    _disableDefaultDrag(e) {
+        // Disble default event handler: open new tab with file content when dropping
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     render() {
         let spinnerClassName = `fa fa-spinner fa-pulse ${styles.spinner}`;
         let elmInner;
@@ -76,9 +110,16 @@ export default class UploadImageDialog extends React.Component {
             </div>;
         } else {
             elmInner = <div>
-                <div className={styles.textControlV}>Ctrl + V</div>
-                <div className={styles.textPasteFromClipboard}>
-                    <span className={styles.textPaste}>Paste</span> from your clipboard.
+                <div className={styles.textControlV}>Upload Image</div>
+                <div className={styles.dropZone}  onDrop={(e) => this._onDrop(e)}
+                     onDragEnter={this._disableDefaultDrag}
+                     onDragOver={this._disableDefaultDrag}
+                     onDragLeave={this._disableDefaultDrag}
+                >
+
+                    <div><span className={styles.textPaste}>Ctrl+V</span> to paste from clipboard.</div>
+                    <div>Or <span className={styles.textPaste}>Drag+drop</span> your file here.</div>
+                    <div className={styles.uploadIcon}><i className="fas fa-cloud-upload-alt"/></div>
                 </div>
             </div>
         }

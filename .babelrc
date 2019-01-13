@@ -5,7 +5,8 @@
       {
         loose: true
       }
-    ]
+    ],
+    "@babel/plugin-transform-runtime"
   ],
   "presets": [
     "@babel/preset-env",
