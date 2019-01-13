@@ -18,6 +18,7 @@
 
 .contentHolder {
   flex: 1;
+  overflow-y: auto;
 }
 
 .toggleToolbarButton {
@@ -53,4 +54,7 @@
 :global(.ck.ck-toolbar.ck-rounded-corners) {
   border-top: none !important;
   border-radius: 0 !important;
+}
+
+.scrollbarContent {
 }

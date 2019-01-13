@@ -65,22 +65,20 @@ export default class NodeEditor extends React.Component {
                 {elmToolbar}
             </div>
             <div className={styles.contentHolder}>
-                <Scrollbar>
-                    <TitleEditor html={node.title}
-                                 placeHolder="<page-title>"
-                                 contentEditableClassName="nodeTitle"
-                                 onChange={html => this._onChangeTitle(html)}
-                    />
+                <TitleEditor html={node.title}
+                             placeHolder="<page-title>"
+                             contentEditableClassName="nodeTitle"
+                             onChange={html => this._onChangeTitle(html)}
+                />
 
-                    <HtmlEditor value={slateValue}
-                                contentEditableClassName="nodeHtml pencilTheme"
-                                onChange={onChange}
-                                addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
-                                controller={this.controller}
-                                ref={ref => {
-                                    this.elmHtmlEditor = ref;
-                                }}/>
-                </Scrollbar>
+                <HtmlEditor value={slateValue}
+                            contentEditableClassName="nodeHtml pencilTheme"
+                            onChange={onChange}
+                            addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
+                            controller={this.controller}
+                            ref={ref => {
+                                this.elmHtmlEditor = ref;
+                            }}/>
             </div>
             <div className={styles.toggleToolbarButton} onClick={() => this._toggleToolbar()}>
                 <i className={toggleToolbarButton}></i>
