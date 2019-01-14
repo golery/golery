@@ -32,6 +32,7 @@ export default class NodeView extends React.Component {
 
     render() {
         let editor;
+        let {showTree} = this.props;
         if (typeof(window) === "undefined") {
             // server side render html
             // This cause mismatch the html tag, potentially cause problem.
@@ -47,7 +48,9 @@ export default class NodeView extends React.Component {
         return (
             <div
                 className={[styles.component, "pencilTheme"].join(' ')}>
-                <HtmlView html={this.props.node.title} className="nodeTitle"/>
+                <div className={showTree ? styles.titleWithTree : styles.titleNoTree}>
+                    <HtmlView html={this.props.node.title} className="nodeTitle"/>
+                </div>
                 <div className={"nodeHtml"}>
                     {editor}
                 </div>

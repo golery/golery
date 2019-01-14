@@ -26,6 +26,10 @@
   flex-direction: column;
 }
 
+.contentPane.noTree {
+
+}
+
 .editing {
   & .contentPane {
     bottom: 0;
@@ -79,6 +83,14 @@
   border-radius: 2px;
 }
 
+.scrollbarContentPaddingRight {
+  padding-right: 330px;
+}
+
+.scrollBarContentNoPadding {
+  padding-right: 0;
+}
+
 @media only screen and (min-device-width: 480px) {
   .doneEditButton {
     display: none;
@@ -106,6 +118,10 @@
     left: 330px;
     right: 0;
     bottom: 0;
+  }
+
+  .contentPane.noTree {
+    padding-right: 330px;
   }
 
   .treeViewHolder {

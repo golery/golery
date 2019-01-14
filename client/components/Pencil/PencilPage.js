@@ -122,7 +122,6 @@ export default class PencilPage extends React.Component {
             // only show loading if there is no initial nodeId
             return <LoadingPage/>;
         }
-        console.log("Render Pages");
         let styleEditing = '';
         if (this.state.contentMode === CONTENT_MODE_EDIT) styleEditing = styles.editing;
 
@@ -157,9 +156,13 @@ export default class PencilPage extends React.Component {
         if (!this.state.editingNode) return;
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
+            let {showTree} = this.state;
+            let scrollBarContent = showTree ? styles.scrollBarContentNoPadding : styles.scrollbarContentPaddingRight;
             return <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
                 <Scrollbar>
-                    <NodeView node={this.state.editingNode}/>
+                    <div className={scrollBarContent}>
+                        <NodeView node={this.state.editingNode} showTree={showTree}/>
+                    </div>
                 </Scrollbar>
             </div>;
         }
