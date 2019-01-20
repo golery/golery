@@ -1,13 +1,16 @@
 /** This modules generates boilerplat for a page (ex: google analytics, open graphs tags...) */
 import React from "react";
 import ReactDOM from "react-dom/server";
-import hashes from "./Generated/webpack.manifest.json"
+import hashes from "./Generated/webpack.manifest.json";
 
 function getGoogleAnalytics(req) {
-    /** When run at local, do not use google analytics */
-    if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') return `/*Disable google analytics due to hostname: ${req.hostname}*/`;
-    /** When run with non-user account, do not use google analytics */
-    if (req.cookies.disableStats === 'true') return '/** Disable google analytics due to cookie disableStats */';
+    /** Use ga=true to force google analytics */
+    if (req.query.ga !== 'true') {
+        /** When run at local, do not use google analytics */
+        if (req.hostname === 'localhost' || req.hostname === '127.0.0.1') return `/*Disable google analytics due to hostname: ${req.hostname}*/`;
+        /** When run with non-user account, do not use google analytics */
+        if (req.cookies.disableStats === 'true') return '/** Disable google analytics due to cookie disableStats */';
+    }
 
     let googleAnalytics = `
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject'] = r;i[r]=i[r]||function(){

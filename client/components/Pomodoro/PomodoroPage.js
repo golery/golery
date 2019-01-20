@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './PomodoroPage.css';
+import Ga from './Ga';
 
 // Set not null to force a specific short duration for development
 const DEBUG_FORCE_SECONDS = null;
 
 const _interval = 1000;
-const LOCAL_STORAGE_KEY = "STATE";
-const MODE_READY_TO_START = 'STOPPED';
+const LOCAL_STORAGE_KEY = "POMODORO_STATE";
+const MODE_READY_TO_START = 'MODE_READY_TO_START';
 const MODE_RUNNING = 'RUNNING';
 const MODE_PAUSE = 'PAUSE';
 const MODE_DONE = 'DONE';
@@ -18,6 +19,43 @@ const ICON_RUNNING = 'RUNNING';
 const ICON_STOP = 'STOP';
 const ICON_DATA_RUNNING = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHWSURBVDhPY6AZqK+vZ3L3CvF29Qn2BLGhwsQDD48QUVfvkJuu3sG3nQMChKHC+IGfnx8vkGL0DImJ84lOOOcfl/TaLz7pjU9U/Dmv4IgYkJyHRzQfWDE2ALRxqVdI9MOU1oaPHcc2/594cQ8Ytx/d9B8o9gEkB1IDVY4JfMJjVxfOnfRz9tVD/++8ffX/6rXbYHz7zav/ILGC2ZN+AtWsgipHBY4e4cphOTkvJl/c9//t5y//v3///X/HrgNgDGK/AYqB5EKzsl84ewcpQbUhANDfZSWLZ/w98uQOWAMIr1i9EYxhfJBc8aLpfz1Dosqg2hDALzphft3Wpf+vvX4O15CcUfA/LjkbzgfJgdSA1EK1IYBvRFxX5ep5/88+fwTXsG3Hvv9btu2B8888f/i/YtWc/94RsR1QbQjg6hlknVBX/XbBtaP/v377BdcEwyAxkFx8TeVbkFqoNlTgHRl/sWHniv+b7l78//HLd7hmEBskVr99+X+fiNjzUOWYwMMjUMYvKuFh9foF/6Ze2v9/w50LYDwFyK5cM+8fMEE9AqmBKscOXF0DxXyj4jcGJac/TaiveQPCQUmpz3wi4zaA5KDKCANX1xhud59AIxAGsaHC1AYMDAAihkukriSApAAAAABJRU5ErkJggg==";
 const ICON_DATA_STOP = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHklEQVQ4T2N8Jyj4n4ECwDhqAMNoGDCMhgHDsAgDAOy6IQEZi+WeAAAAAElFTkSuQmCC';
+
+const GA_CATEGORY = 'Pomodoro.Button';
+
+
+class GaTrackTick {
+    constructor(ga) {
+        this.ga = ga;
+        this.lastSend = 0;
+    }
+
+    send(elapsedMs) {
+        let time = new Date().getTime();
+        if (time - this.lastSend >= 5000) {
+            this.ga.send(GA_CATEGORY, 'tick', 'elapse', elapsedMs/1000);
+            this.lastSend = time;
+        }
+    }
+}
+class History{
+    constructor(history) {
+        this.history = history;
+    }
+    
+    _getDate() {
+        let today = new Date();
+        let day = today.getDate();
+        let month = today.getMonth() + 1; //January is 0!
+        let year = today.getFullYear();
+
+        return {day, month, year};
+    }
+    
+    addSuccess() {
+        let entry = { time: new Date().getTime(), status: 'success'};
+        this.history.unshift(entry);
+    }
+}
 
 /** This service updates browser tab title */
 class DocumentTitle {
@@ -66,15 +104,21 @@ export default class PomodoroPage extends React.Component {
         super(props);
         this.timer = null;
         this.documentTitle = new DocumentTitle();
+        this.ga = new Ga();
+        this.gaTrackTick = new GaTrackTick(this.ga);
 
         this.state = {
+            formatVersion: 1,
             mode: MODE_READY_TO_START,
             startTime: null,
             pomoDurationSec: 25 * 60,
             inputMinutes: 25,
             lastResume: null,
             msFromLastPause: null,
-            elapsedMsBeforeLastPause: null};
+            elapsedMsBeforeLastPause: null,
+            history: [],
+            showHistory: false
+        };
         this.state = this._loadState(this.state);
         // user comes back at running state
         if (this.state.mode === MODE_RUNNING) {
@@ -92,17 +136,28 @@ export default class PomodoroPage extends React.Component {
             }
             console.log('Loaded settings:', settings);
         }
-        if (!settings || !settings.pomoDurationSec || (settings.mode === MODE_RUNNING && !settings.startTime)) {
+        if (!settings) {
             settings = currentState;
+        } else if (settings.formatVersion !== currentState.formatVersion) {
+            console.log('Upgrade storage. Reset settings')
+            this.ga.send(GA_CATEGORY, 'resetSetting', 'version', settings.formatVersion);
+            settings = currentState;
+        } else {
+            this.ga.send(GA_CATEGORY, 'loadSettingSuccess', 'version', settings.formatVersion);
         }
         return settings;
     }
 
-    _saveState() {
+    _saveState(stateUpdate) {
         // don't save at server side
         if (typeof(window) === "undefined") return;
-        let json = JSON.stringify(this.state);
+
+        let newState = Object.assign({}, this.state, stateUpdate);
+        let json = JSON.stringify(newState);
         window.localStorage.setItem(LOCAL_STORAGE_KEY, json);
+
+        // this call is async
+        this.setState(stateUpdate);
     }
 
     componentWillUnmount() {
@@ -115,7 +170,6 @@ export default class PomodoroPage extends React.Component {
             clearInterval(this.timer);
         }
     }
-
 
     _startTimer() {
         this.timer = setInterval(() => this.tick(), _interval);
@@ -130,6 +184,8 @@ export default class PomodoroPage extends React.Component {
         }
 
         let elapsedMs = this._getElapseMs();
+        this.gaTrackTick.send(elapsedMs);
+
         if (elapsedMs >= this.state.pomoDurationSec*1000) {
             this._stopTimer();
             this._playMusic();
@@ -187,13 +243,53 @@ export default class PomodoroPage extends React.Component {
         );
     }
 
+    _toggleHistory() {
+        this.ga.send(GA_CATEGORY, 'openHistory');
+        this.setState({showHistory: !this.state.showHistory});
+
+    }
+
+    _clearHistory() {
+        this.setState({history: []});
+    }
+
+    _renderHistory() {
+        if (this.state.showHistory) {
+            let lines = this.state.history.map((v, i)=> {
+                let time = new Date(v.time).toLocaleString();
+                return <div className={styles.historyLine} key={i}>{time} {v.status}</div>
+            });
+
+            return (
+                <div className={styles.historyHolder}>
+                    <div className={styles.historyLinkHolder}>
+                        <a href='#' onClick={() => this._toggleHistory()}>Hide History</a>
+                        <a href='#' onClick={() => this._clearHistory()}>Clear</a>
+                    </div>
+                    <div>
+                        {lines}
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div className={styles.historyHolder}>
+                    <div className={styles.historyLinkHolder}><a href='#'
+                                                                 onClick={() => this._toggleHistory()}>History</a></div>
+                </div>
+            );
+        }
+    }
+
     _renderReadyToStart() {
         let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: "00:00",
             text2: null});
+
         return <div className={styles.component}>
             {this._renderStartButton()}
             {circle}
+            {this._renderHistory()}
         </div>;
     }
 
@@ -220,13 +316,13 @@ export default class PomodoroPage extends React.Component {
 
     _renderOnPause() {
         let elapseMs = this.state.elapsedMsBeforeLastPause;
-        let elapseText = this._getElapseText(elapseMs);
+            let elapseText = this._getElapseText(elapseMs);
 
         let buttons = (
             (<div className={styles.inputAndStartButtonHolder}>
                 <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>DONE</div>
                 <div className={[styles.button, styles.grey].join(' ')} onClick={() => this._onResume()}>RESUME</div>
-                <div className={styles.button} onClick={() => this._onIFail()}>ABORT</div>
+                <div className={styles.button} onClick={() => this._onAbort()}>ABORT</div>
             </div>)
         );
         let circle = this._renderCircle({percentage: elapseMs/1000/this.state.pomoDurationSec,
@@ -245,7 +341,7 @@ export default class PomodoroPage extends React.Component {
         let buttons = (
             <div className={styles.inputAndStartButtonHolder}>
                 <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>SUCCESS</div>
-                <div className={styles.button} onClick={() => this._onIFail()}>FAIL</div>
+                <div className={styles.button} onClick={() => this._onAbort()}>FAIL</div>
             </div>);
         let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
             text1: <div className={styles.doneText}>DONE</div>,
@@ -308,6 +404,7 @@ export default class PomodoroPage extends React.Component {
     }
 
     _onStart() {
+        this.ga.send(GA_CATEGORY, 'start', 'minutes', this.state.inputMinutes);
         this._stopTimer();
 
         let maxMinutes = parseInt(this.state.inputMinutes);
@@ -327,37 +424,40 @@ export default class PomodoroPage extends React.Component {
     }
 
     _onPause() {
+        let elapsedMs = this._getElapseMs();
+        this.ga.send(GA_CATEGORY, 'pause', 'elapsed', elapsedMs);
+
         this._stopTimer();
-        this.setState({mode : MODE_PAUSE,
+        this._saveState({mode : MODE_PAUSE,
             lastResume: null,
             msFromLastPause: null,
-            elapsedMsBeforeLastPause: this._getElapseMs()});
-        this._saveState();
+            elapsedMsBeforeLastPause: elapsedMs});
     }
 
     _onResume() {
-        this.setState({mode : MODE_RUNNING,
+        this.ga.send(GA_CATEGORY, 'resume');
+        this._saveState({mode : MODE_RUNNING,
             lastResume: Date.now(),
             msFromLastPause: 0});
-        this._saveState();
         this._startTimer();
     }
 
-    _onIFail() {
+    _onAbort() {
+        this.ga.send(GA_CATEGORY, 'abort');
         this._stopTimer();
-        this.setState({mode : MODE_READY_TO_START});
-        this._saveState();
+        this._saveState({mode : MODE_READY_TO_START});
     }
 
     _onSuccess() {
+        this.ga.send(GA_CATEGORY, 'success');
         this._stopTimer();
-        this.setState({mode : MODE_READY_TO_START});
-        this._saveState();
+        new History(this.state.history).addSuccess();
+        this._saveState({mode : MODE_READY_TO_START});
     }
 
     _renderBody() {
         let {mode} = this.state;
-        console.log("Render with mode ", mode);
+        //console.log("Render with mode ", mode);
         if (mode === MODE_READY_TO_START) {
             return this._renderReadyToStart();
         } else if (mode === MODE_RUNNING) {

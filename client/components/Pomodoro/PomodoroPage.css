@@ -106,6 +106,21 @@
     color: #666;
 }
 
+.historyHolder {
+    margin-top: 2rem;
+}
+
+.historyLinkHolder {
+    margin-bottom: 1rem;
+}
+
+.historyLinkHolder a {
+    margin: 1rem;
+}
+.historyLine {
+    margin: 1rem;
+}
+
 .doneText {
     display: inline-block;
     animation-name: shake;
