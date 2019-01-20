@@ -201,9 +201,9 @@ export default class PomodoroPage extends React.Component {
         let elapseMs = this._getElapseMs();
         let elapseText = this._getElapseText(elapseMs);
 
-        this._updateDocumentTitle(this.state.msFromLastPause, elapseText);
+        this._updateDocumentTitle(elapseMs, elapseText);
 
-        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
+        let circle = this._renderCircle({percentage: elapseMs/1000/this.state.pomoDurationSec,
             text1: elapseText,
             text2: this._getCircleText2()});
         return <div className={styles.component}>
@@ -226,10 +226,10 @@ export default class PomodoroPage extends React.Component {
             (<div className={styles.inputAndStartButtonHolder}>
                 <div className={[styles.button, styles.green].join(' ')} onClick={() => this._onSuccess()}>DONE</div>
                 <div className={[styles.button, styles.grey].join(' ')} onClick={() => this._onResume()}>RESUME</div>
-                <div className={styles.button} onClick={() => this._onIFail()}>I FAIL</div>
+                <div className={styles.button} onClick={() => this._onIFail()}>ABORT</div>
             </div>)
         );
-        let circle = this._renderCircle({percentage: this.state.msFromLastPause/this.state.pomoDurationSec,
+        let circle = this._renderCircle({percentage: elapseMs/1000/this.state.pomoDurationSec,
             text1: elapseText,
             text2: this._getCircleText2()});
 
@@ -280,11 +280,11 @@ export default class PomodoroPage extends React.Component {
         return backgroundImage;
     }
 
-    _updateDocumentTitle(msFromLastPauseond, elapseText) {
+    _updateDocumentTitle(elapsedMs, elapseText) {
         if (typeof (document) === "undefined") return;
 
         let title, icon;
-        if (msFromLastPauseond >= this.state.pomoDurationSec) {
+        if (elapsedMs >= this.state.pomoDurationSec*1000) {
             title = "DONE";
             icon = ICON_STOP;
         } else {
@@ -372,7 +372,7 @@ export default class PomodoroPage extends React.Component {
     }
     render() {
         if (typeof(window) === "undefined") {
-            return <div>Loading...</div>
+            return <div>Loading Goloery Pomodoro...</div>
         }
         return <div className={styles.component}>
             {this._renderBody()}
