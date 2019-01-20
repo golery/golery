@@ -1,0 +1,28 @@
+.component {
+
+}
+
+.contentEditable {
+  background-color: #f4f9f4;
+  border: 1px solid #a7d7c5;
+  min-height: 10rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  line-height: 1.5rem;
+}
+
+.contentEditable[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.buttonHolder {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.button {
+  background-color: #74b49b;
+  color: #f4f9f4;
+  display: inline-block;
+  padding: 1rem;
+}

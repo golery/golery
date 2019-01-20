@@ -23,6 +23,7 @@ import ViewPollPage from "./components/GoGo/View/ViewPollPage";
 import EditEventPage from "./components/GoGo/EditEventPage";
 import ZoomAppView from "./components/Zoom/ZoomAppView";
 import CodeVisualPage from "./components/Forge/CodeVisualPage";
+import CalendarPage from "./components/Calendar/CalendarPage";
 
 /** The main page for www.golery.com/app. There is no server side rendering */
 export default
@@ -66,6 +67,8 @@ export default
             <Route path="/gogo/edit/:eventId" component={EditEventPage}/>
 
             <Route path="/zoom" component={ZoomAppView}/>
+
+            <Route path="/calendar" component={CalendarPage}/>
         </Switch>
     </div>
 </Router>;
