@@ -1,14 +1,18 @@
 import passport from "passport";
-import connectMongo from "connect-mongo";
+// import connectMongo from "connect-mongo";
 import session from "express-session";
 import localStrategy from "./strategies/local";
 import User from "./user.model";
+// import SessionStore from "../Web/Auth/SessionStore";
+import RestSessionStore from "../Web/Auth/RestSessionStore";
 
 // https://github.com/jdesboeufs/connect-mongo
-const MongoStore = connectMongo(session);
+//     const MongoStore = connectMongo(session);
 
 const sessionSecret = 'GoLeRy';
 const sessionDbCollection = 'sessions';
+
+const HTTPStore = RestSessionStore(session);
 
 function configSession(app, db) {
     // Store session to database
@@ -17,10 +21,7 @@ function configSession(app, db) {
         resave: false,
         secret: sessionSecret,
         cookie: {maxAge: 86400 * 1000 * 30 * 3},
-        store: new MongoStore({
-            db: db,
-            collection: sessionDbCollection
-        })
+        store: new HTTPStore('xxxx')
     }));
 }
 

@@ -15,14 +15,6 @@ import Config from "./config";
 
 const WEBAPP_PATH = '/';
 
-function connectMongo() {
-    // use ES6 promise
-    mongoose.Promise = global.Promise;
-    let mongoUrl = Config.mongoUrl;
-    console.log('Connecting to database...', mongoUrl);
-    return mongoose.connect(mongoUrl);
-}
-
 function configExpressMiddleware(app, db) {
     // log request
     //app.use(require('morgan')('combined'));
@@ -48,30 +40,28 @@ function configExpressRouter(app) {
 }
 
 function startServer() {
-    connectMongo().then(() => {
-        console.log('Init express...');
-        let app = express();
+    console.log('Init express...');
+    let app = express();
 
-        configExpressMiddleware(app, mongoose.connection.db);
-        configExpressRouter(app);
+    configExpressMiddleware(app, mongoose.connection.db);
+    configExpressRouter(app);
 
-        app.listen(Config.httpPort, function () {
-            console.log('Access at http://localhost:', Config.httpPort);
-        });
-
-        try {
-            let sslOptions = {
-                key: fs.readFileSync('/data/ssl-certs/key.pem'),
-                cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
-            };
-
-            https.createServer(sslOptions, app).listen(Config.httpsPort, function () {
-                console.log('Access at http://localhost:', Config.httpsPort);
-            });
-        } catch (e) {
-            console.error('Fail to load ssl certs in /data/ssl-certs', e);
-        }
+    app.listen(Config.httpPort, function () {
+        console.log('Access at http://localhost:', Config.httpPort);
     });
+
+    try {
+        let sslOptions = {
+            key: fs.readFileSync('/data/ssl-certs/key.pem'),
+            cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
+        };
+
+        https.createServer(sslOptions, app).listen(Config.httpsPort, function () {
+            console.log('Access at http://localhost:', Config.httpsPort);
+        });
+    } catch (e) {
+        console.error('Fail to load ssl certs in /data/ssl-certs', e);
+    }
 }
 
 startServer();
