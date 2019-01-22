@@ -17,16 +17,24 @@ export default class CalendarPage extends React.Component {
             firstSprintDate: new Date(),
             firstSpringId: 1
         };
-        this.state = this._loadState();
+        this.state = this._loadState(this.state);
     }
 
-    _loadState() {
+    _loadState(defaultState) {
         let text = this.storage.get(STORAGE_KEY_YML);
+        if (text) {
+            return defaultState;
+        }
         let obj = JsYaml.safeLoad(text);
-        let newState = {
-            firstSprintId: obj.firstSprintId,
-            firstSprintDate: new Date(obj.firstSprintDate)
-        };
+        let newState;
+        if (obj) {
+            newState = {
+                firstSprintId: obj.firstSprintId,
+                firstSprintDate: new Date(obj.firstSprintDate)
+            };
+        } else {
+            newState = defaultState;
+        }
 
         console.log('Load state', obj);
         return newState;
