@@ -1,7 +1,7 @@
 import passport from "passport";
 // import connectMongo from "connect-mongo";
 import session from "express-session";
-import localStrategy from "./strategies/local";
+import localStrategy from "../Api/Auth/Passport/Strategies/local";
 import User from "./user.model";
 // import SessionStore from "../Web/Auth/SessionStore";
 import RestSessionStore from "../Web/Auth/RestSessionStore";
@@ -21,38 +21,23 @@ function configSession(app, db) {
         resave: false,
         secret: sessionSecret,
         cookie: {maxAge: 86400 * 1000 * 30 * 3},
-        store: new HTTPStore('xxxx')
+        store: new HTTPStore('http://localhost:8100')
     }));
 }
 
+// Not all user data is stored into session.
+// Passport.serializedUser extracts the id
+// Passport.deserializedUser reloads full user info from id
 function configSerializeUser() {
     // Store only userId to session
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
-    // Retrieve user object from userID in session
-    let cache = {};
-    passport.deserializeUser(function (id, done) {
-        // for simplicity, the cache is never expire
-        let userInCache = cache[id];
-        if (userInCache) {
-            console.log('User (cache): username=', userInCache.username, 'id=', userInCache._id);
-            done(null, userInCache);
-            return;
-        }
 
-        User.findOne({
-            _id: id
-        }, '-salt -password', function (err, user) {
-            if (err) {
-                console.log('Fail to deserialize user. Id=', id, err);
-            } else {
-                console.log('Loaded user ', user._id, user.username);
-                cache[id] = user;
-            }
-            done(err, user);
-        });
+    passport.deserializeUser(function (id, done) {
+        // load more info from db if needed (ex: block account)
+        done(null, {id});
     });
 }
 export default function configPassport(app, db) {

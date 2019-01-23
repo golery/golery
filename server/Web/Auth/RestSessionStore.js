@@ -1,4 +1,4 @@
-// https://github.com/jankal/restsession/blob/master/index.js
+    // https://github.com/jankal/restsession/blob/master/index.js
 import axios from 'axios';
 import util from 'util';
 
@@ -17,10 +17,18 @@ function    SessionStore(session) {
     RestStore.prototype.__proto__ = Store.prototype;
 
     RestStore.prototype.get = function (sid, callback) {
-        axios.get(this.endpoint + '/' + sid).then(function ({data}) {
-            callback(null, data);
+        let url = this.endpoint + '/api/secure/session/' + sid;
+        console.log('Session.Get', url);
+        axios.get(url).then(function ({data}) {
+            console.log(data);
+            if (!data) {
+                callback();
+            } else {
+                console.log('Sesion data: ', data);
+                callback(null, data);
+            }
         }).catch(function (e) {
-            if (typeof e.response != 'undefined' && e.response.status === 404) {
+            if (typeof e.response !== 'undefined' && e.response.status === 404) {
                 callback(null, null);
                 return;
             }
@@ -29,7 +37,9 @@ function    SessionStore(session) {
     };
 
     RestStore.prototype.set = function (sid, data, callback) {
-        axios.post(this.endpoint + '/' + sid, data).then(function () {
+        let url = this.endpoint + '/api/secure/session/' + sid;
+        console.log('Session.Set ', sid, data);
+        axios.put(url, data).then(function () {
             callback();
         }).catch(function (e) {
             callback(e);
@@ -37,6 +47,7 @@ function    SessionStore(session) {
     };
 
     RestStore.prototype.destroy = function (sid, callback) {
+        console.log('Session.Destroy');
         axios.delete(this.endpoint + '/' + sid).then(function () {
             callback();
         }).catch(function (e) {
@@ -45,6 +56,7 @@ function    SessionStore(session) {
     };
 
     RestStore.prototype.clear = function (callback) {
+        console.log('Session.Clear');
         axios.delete(this.endpoint).then(function () {
             callback();
         }).catch(function (e) {

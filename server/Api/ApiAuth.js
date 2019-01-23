@@ -1,6 +1,7 @@
 import User from '../user/user.model';
 import Rest from './Rest';
 import passport from "passport";
+import GoApi from './GoApi/GoApi';
 
 // only special user is allowed to have short name
 const SPECIAL_USER = "hly";
@@ -19,11 +20,13 @@ class ApiAuth {
     _login(req, res, next) {
         // 'local': use LocalStrategy
         // Ref. http://www.passportjs.org/docs/authenticate/ (section Custom Callback)
+        console.log('Login');
         passport.authenticate('local', function (err, user, info) {
             if (err || !user) {
                 console.log('Login fail', err, user, info);
                 res.status(400).send(info);
             } else {
+                console.log('Login success');
                 // Remove sensitive data before login
                 user.password = undefined;
                 user.salt = undefined;

@@ -1,12 +1,7 @@
-'use strict';
+import GoApi from '../../../GoApi/GoApi';
+import passport from 'passport';
+import {Strategy as LocalStrategy} from 'passport-local';
 
-/**
- * Module dependencies.
- */
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
-
-import User from "../user.model";
 
 module.exports = function () {
     // Use local strategy
@@ -17,27 +12,13 @@ module.exports = function () {
         },
         function (username, password, done) {
             console.log('Passport local strategy: load ' + username);
-            User.findOne({
-                $or: [ {username: username}, {email: username}]
-            }, function (err, user) {
-                if (err) {
-                    console.log('Passport local strategy: Fail ', err);
-                    return done(err);
-                }
-                if (!user) {
-                    console.log('Passport local strategy: User not found ', err);
-                    return done(null, false, {
-                        message: 'Unknown user'
-                    });
-                }
-                if (!user.authenticate(password)) {
-                    return done(null, false, {
-                        message: 'Invalid password'
-                    });
-                }
-
-                return done(null, user);
+            GoApi.auth(username, password).then(({data}) => {
+                console.log(data);
+                done(null, data);
+            }).catch(err => {
+                done(err);
             });
+
         }
     ));
 };
