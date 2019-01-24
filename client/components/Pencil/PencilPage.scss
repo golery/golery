@@ -1,5 +1,20 @@
 .component {
   font-family: "Montserrat-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-height: 100vh;
+}
+
+.appBar {
+  border: 1px solid red;
+  height: 2rem;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
 }
 
 .nodeViewHolder {
@@ -17,13 +32,10 @@
 }
 
 .contentPane {
-  position: fixed;
-  top: 0;
-  bottom: 50%;
-  left: 0.5rem;
-  right: 0;
+  border: 3px solid peru;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .contentPane.noTree {
@@ -41,15 +53,11 @@
 }
 
 .treeViewHolder {
+  flex: 0 0 30%;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
 
-  border-top: 3px solid #c0c0c0;
-  position: fixed;
-  top: 50%;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  border: 3px solid yellow;
   width: auto;
 
   padding-left: 0.4rem;
@@ -114,21 +122,8 @@
     vertical-align: bottom;
   }
 
-  .contentPane {
-    left: 330px;
-    right: 0;
-    bottom: 0;
-  }
-
   .contentPane.noTree {
     padding-right: 330px;
-  }
-
-  .treeViewHolder {
-    border-top: none;
-    top: 0;
-    bottom: 1rem;
-    width: 300px;
   }
 
   .treeActionButtonsHolder {

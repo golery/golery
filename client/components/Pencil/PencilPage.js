@@ -126,8 +126,11 @@ export default class PencilPage extends React.Component {
         if (this.state.contentMode === CONTENT_MODE_EDIT) styleEditing = styles.editing;
 
         return <div className={[styles.component, styleEditing].join(' ')}>
-            {this._buildTreeElm()}
-            {this._buildContentElm()}
+            <div className={styles.appBar}>PENCIL</div>
+            <div className={styles.body}>
+                {this._buildTreeElm()}
+                {this._buildContentElm()}
+            </div>
             <ContextMenuView ref={(view) => this.contextMenuView = view}/>
             <AppMenu onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()}/>
         </div>;
@@ -141,13 +144,14 @@ export default class PencilPage extends React.Component {
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
             <Scrollbar>
-                <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
-                          ref={(treeView) => this.treeView = treeView}/>
+                {/*<TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}*/}
+                          {/*ref={(treeView) => this.treeView = treeView}/>*/}
+                          <div style={{width: '50rem', height: '50rem'}}>ABC</div>
             </Scrollbar>
-            <div className={styles.treeToolTipHolder}>
-                Right click on tree or Double click to edit
-            </div>
-            <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div>
+            {/*<div className={styles.treeToolTipHolder}>*/}
+                {/*Right click on tree or Double click to edit*/}
+            {/*</div>*/}
+            {/*<div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div>*/}
         </div>;
     }
 
