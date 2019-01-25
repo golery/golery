@@ -114,11 +114,15 @@ export default class PencilLandingPage extends React.Component {
     }
 
     _doSignUp(email, password, confirmPassword) {
+        if (password !== confirmPassword) {
+            this.setState({message: 'Password does not match'});
+            return;
+        }
         Axios.post("/api/public/signup", {
-            email: email,
+            username: email,
             password: password,
             confirmPassword: confirmPassword
-        }).then(function (response) {
+        }).then(function () {
             location.reload();
         }).catch(error => {
             let message = error.response.data.message;

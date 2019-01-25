@@ -1,10 +1,7 @@
 import fetch from "node-fetch";
 import Config from "../config";
 
-// To connect to GoApi run in host machine, use the following
 const goApiServiceHost = Config.goApiHost;
-// To connect to local docker use the following
-// const host = 'http://goapi:8100';
 
 // TODO PERFORMANCE This proxy add 100ms (at dev local env)
 /** Forward requests to API service */
@@ -42,10 +39,12 @@ function proxyToGoApi(req, res) {
     }).catch(err => console.log(err));
 }
 
-class GoApi {
+class GoApiProxy {
     /** Available at /api/pubic/... */
     setupPublicRoute(route) {
         route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
+        route.all('/login', (req, res) => proxyToGoApi(req, res));
+        route.all('/signup', (req, res) => proxyToGoApi(req, res));
     }
 
     /** Available at /api/secure/... */
@@ -86,4 +85,4 @@ class GoApi {
 }
 
 
-export default new GoApi();
+export default new GoApiProxy();

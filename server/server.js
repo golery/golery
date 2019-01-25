@@ -1,28 +1,53 @@
 import express, {Router} from "express";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
 import https from 'https';
 import fs from 'fs';
 
-import configPassport from "./user/passport.config";
+import localStrategy from "./Api/Passport/Strategies/local";
 import apiRouter from "./Router/ApiRouter";
 import pageRouter from "./Router/PageRouter";
 
 import {MAX_UPLOAD_FILE_SIZE} from "./Api/ApiFile";
 import Config from "./config";
+import session from "express-session";
+import RestSessionStore from "./Api/RestSessionStore";
+import passport from "passport/lib";
 
 const WEBAPP_PATH = '/';
 
-function configExpressMiddleware(app, db) {
-    // log request
-    //app.use(require('morgan')('combined'));
-    app.use(cookieParser());
-    app.use(bodyParser.json());
-    // support upload image max 1mb
-    app.use(bodyParser.raw({limit: MAX_UPLOAD_FILE_SIZE}));
-    configPassport(app, db);
+/**
+ * Middle ware allows to attach and retrieve data from sessionId.
+ * Passport middleware use session to store user info
+ **/
+function sessionMiddleware() {
+    const sessionSecret = 'GoLeRy@2019#Ny!';
+    const HTTPStore = RestSessionStore(session);
+    return session({
+        saveUninitialized: false,
+        resave: false,
+        secret: sessionSecret,
+        cookie: {maxAge: 86400 * 1000 * 30 * 3},
+        store: new HTTPStore()
+    });
+}
+
+function passportMiddleware() {
+    // local strategy store username and password in mongo database
+    localStrategy();
+
+    passport.serializeUser(function (user, done) {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser(function (id, done) {
+        // load more info from db if needed (ex: block account)
+        done(null, {id});
+    });
+
+
+    return passport.initialize();
 }
 
 
@@ -39,11 +64,23 @@ function configExpressRouter(app) {
     app.use(WEBAPP_PATH, router);
 }
 
+function configExpressMiddleware(app) {
+    //app.use(require('morgan')('combined'));
+    app.use(cookieParser());
+    app.use(bodyParser.json());
+    // support upload image max 1mb
+    app.use(bodyParser.raw({limit: MAX_UPLOAD_FILE_SIZE}));
+
+    app.use(sessionMiddleware());
+    app.use(passportMiddleware());
+}
+
+
 function startServer() {
     console.log('Init express...');
     let app = express();
 
-    configExpressMiddleware(app, mongoose.connection.db);
+    configExpressMiddleware(app);
     configExpressRouter(app);
 
     app.listen(Config.httpPort, function () {

@@ -1,14 +1,14 @@
     // https://github.com/jankal/restsession/blob/master/index.js
 import axios from 'axios';
-import util from 'util';
+import Config from '../config';
 
-function    SessionStore(session) {
+function SessionStore(session) {
     var Store = session.Store;
 
     function RestStore (endpoint) {
         var self = this;
 
-        endpoint = endpoint || '127.0.0.1';
+        endpoint = Config.goApiHost  + '/api/secure/session';
         Store.call(self);
 
         self.endpoint = endpoint;
@@ -17,14 +17,14 @@ function    SessionStore(session) {
     RestStore.prototype.__proto__ = Store.prototype;
 
     RestStore.prototype.get = function (sid, callback) {
-        let url = this.endpoint + '/api/secure/session/' + sid;
+        let url = this.endpoint + '/' + sid;
         console.log('Session.Get', url);
         axios.get(url).then(function ({data}) {
-            console.log(data);
+            // console.log(data);
             if (!data) {
                 callback();
             } else {
-                console.log('Sesion data: ', data);
+                // console.log('Sesion data: ', data);
                 callback(null, data);
             }
         }).catch(function (e) {
@@ -37,7 +37,7 @@ function    SessionStore(session) {
     };
 
     RestStore.prototype.set = function (sid, data, callback) {
-        let url = this.endpoint + '/api/secure/session/' + sid;
+        let url = this.endpoint + '/' + sid;
         console.log('Session.Set ', sid, data);
         axios.put(url, data).then(function () {
             callback();
@@ -48,7 +48,7 @@ function    SessionStore(session) {
 
     RestStore.prototype.destroy = function (sid, callback) {
         console.log('Session.Destroy');
-        axios.delete(this.endpoint + '/' + sid).then(function () {
+        axios.delete(this.endpoint + '/api/secure/session/' + sid).then(function () {
             callback();
         }).catch(function (e) {
             callback(e);
@@ -72,13 +72,13 @@ function    SessionStore(session) {
         });
     };
 
-    RestStore.prototype.touch = function (sid, data, callback) {
-        axios.post(this.endpoint + '/' + sid + '?ping', data).then(function () {
-            callback();
-        }).catch(function (e) {
-            callback(e);
-        });
-    };
+    // RestStore.prototype.touch = function (sid, data, callback) {
+    //     axios.post(this.endpoint + '/' + sid + '?ping', data).then(function () {
+    //         callback();
+    //     }).catch(function (e) {
+    //         callback(e);
+    //     });
+    // };
     return RestStore;
 }
 

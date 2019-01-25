@@ -1,13 +1,19 @@
 import axios from 'axios';
+import Config from "../../config";
+
+const goApiServiceHost = Config.goApiHost;
 
 class GoApi {
-    constructor() {
-        this.endpoint = "http://localhost:8100";
+    async login(username, password) {
+        let url = goApiServiceHost + '/api/public/login';
+        console.log('GoApi:Login. Url: ', url);
+        return axios.post(url, {username:username, password});
     }
-    async auth(username, password) {
-        console.log('GoApi:Login');
-        let url = this.endpoint + '/api/secure/auth';
-        return axios.post(url, {username, password});
+
+    async signup(username, password) {
+        let url = goApiServiceHost + '/api/public/signup';
+        console.log('GoApi:Signup. Url: ', url, 'Username:',username);
+        return axios.post(url, {username:username, password});
     }
 }
 
