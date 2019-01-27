@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import styles from './Scrollbar.scss';
-import SmoothScrollbar from 'react-smooth-scrollbar';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
@@ -12,7 +10,7 @@ export default class Scrollbar extends React.Component {
     }
 
     render() {
-        return <SimpleBar {...this.props}>
+        return <SimpleBar {...this.props} className={styles.scrollbar}>
             {this.props.children}
         </SimpleBar>;
     }

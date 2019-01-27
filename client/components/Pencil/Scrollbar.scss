@@ -1,0 +1,26 @@
+.scrollbar {
+
+}
+
+.scrollbar :global(.simplebar-scrollbar) {
+  width: 3px;
+  right: 0;
+}
+
+.scrollbar :global(.simplebar-track.simplebar-horizontal .simplebar-scrollbar) {
+  height: 3px;
+  bottom: 0;
+  top: auto;
+}
+
+
+.scrollbar :global(.simplebar-track.simplebar-hover .simplebar-scrollbar) {
+  width: 7px;
+}
+.scrollbar :global(.simplebar-track.simplebar-hover.simplebar-horizontal .simplebar-scrollbar) {
+  height: 7px;
+}
+
+.scrollbar :global(.simplebar-scrollbar:before) {
+  background-color: lightgrey;
+}
