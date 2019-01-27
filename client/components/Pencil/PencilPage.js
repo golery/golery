@@ -143,11 +143,17 @@ export default class PencilPage extends React.Component {
 
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.treeViewHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
-            <Scrollbar>
+            <div className={styles.innn}>
+            <Scrollbar >
                 {/*<TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}*/}
                           {/*ref={(treeView) => this.treeView = treeView}/>*/}
-                          <div style={{width: '50rem', height: '50rem'}}>ABC</div>
+                          <div contentEditable={true}>
+                              {[...Array(50)].map((x, i) =>
+                                  <p key={i} className="odd">Some content {i}   </p>
+                              )}
+                          </div>
             </Scrollbar>
+            </div>
             {/*<div className={styles.treeToolTipHolder}>*/}
                 {/*Right click on tree or Double click to edit*/}
             {/*</div>*/}

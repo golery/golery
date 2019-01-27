@@ -5,6 +5,10 @@
   min-height: 100vh;
   max-height: 100vh;
 }
+.innn {
+  height: 100%;
+  border: 1px solid darkgoldenrod;
+}
 
 .appBar {
   border: 1px solid red;
@@ -54,8 +58,7 @@
 
 .treeViewHolder {
   flex: 0 0 30%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  position: relative;
 
   border: 3px solid yellow;
   width: auto;
