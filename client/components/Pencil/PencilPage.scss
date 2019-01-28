@@ -5,7 +5,9 @@
   min-height: 100vh;
   max-height: 100vh;
 }
-.innn {
+
+/** Scrollbar needs an element with height. We need an extra div to remove the flex auto height */
+.treeContent {
   height: 100%;
   width: 100%;
   border: 1px solid darkgoldenrod;
@@ -38,10 +40,10 @@
 }
 
 .contentPane {
-  border: 3px solid peru;
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
 }
 
 .contentPane.noTree {
@@ -53,20 +55,20 @@
     bottom: 0;
   }
 
-  & .treeViewHolder {
+  & .leftPaneHolder {
     display: none;
   }
 }
 
-.treeViewHolder {
-  flex: 0 0 30%;
+.leftPaneHolder {
+  flex: 0 0 20%;
   position: relative;
 
-  border: 3px solid yellow;
-  width: auto;
-
-  padding-left: 0.4rem;
   background-color: #fbfbfb;
+}
+
+.treeViewHolder {
+  padding-left: 0.4rem;
 }
 
 .collapsedTree {
@@ -104,13 +106,19 @@
   padding-right: 0;
 }
 
+.contentPaneScrollbarHolder {
+  margin-left: 3rem;
+  margin-top: 1rem;
+  box-sizing: padding-box;
+}
+
 @media only screen and (min-device-width: 480px) {
   .doneEditButton {
     display: none;
   }
 
   .editing {
-    & .treeViewHolder {
+    & .leftPaneHolder {
       display: initial;
     }
   }

@@ -142,18 +142,13 @@ export default class PencilPage extends React.Component {
 
 
         let listeners = {onSelect: this.onSelect};
-        return <div className={styles.treeViewHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
-            <div className={styles.innn}>
-            <Scrollbar scrollbarMinSize={1} autoHide={false}>
-                {/*<TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}*/}
-                          {/*ref={(treeView) => this.treeView = treeView}/>*/}
-                          <div style={{width:'50rem'}}>
-                              {[...Array(50)].map((x, i) =>
-                                  <p key={i} className="odd">Some content {i}   </p>
-                              )}
-                          </div>
-            </Scrollbar>
-            </div>
+        return <div className={styles.leftPaneHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
+                <Scrollbar>
+                    <div className={styles.treeViewHolder}>
+                        <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
+                                  ref={(treeView) => this.treeView = treeView}/>
+                    </div>
+                </Scrollbar>
             {/*<div className={styles.treeToolTipHolder}>*/}
                 {/*Right click on tree or Double click to edit*/}
             {/*</div>*/}
@@ -167,14 +162,14 @@ export default class PencilPage extends React.Component {
 
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
             let {showTree} = this.state;
-            let scrollBarContent = showTree ? styles.scrollBarContentNoPadding : styles.scrollbarContentPaddingRight;
-            return <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
-                <Scrollbar>
-                    <div className={scrollBarContent}>
-                        <NodeView node={this.state.editingNode} showTree={showTree}/>
+            return (
+                <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
+                    <div className={styles.contentPaneScrollbarHolder}>
+                        <Scrollbar>
+                            <NodeView node={this.state.editingNode} showTree={showTree}/>
+                        </Scrollbar>
                     </div>
-                </Scrollbar>
-            </div>;
+                </div>);
         }
 
         if (this.state.editor === EDITOR_HTML) {
