@@ -98,12 +98,13 @@
   border-radius: 2px;
 }
 
-.scrollbarContentPaddingRight {
-  padding-right: 330px;
+.contentHolderNoTree {
+  padding-right: 20%;
+  padding-left: 20%;
 }
 
-.scrollBarContentNoPadding {
-  padding-right: 0;
+.contentHolderWithTree {
+  padding: 1rem 2rem;
 }
 
 .contentPaneScrollbarHolder {

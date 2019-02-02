@@ -159,24 +159,28 @@ export default class PencilPage extends React.Component {
 
     _buildContentElm() {
         if (!this.state.editingNode) return;
-
+        let {showTree} = this.state;
+        let scrollBarContent = showTree ? styles.contentHolderWithTree : styles.contentHolderWithTree;
         if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            let {showTree} = this.state;
+            // let {showTree} = this.state;
+            // let scrollBarContent = showTree ? styles.contentHolderWithTree : styles.contentHolderNoTree;
             return (
                 <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
-                    <div className={styles.contentPaneScrollbarHolder}>
-                        <Scrollbar>
+                    <Scrollbar>
+                        <div className={scrollBarContent}>
                             <NodeView node={this.state.editingNode} showTree={showTree}/>
-                        </Scrollbar>
-                    </div>
+                        </div>
+                    </Scrollbar>
                 </div>);
         }
 
         if (this.state.editor === EDITOR_HTML) {
             return <div className={styles.contentPane}>
+                <div className={scrollBarContent}>
                 <NodeEditor node={this.state.editingNode}
                             listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
                             ref={ref => this._nodeEditor = ref}/>
+                </div>
                 <div className={styles.doneEditButton}
                      onClick={() => this._closeEditor()}>CLOSE
                 </div>

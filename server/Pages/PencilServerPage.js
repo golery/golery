@@ -49,7 +49,7 @@ export default function (req, res) {
         return;
     }
 
-    nodeService.findById(req.user && req.user._id, nodeId).then(nodes => {
+    nodeService.findById(req.user && req.user.id, nodeId).then(nodes => {
         if (nodes === null || !nodes[0]) {
             res.json("Page was moved");
             return;
