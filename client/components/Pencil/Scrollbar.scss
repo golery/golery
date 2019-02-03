@@ -1,0 +1,31 @@
+.scrollbar :global(.scrollbar-thumb) {
+  background-color: #e0e0e0;
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar :global(.scrollbar-track) {
+  background-color: #f8f8f8;
+}
+
+.scrollbar :global(.scrollbar-track-x) {
+  height: 4px
+}
+
+.scrollbar :global(.scrollbar-track-y) {
+  width: 4px;
+}
+
+.scrollbar :global(.scrollbar-track-y):hover {
+  width: 8px;
+  & :global(.scrollbar-thumb) {
+    width: 8px;
+  }
+}
+
+.scrollbar :global(.scrollbar-track-x):hover {
+  height: 8px;
+  & :global(.scrollbar-thumb) {
+    height: 8px;
+  }
+}
