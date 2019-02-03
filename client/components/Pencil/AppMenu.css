@@ -1,37 +1,41 @@
 .component {
-  position: fixed;
+    font-weight: initial;
+    font-size: 1rem;
 }
 
 .menuButton {
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: grey;
-  color: white;
-  width: 2rem;
-  height: 2rem;
-  text-align: center;
-  line-height: 2rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
+    color: goldenrod;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .menuButton:hover {
-  background-color: black;
+    background-color: #EEDA7B;
 }
+
 .menu1 {
-  position: fixed;
-  right: 0;
-  top: 2.5rem;
-  background-color: white;
-  color: black;
-  border: 1px solid gray;
-  cursor: default;
+    position: fixed;
+    right: 0;
+    top: 2.5rem;
+    background-color: white;
+    color: black;
+    border: 1px solid gray;
+    cursor: default;
 }
+
 .menuItem {
-  padding: 1rem;
+    padding: 1rem;
 }
+
 .menuItem:hover {
-  background-color: lightgray;
+    background-color: lightgray;
 }

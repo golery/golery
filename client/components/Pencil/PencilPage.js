@@ -22,6 +22,7 @@ import TermsView from './TermsView';
 import AppMenu from './AppMenu';
 import ModalDialog from '../Core/Dialog/ModalDialog';
 import Scrollbar from './Scrollbar';
+import AppBar from './AppBar';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -115,7 +116,6 @@ export default class PencilPage extends React.Component {
     render() {
         let currentNode = this.state.editingNode;
 
-        console.log(currentNode, this.treeModel);
         if (!currentNode && !this.treeModel) {
             console.log('Render Loading....');
             // only show loading if there is no initial nodeId
@@ -126,13 +126,12 @@ export default class PencilPage extends React.Component {
 
         return (
             <div className={[styles.component, styleEditing].join(' ')}>
-                <div className={styles.appBar}>PENCIL</div>
+                <AppBar/>
                 <div className={styles.body}>
                     {this._buildTreeElm()}
                     {this._buildContentElm()}
                 </div>
                 <ContextMenuView ref={view => this.contextMenuView = view} />
-                <AppMenu onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()} />
             </div>
         );
     }

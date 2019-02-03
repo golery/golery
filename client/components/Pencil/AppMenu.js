@@ -17,17 +17,22 @@ export default class AppMenu extends React.Component {
 
         let menu;
         if (openMenu) {
-            menu = <div className={styles.menu1}>
-                <div className={styles.menuItem} onClick={onLogout}>Logout</div>
-                <div className={styles.menuItem} onClick={onShowTerms}>Terms</div>
-            </div>;
+            menu = (
+                <div className={styles.menu1}>
+                    <div className={styles.menuItem} onClick={onLogout}>Logout</div>
+                    <div className={styles.menuItem} onClick={onShowTerms}>Terms</div>
+                </div>
+            );
         } else {
             menu = [];
         }
-        return <div className={styles.component}>
-            <div className={styles.menuButton} onClick={() => this._onToogleMenu()}>=</div>
-            {menu}
-        </div>;
+        let icon = openMenu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />;
+        return (
+            <div className={styles.component}>
+                <div className={styles.menuButton} onClick={() => this._onToogleMenu()}>{icon}</div>
+                {menu}
+            </div>
+        );
     }
 
     _onToogleMenu() {
