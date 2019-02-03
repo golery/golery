@@ -13,10 +13,11 @@ export default class Scrollbar extends React.Component {
     }
 
     render() {
-        let className = this.props.className || '';
-        className = [className, styles.scrollbar].join(' ');
+        let props = Object.assign({}, this.props);
+        props.className = [props.className || '', styles.scrollbar].join(' ');
+        props.plugins = {overscroll: {effect: 'glow'}};
         return (
-            <ReactSmoothScrollbar {...this.props} className={className} plugins={{overscroll: { effect: 'glow'}}}>
+            <ReactSmoothScrollbar {...props}>
                 {this.props.children}
             </ReactSmoothScrollbar>
         );
