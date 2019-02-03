@@ -103,13 +103,13 @@ export default class NodeEditor extends React.Component {
     }
 
     _onChangeTitle(html) {
-        const node = this.props.node;
+        const {node} = this.props;
         node.title = html;
         this._onUpdateNode(node);
     }
 
     _onChangeNodeHtml(html) {
-        const node = this.props.node;
+        const {node} = this.props;
         node.html = html;
         this._onUpdateNode(node);
     }
