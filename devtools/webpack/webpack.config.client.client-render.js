@@ -37,7 +37,7 @@ module.exports = function (prod, outputRelativePath) {
         manifestPlugin];
 
     let ruleJs = {
-        test: /\.js$/,
+        test: /\.js|\.jsx$/,
         exclude: /node_modules/,
         loader: "babel-loader"
     };
