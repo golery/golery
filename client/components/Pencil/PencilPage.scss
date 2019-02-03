@@ -46,9 +46,6 @@
   position: relative;
 }
 
-.contentPane.noTree {
-
-}
 
 .editing {
   & .contentPane {
@@ -97,12 +94,12 @@
   border-radius: 2px;
 }
 
-.contentHolderNoTree {
+.contentPaddingLeftRightPadding {
   padding-right: 20%;
   padding-left: 20%;
 }
 
-.contentHolderWithTree {
+.contentPadding {
   padding: 1rem 2rem;
 }
 

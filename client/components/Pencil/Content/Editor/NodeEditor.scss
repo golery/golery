@@ -49,14 +49,10 @@
   display: none;
 }
 
-:global(.ck.ck-editor__editable_inline) {
-  padding: 0 !important;
+.contentPadding {
+  padding: 1rem 2rem;
 }
 
-:global(.ck.ck-toolbar.ck-rounded-corners) {
-  border-top: none !important;
-  border-radius: 0 !important;
-}
-
-.scrollbarContent {
+.contentPaddingLeftRightPadding {
+  padding: 1rem 20%;
 }

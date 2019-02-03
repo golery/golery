@@ -10,7 +10,7 @@ import ShareEditor from './ShareEditor';
 import NodeRepo from '../../../../services/NodeRepo';
 import ModalDialog from '../../../Core/Dialog/ModalDialog';
 import {openUploadImageDialog} from "./HtmlEditor/Image/UploadImageDialog";
-
+import Scrollbar from '../../Scrollbar';
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
 const DELAY_UPDATE_TITLE_MS = 400;
@@ -45,7 +45,7 @@ export default class NodeEditor extends React.Component {
     }
 
     render() {
-        let {node} = this.props;
+        let {node, leftRightPadding} = this.props;
         let toggleToolbarButton = "fas fa-minus";
         let {slateValue} = this.state;
         const onChange = (change) => this._onChangeHtml(change);
@@ -58,25 +58,30 @@ export default class NodeEditor extends React.Component {
             toggleToolbarButton = "fas fa-grip-horizontal";
         }
 
+        const classNameContentPadding = leftRightPadding ? styles.contentPaddingLeftRightPadding : styles.contentPadding;
         return <div className={[styles.component, "pencilTheme"].join(' ')}>
             <div>
                 {elmToolbar}
             </div>
             <div className={styles.contentHolder}>
-                <TitleEditor html={node.title}
-                             placeHolder="<page-title>"
-                             contentEditableClassName="nodeTitle"
-                             onChange={html => this._onChangeTitle(html)}
-                />
+                <div className={classNameContentPadding}>
+                    <TitleEditor
+                        html={node.title}
+                        placeHolder="<page-title>"
+                        contentEditableClassName="nodeTitle"
+                        onChange={html => this._onChangeTitle(html)}
+                    />
 
-                <HtmlEditor value={slateValue}
-                            contentEditableClassName="nodeHtml pencilTheme"
-                            onChange={onChange}
-                            addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
-                            controller={this.controller}
-                            ref={ref => {
-                                this.elmHtmlEditor = ref;
-                            }}/>
+                    <HtmlEditor
+                        value={slateValue}
+                        contentEditableClassName="nodeHtml pencilTheme"
+                        onChange={onChange}
+                        addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
+                        controller={this.controller}
+                        ref={ref => {
+                            this.elmHtmlEditor = ref;
+                        }}/>
+                </div>
             </div>
             <div className={styles.toggleToolbarButton} onClick={() => this._toggleToolbar()}>
                 <i className={toggleToolbarButton}></i>

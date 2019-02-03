@@ -1,34 +1,34 @@
+import React from 'react';
+import Axios from 'axios';
 import themeStyles from './Content/Theme/Standard.scss';
-import styles from "./PencilPage.scss";
+import styles from './PencilPage.scss';
 
-import React from "react";
-import Axios from "axios";
 
-import NodeRepo from "../../services/NodeRepo";
-import NodeEditor from "./Content/Editor/NodeEditor";
-import TreeView from "../Tree/TreeView";
-import TreeModel from "../Tree/TreeModel";
-import TreeViewModel from "../Tree/TreeViewModel";
-import HeadLineParser from "./HeadLineParser";
-import Toolbar from "./Toolbar";
-import TreeActionButtons from "./TreeActionButtons";
-import Action from "./Action";
-import LoadingPage from "./LoadingPage";
-import SyncTracker from "./SyncTracker";
-import NodeView from "./Content/View/NodeView";
-import ShortcutHandler from "./ShortcutHandler";
-import ContextMenuView from "./ContextMenuView";
-import TermsView from "./TermsView";
-import AppMenu from "./AppMenu";
-import ModalDialog from "../Core/Dialog/ModalDialog";
-import Scrollbar from "./Scrollbar";
+import NodeRepo from '../../services/NodeRepo';
+import NodeEditor from './Content/Editor/NodeEditor';
+import TreeView from '../Tree/TreeView';
+import TreeModel from '../Tree/TreeModel';
+import TreeViewModel from '../Tree/TreeViewModel';
+import HeadLineParser from './HeadLineParser';
+import Toolbar from './Toolbar';
+import TreeActionButtons from './TreeActionButtons';
+import Action from './Action';
+import LoadingPage from './LoadingPage';
+import SyncTracker from './SyncTracker';
+import NodeView from './Content/View/NodeView';
+import ShortcutHandler from './ShortcutHandler';
+import ContextMenuView from './ContextMenuView';
+import TermsView from './TermsView';
+import AppMenu from './AppMenu';
+import ModalDialog from '../Core/Dialog/ModalDialog';
+import Scrollbar from './Scrollbar';
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
 
 const EDITOR_HTML = Symbol();
-const CONTENT_MODE_VIEW = "VIEW";
-const CONTENT_MODE_EDIT = "EDIT";
+const CONTENT_MODE_VIEW = 'VIEW';
+const CONTENT_MODE_EDIT = 'EDIT';
 
 class Node {
     constructor(id, name) {
@@ -49,8 +49,7 @@ class PencilTreeModel extends TreeModel {
 
     getNodeName(node) {
         let name = node.name || HeadLineParser.parseTitle(node.html);
-        if (!name || name.trim().length === 0)
-            return "&lt;empty&gt;";
+        if (!name || name.trim().length === 0) return '&lt;empty&gt;';
         return name;
     }
 }
@@ -105,7 +104,7 @@ export default class PencilPage extends React.Component {
     }
 
     componentDidMount() {
-        let {id62} = this.state.editingNode || { id62: null};
+        let {id62} = this.state.editingNode || {id62: null};
         // delay loading to test loading wheel
         // setTimeout(() => {
         //     this._load(id62);
@@ -118,22 +117,24 @@ export default class PencilPage extends React.Component {
 
         console.log(currentNode, this.treeModel);
         if (!currentNode && !this.treeModel) {
-            console.log("Render Loading....");
+            console.log('Render Loading....');
             // only show loading if there is no initial nodeId
-            return <LoadingPage/>;
+            return <LoadingPage />;
         }
         let styleEditing = '';
         if (this.state.contentMode === CONTENT_MODE_EDIT) styleEditing = styles.editing;
 
-        return <div className={[styles.component, styleEditing].join(' ')}>
-            <div className={styles.appBar}>PENCIL</div>
-            <div className={styles.body}>
-                {this._buildTreeElm()}
-                {this._buildContentElm()}
+        return (
+            <div className={[styles.component, styleEditing].join(' ')}>
+                <div className={styles.appBar}>PENCIL</div>
+                <div className={styles.body}>
+                    {this._buildTreeElm()}
+                    {this._buildContentElm()}
+                </div>
+                <ContextMenuView ref={view => this.contextMenuView = view} />
+                <AppMenu onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()} />
             </div>
-            <ContextMenuView ref={(view) => this.contextMenuView = view}/>
-            <AppMenu onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()}/>
-        </div>;
+        );
     }
 
     _buildTreeElm() {
@@ -142,48 +143,59 @@ export default class PencilPage extends React.Component {
 
 
         let listeners = {onSelect: this.onSelect};
-        return <div className={styles.leftPaneHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
+        return (
+            <div className={styles.leftPaneHolder} onContextMenu={e => this._onContextMenuOnTree(e)}>
                 <Scrollbar className={styles.treeViewHolder}>
-                        <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
-                                  ref={(treeView) => this.treeView = treeView}/>
+                    <TreeView
+                        treeModel={this.treeModel}
+                        treeViewModel={this.treeViewModel}
+                        listeners={listeners}
+                        ref={treeView => this.treeView = treeView}
+                    />
                 </Scrollbar>
-            {/*<div className={styles.treeToolTipHolder}>*/}
-                {/*Right click on tree or Double click to edit*/}
-            {/*</div>*/}
-            {/*<div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div>*/}
-        </div>;
+                {/* <div className={styles.treeToolTipHolder}> */}
+                {/* Right click on tree or Double click to edit */}
+                {/* </div> */}
+                {/* <div className={styles.treeActionButtonsHolder}><TreeActionButtons actions={this.treeActions}/></div> */}
+            </div>
+        );
     }
 
 
     _buildContentElm() {
-        if (!this.state.editingNode) return;
-        let {showTree} = this.state;
-        let scrollBarContent = showTree ? styles.contentHolderWithTree : styles.contentHolderWithTree;
-        if (this.state.contentMode === CONTENT_MODE_VIEW) {
-            // let {showTree} = this.state;
-            // let scrollBarContent = showTree ? styles.contentHolderWithTree : styles.contentHolderNoTree;
-            return (
+        let {editingNode, contentMode, showTree} = this.state;
+        if (!editingNode) return <div />;
+        let $content;
+        if (contentMode === CONTENT_MODE_VIEW) {
+            const classNameContentPadding = showTree ? styles.contentPadding : styles.contentPaddingLeftRightPadding;
+            $content = (
                 <div className={styles.contentPane} onDoubleClick={() => this._onShowEditView()}>
                     <Scrollbar>
-                        <div className={scrollBarContent}>
-                            <NodeView node={this.state.editingNode} showTree={showTree}/>
+                        <div className={classNameContentPadding}>
+                            <NodeView node={editingNode} showTree={showTree} />
                         </div>
                     </Scrollbar>
-                </div>);
-        }
-
-        if (this.state.editor === EDITOR_HTML) {
-            return <div className={styles.contentPane}>
-                <div className={scrollBarContent}>
-                <NodeEditor node={this.state.editingNode}
-                            listeners={{onChangeNodeName: (node) => this._onChangeNodeName(node)}}
-                            ref={ref => this._nodeEditor = ref}/>
                 </div>
-                <div className={styles.doneEditButton}
-                     onClick={() => this._closeEditor()}>CLOSE
+            );
+        } else {
+            $content = (
+                <div className={styles.contentPane}>
+                    <NodeEditor
+                        node={editingNode}
+                        listeners={{onChangeNodeName: node => this._onChangeNodeName(node)}}
+                        leftRightPadding={!showTree}
+                        ref={(ref) => { this._nodeEditor = ref; return null; }}
+                    />
+                    <div
+                        className={styles.doneEditButton}
+                        onClick={() => this._closeEditor()}
+                    >
+                        CLOSE
+                    </div>
                 </div>
-            </div>;
+            );
         }
+        return $content;
     }
 
     _closeEditor() {
@@ -191,12 +203,12 @@ export default class PencilPage extends React.Component {
     }
 
     _buildTreeCollapseElm() {
-        return <div className={styles.collapsedTree} onClick={() => this._toggleTree()}/>;
+        return <div className={styles.collapsedTree} onClick={() => this._toggleTree()} />;
     }
 
     _toggleTree() {
         if (!this.state.showTree && !this.state.nodes) {
-            window.location.href = "/pencil";
+            window.location.href = '/pencil';
         }
         this.setState({showTree: !this.state.showTree});
     }
@@ -234,9 +246,9 @@ export default class PencilPage extends React.Component {
             });
             this.treeViewModel = new TreeViewModel();
 
-            let state = {nodes: nodes, rootId: rootNode.id};
+            let state = {nodes, rootId: rootNode.id};
             this.setState(state);
-        })
+        });
     }
 
     _onMoveNode(nodeId, newParentId, newPosition) {
@@ -254,25 +266,25 @@ export default class PencilPage extends React.Component {
 
         let newNode = this._createNewEmptyNode();
 
-        let {parentNode, position, nodeView} = asNextSibling ?
-            this.treeView.addNewNodeAsNextSiblings(newNode) :
-            this.treeView.addNewNodeAsChildren(newNode);
+        let {parentNode, position, nodeView} = asNextSibling
+            ? this.treeView.addNewNodeAsNextSiblings(newNode)
+            : this.treeView.addNewNodeAsChildren(newNode);
 
         this._onShowEditView();
 
         // save async
-        NodeRepo.create(parentNode.id, position).then(createdNode => {
+        NodeRepo.create(parentNode.id, position).then((createdNode) => {
             let newId = createdNode.id;
-            console.log("Create new node successfully at server side ", newId);
-            console.log("Replace nodeId ", newNode.id, " by ", newId);
+            console.log('Create new node successfully at server side ', newId);
+            console.log('Replace nodeId ', newNode.id, ' by ', newId);
             this.treeModel.updateNodeId(newNode, parentNode, newId);
             nodeView.changeNodeId(newId);
         });
     }
 
     _createNewEmptyNode() {
-        let node = new Node("TEMP" + this._uuidv4(), null);
-        node.html = "<ol><li/></ol>";
+        let node = new Node(`TEMP${this._uuidv4()}`, null);
+        node.html = '<ol><li/></ol>';
         return node;
     }
 
@@ -285,7 +297,7 @@ export default class PencilPage extends React.Component {
 
         // then delete node async
         NodeRepo.delete(nodeId).then(() => {
-            console.log("Delete node successfully at server side ", nodeId);
+            console.log('Delete node successfully at server side ', nodeId);
         });
     }
 
@@ -294,13 +306,11 @@ export default class PencilPage extends React.Component {
         if (!selectedNode) return;
         console.log(selectedNode);
         let id = selectedNode.id;
-        window.open("#/card/" + id, '_blank');
+        window.open(`#/card/${id}`, '_blank');
     }
 
     _uuidv4() {
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        )
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
     }
 
     _onChangeNodeName(node) {
@@ -329,14 +339,14 @@ export default class PencilPage extends React.Component {
     }
 
     _onLogout() {
-        Axios.post("/api/secure/logout").then(function () {
+        Axios.post('/api/secure/logout').then(() => {
             location.reload();
-        }).catch(error => {
+        }).catch((error) => {
             alert('Fail to logout');
         });
     }
 
     _onShowTerms() {
-        new ModalDialog().show(<TermsView/>);
+        new ModalDialog().show(<TermsView />);
     }
 }

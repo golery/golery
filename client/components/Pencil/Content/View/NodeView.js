@@ -35,7 +35,6 @@ export default class NodeView extends React.Component {
     }
 
     render() {
-        console.log('.......');
         let editor;
         let {showTree} = this.props;
         if (typeof(window) === "undefined" || !this.state.isClient) {
@@ -44,7 +43,6 @@ export default class NodeView extends React.Component {
             // Later, we can update the golery editor to generate exact match html tags
             editor = <div dangerouslySetInnerHTML={{__html:this.state.html}}/>;
         } else {
-            console.log('.......xx');
             editor = <GoleryEditor value={this.state.value}
                                    onChange={(c) => this.setState({value: c.value})}
                                    readOnly={true}
