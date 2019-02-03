@@ -143,11 +143,9 @@ export default class PencilPage extends React.Component {
 
         let listeners = {onSelect: this.onSelect};
         return <div className={styles.leftPaneHolder} onContextMenu={(e) => this._onContextMenuOnTree(e)}>
-                <Scrollbar>
-                    <div className={styles.treeViewHolder}>
+                <Scrollbar className={styles.treeViewHolder}>
                         <TreeView treeModel={this.treeModel} treeViewModel={this.treeViewModel} listeners={listeners}
                                   ref={(treeView) => this.treeView = treeView}/>
-                    </div>
                 </Scrollbar>
             {/*<div className={styles.treeToolTipHolder}>*/}
                 {/*Right click on tree or Double click to edit*/}
@@ -213,14 +211,6 @@ export default class PencilPage extends React.Component {
             e.preventDefault();
         });
         shortcutHandler.register('view', 'Escape', () => this._onShowContentView());
-    }
-
-    _renderThumbVertical() {
-        return <div className={styles.scrollbarVerticalThumb}/>;
-    }
-
-    _renderThumbHorizontal() {
-        return <div className={styles.scrollbarHorizontalThumb}/>;
     }
 
     _onShowEditView() {
