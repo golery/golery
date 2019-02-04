@@ -39,6 +39,7 @@ export default function (req, res) {
     // Ref. PageRouter for url patterns
     let {rootId, nodeId} = req.params;
 
+    console.log('xxxxx');
     if (!nodeId) {
         if (req.user) {
             console.log("User in req.user=", req.user._id);
@@ -49,6 +50,7 @@ export default function (req, res) {
         return;
     }
 
+    console.log('yyyy');
     nodeService.findById(req.user && req.user.id, nodeId).then(nodes => {
         if (nodes === null || !nodes[0]) {
             res.json("Page was moved");

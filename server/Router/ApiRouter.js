@@ -4,7 +4,6 @@ import passport from "passport";
 import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
-import ApiMisc from "../Api/ApiMisc";
 import GoApiProxy from "../Api/GoApiProxy";
 
 function buildApiRouter() {
@@ -55,7 +54,6 @@ function _buildApiSecureRouter() {
     configGetUser(route);
 
     ApiFile.setupRoute(route);
-    ApiMisc.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
     GoApiProxy.setupSecureRoute(route);
 
