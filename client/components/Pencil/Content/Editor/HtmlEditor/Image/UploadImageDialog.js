@@ -70,7 +70,6 @@ export default class UploadImageDialog extends React.Component {
         e.stopPropagation();
 
         let file = getFileFromDrop(e);
-        // let blobUrl = await readBlob(file);
         let blobUrl = URL.createObjectURL(file);
         this._copyToCanvas(blobUrl);
     }
@@ -197,15 +196,16 @@ export default class UploadImageDialog extends React.Component {
 
     _redrawCanvas() {
         if (!this.state.hasImage) return;
-        let image = this.image;
+        let {image, canvas} = this;
         let ratio = this.state.resizePercent / 100.0;
         let {width, height} = this.state.imageSize;
-        let canvas = this.canvas;
         canvas.width = width * ratio;
         canvas.height = height * ratio;
-        let ctx = this.canvas.getContext("2d");
+        console.log('Resize. Ratio=', ratio, canvas.width, canvas.height);
+        let ctx = this.canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, image.width, image.height);
     }
 
     _adjustImageSize(width, height) {
@@ -215,10 +215,12 @@ export default class UploadImageDialog extends React.Component {
         if (w >= MAX_IMAGE_WIDTH) {
             w = 1000;
             h = w / ratio;
+            console.log('Adjusted image width');
         }
         if (h >= MAX_IMAGE_HEIGHT) {
             h = 800;
             w = h * ratio;
+            console.log('Adjusted image height');
         }
 
         return {width: w, height: h};

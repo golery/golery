@@ -20,6 +20,24 @@ import GoleryEditorLib from "golery-editor";
 
 let {EditorToolbar, htmlSerializer, EditorController} = GoleryEditorLib;
 
+class GoleryController extends EditorController {
+    /**
+     * When clicking on image button in toolbar, this method is called to open image dialge
+     * Injected by library user
+     * */
+    async openInsertImageDialog() {
+        return openUploadImageDialog();
+    }
+
+    /**
+     * When paste an image, this method is called and allow user to modify image
+     * Injected by library user
+     * */
+    async editImageOnPaste(pasteBlobUrl) {
+        return openUploadImageDialog(pasteBlobUrl);
+    }
+}
+
 export default class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -39,9 +57,9 @@ export default class NodeEditor extends React.Component {
 
         this.updateNodeNameScheduler = new DelayTaskScheduler();
         this.saveNodeScheduler = new DelayTaskScheduler();
-        this.controller = new EditorController();
+        this.controller = new GoleryController();
 
-        this.editorToolbarOptions = this.controller.getToolbarOptions({getImageUrl: openUploadImageDialog});
+        this.editorToolbarOptions = this.controller.getToolbarOptions();
     }
 
     render() {

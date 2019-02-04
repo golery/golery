@@ -3,7 +3,8 @@ import styles from './HtmlEditor.css';
 import PropTypes from 'prop-types';
 
 import GoleryEditorLib from "golery-editor";
-let {GoleryEditor, EditorController} = GoleryEditorLib;
+let {GoleryEditor} = GoleryEditorLib;
+
 
 /**
  * Pure Html editor. It does not know about the node data
@@ -12,21 +13,23 @@ export default class HtmlEditor extends React.Component {
     constructor(props) {
         super(props);
         this.goleryEditor = React.createRef();
-        this.controller = new EditorController();
     }
 
     render() {
         let {value, onChange, contentEditableClassName, ...rest} = this.props;
-        console.log("HtmlEditor.Value=", value, this.controller);
-        return <div className={contentEditableClassName}>
-            <GoleryEditor value={value}
-                          onChange={onChange}
-                          controller={this.controller}
-                          readOnly={false}
-                          autoFocus={true}
-                          {...rest}
-                          ref={this.goleryEditor}/>
-        </div>;
+        console.log('HtmlEditor.Value=', value, this.controller);
+        return (
+            <div className={contentEditableClassName}>
+                <GoleryEditor
+                    value={value}
+                    onChange={onChange}
+                    readOnly={false}
+                    autoFocus
+                    {...rest}
+                    ref={this.goleryEditor}
+                />
+            </div>
+        );
     }
 
     _onChange(change) {
