@@ -1,141 +1,164 @@
 .tree {
-  cursor: default;
-  color: #333;
+    cursor: default;
+    color: #333;
+}
+
+.tree:focus {
+    outline: none;
 }
 
 .selected {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
 .childrenList {
-  margin-left: 1rem;
+    margin-left: 1rem;
 }
 
 .nodeHolder {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 /** Root node does not have left margin */
 .tree > .nodeTree {
-  & > .nodeHolder .verticalLine {
+
+&
+> .nodeHolder .verticalLine {
     display: none;
-  }
-  & > .nodeHolder .connectorHolder {
+}
+
+&
+> .nodeHolder .connectorHolder {
     display: none;
-  }
-  & > .nodeHolder .text {
+}
+
+&
+> .nodeHolder .text {
     font-weight: bolder;
     margin-top: 0.5rem;
     margin-bottom: 0.3rem;
-  }
-  & > .childrenList {
+}
+
+&
+> .childrenList {
     margin-left: 0;
-  }
+}
+
 }
 
 .text {
-  display: inline-block;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  padding: 2px 1px;
+    display: inline-block;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    padding: 2px 1px;
 }
 
 .verticalLine {
-  position: absolute;
-  left: 8px;
-  top: 0;
-  bottom: 0;
-  border-left: 1px solid #eee;
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid #eee;
 }
 
 .nodeTree.lastChild > .nodeHolder .verticalLine {
-  bottom: auto;
-  height: 8px;
+    bottom: auto;
+    height: 8px;
 }
 
 .connectorHolder {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    position: relative;
 }
 
 .connectorHolder .connectorOpen {
-  position: absolute;
-  top: 2px;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  margin-left: 8px;
-  background: url(./tree.gif) no-repeat -32px -82px;
+    position: absolute;
+    top: 2px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    background: url(./tree.gif) no-repeat -32px -82px;
 }
 
 .connectorHolder .connectorClose {
-  position: absolute;
-  top: 2px;
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  margin-left: 8px;
-  background: url(./tree.gif) 0 -82px no-repeat;
+    position: absolute;
+    top: 2px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    background: url(./tree.gif) 0 -82px no-repeat;
 }
 
 .connectorHolder .connectorHorz {
-  border-bottom: 1px solid #eee;
-  width: 50%;
-  height: 45%;
-  position: absolute;
-  top: 0;
-  left: 8px;
+    border-bottom: 1px solid #eee;
+    width: 50%;
+    height: 45%;
+    position: absolute;
+    top: 0;
+    left: 8px;
 }
 
 .textHolder {
-  min-width: 300px;
-  display: inline-block;
-  white-space: nowrap;
-  vertical-align: top;
+    min-width: 300px;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: top;
 }
 
 .nodeTree {
-  position: relative;
+    position: relative;
 }
 
 .nodeTree.dropAsChildren {
-  & > .nodeHolder .text {
+
+&
+> .nodeHolder .text {
     border: 1px solid gray;
-  }
+}
+
 }
 
 .nodeTree.dropBefore {
-  & > .nodeHolder .textHolder::before {
+
+&
+> .nodeHolder .textHolder::before {
     content: "";
     display: block;
     max-width: 5rem;
     border-top: 1px dashed gray;
-  }
+}
+
 }
 
 .nodeTree.dropAfter {
-  & > .nodeHolder .textHolder::after {
+
+&
+> .nodeHolder .textHolder::after {
     content: "";
     display: block;
     max-width: 5rem;
     border-bottom: 1px dashed gray;
-  }
+}
+
 }
 
 .draggingText {
-  position: fixed;
-  display: none;
-  max-width: 100px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    position: fixed;
+    display: none;
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
-  /* fading on right */
-  &::after {
+/* fading on right */
+&
+::after {
     content: '';
     display: inline-block;
     position: absolute;
@@ -144,5 +167,6 @@
     height: 100%;
     width: 100%;
     background: -webkit-linear-gradient(right, #fff, rgba(255, 255, 255, 0.5));
-  }
+}
+
 }

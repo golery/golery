@@ -116,12 +116,29 @@ export default class TreeView extends React.Component {
 
     render() {
         return <div className={styles.tree} ref={(e) => this.elmRoot = e}
+                    tabIndex={0}
+                    onKeyDown={e => this._onKeyDown(e)}
                     onDragStart={e => e.preventDefault()}
                     onDrop={e => e.preventDefault()}
                     onMouseUp={(e) => this.dragDropPlugin.onMouseUp(e)}
-                    onMouseDown={(e) => this.dragDropPlugin.onMouseDown(e)}
+                    onMouseDown={(e) => {
+                        this._focus();
+                        this.dragDropPlugin.onMouseDown(e);
+                    }}
                     onMouseMove={(e) => this.dragDropPlugin.onMouseMove(e)}
                     onMouseLeave={(e) => this.dragDropPlugin.onMouseLeave(e)}/>;
+    }
+
+    _focus() {
+        if (!this.elmRoot) {
+            console.log('Cannot get focus');
+            return;
+        }
+        this.elmRoot.focus();
+    }
+
+    _onKeyDown(e) {
+        console.log(e);
     }
 
     _onStartDrag(e) {
