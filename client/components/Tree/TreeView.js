@@ -115,7 +115,8 @@ export default class TreeView extends React.Component {
     }
 
     render() {
-        return <div className={styles.tree} ref={(e) => this.elmRoot = e}
+        return <div className={styles.tree}
+                    ref={(e) => this.elmRoot = e}
                     tabIndex={0}
                     onKeyDown={e => this._onKeyDown(e)}
                     onDragStart={e => e.preventDefault()}
@@ -138,7 +139,7 @@ export default class TreeView extends React.Component {
     }
 
     _onKeyDown(e) {
-        console.log(e);
+        this.nodeSelectionPlugin.onKeyDown(e);
     }
 
     _onStartDrag(e) {
