@@ -23,11 +23,15 @@ export default class NodeSelectionPlugin {
             this._selectNext(node);
         }
         else if (e.keyCode === 37) {
-            // left arrow
+            this._setOpen(node, false);
         }
         else if (e.keyCode === 39) {
-            // right arrow
+            this._setOpen(node, true);
         }
+    }
+
+    _setOpen(node, open) {
+        this.treeModel.setOpen(node, open);
     }
 
     _selectPrev(node) {
@@ -68,27 +72,28 @@ export default class NodeSelectionPlugin {
     _selectNext(node) {
         let {treeModel} = this;
         let id = treeModel.getId(node);
-        let parent = treeModel.getParentNode(id);
-        if (!parent) {
-            // Root node
-            return;
-        }
-
-        let childrenIds = treeModel.getChildrenIds(parent, node);
+        let childrenIds = treeModel.getChildrenIds(node);
         if (childrenIds && childrenIds.length > 0 && treeModel.isOpen(node)) {
             let next = treeModel.findById(childrenIds[0]);
-            this._selectNext(next);
+            this.selectNode(next);
         } else {
-            let childPos = treeModel.getChildPosition(parent, node);
-            if (childPos < childrenIds.length - 1) {
-                childPos += 1;
-                let nextId = childrenIds[childPos];
-                let next = treeModel.findById(nextId);
-                this.selectNode(next);
-            } else {
-                this._selectNext(parent);
+            let sibling = this._getNextSibling(treeModel, node);
+            if (sibling) {
+                this.selectNode(sibling);
             }
         }
+    }
+
+    _getNextSibling(treeModel, node) {
+        let parent = treeModel.getParentNode(treeModel.getId(node));
+        let childrenIds = treeModel.getChildrenIds(parent);
+        let childPos = treeModel.getChildPosition(parent, node);
+        if (childPos < childrenIds.length - 1) {
+            let nextId = childrenIds[childPos + 1];
+            return treeModel.findById(nextId);
+        }
+
+        return this._getNextSibling(treeModel, parent);
     }
 
     /** When mouse down (even if user intends to drag node), select the node immediately.
