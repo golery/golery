@@ -1,4 +1,5 @@
 import TreeNodeView from './TreeNodeView';
+import DelayTaskScheduler from './DelayTaskScheduler';
 
 export default class NodeSelectionPlugin {
     constructor(treeModel, treeViewModel, renderPlugin, onSelectListener, options) {
@@ -8,6 +9,7 @@ export default class NodeSelectionPlugin {
         this.onSelectListener = onSelectListener;
         this.nodeIdToToggle = null;
         this.options = options;
+        this.selectNodeScheduler = new DelayTaskScheduler();
     }
 
     onKeyDown(e) {
@@ -230,7 +232,10 @@ export default class NodeSelectionPlugin {
         this.treeViewModel.selectedNode = node;
         this.treeViewModel.selectedNodeView = TreeNodeView.findByNodeId(node.id);
         this.treeViewModel.selectedNodeView.setElementAsSelected(this.options.getScrollbar);
-        this.onSelectListener(node);
+        this.selectNodeScheduler.schedule(200, () => {
+            // Don't select and render the node content immediately
+            this.onSelectListener(node);
+        });
         return this.treeViewModel.selectedNodeView;
     }
 }
