@@ -6,9 +6,15 @@ import ReorderNodePlugin from './ReorderNodePlugin';
 import DragDropPlugin from './DragDropPlugin';
 import RenderPlugin from './RenderPlugin';
 import NodeSelectionPlugin from './NodeSelectionPlugin';
+import PropTypes from "prop-types";
 
 /** React component for Tree */
 export default class TreeView extends React.Component {
+    // context is provided by react-smooth-scrollbar
+    static contextTypes = {
+        getScrollbar: PropTypes.func
+    };
+
     constructor(props) {
         super(props);
         this.treeModel = this.props.treeModel;
@@ -19,7 +25,9 @@ export default class TreeView extends React.Component {
         this.renderPlugin = new RenderPlugin(this.treeModel,
             (node) => this._createTreeNodeView(node));
         this.nodeSelectionPlugin = new NodeSelectionPlugin(this.treeModel, this.treeViewModel, this.renderPlugin,
-            this.props.listeners.onSelect);
+            this.props.listeners.onSelect, {
+                getScrollbar: (f) => this.context.getScrollbar(f)
+            });
         this.dragDropPlugin = new DragDropPlugin((e) => this._onStartDrag(e), (e) => this._onDrag(e),
             (e) => this._onEndDrag(e), (e) => this._onCancelDrag(e));
         this.reorderNodePlugin = new ReorderNodePlugin(this.treeModel, this.treeViewModel, this.renderPlugin, this.nodeSelectionPlugin);
@@ -115,19 +123,22 @@ export default class TreeView extends React.Component {
     }
 
     render() {
-        return <div className={styles.tree}
-                    ref={(e) => this.elmRoot = e}
-                    tabIndex={0}
-                    onKeyDown={e => this._onKeyDown(e)}
-                    onDragStart={e => e.preventDefault()}
-                    onDrop={e => e.preventDefault()}
-                    onMouseUp={(e) => this.dragDropPlugin.onMouseUp(e)}
-                    onMouseDown={(e) => {
-                        this._focus();
-                        this.dragDropPlugin.onMouseDown(e);
-                    }}
-                    onMouseMove={(e) => this.dragDropPlugin.onMouseMove(e)}
-                    onMouseLeave={(e) => this.dragDropPlugin.onMouseLeave(e)}/>;
+        return (
+            <div
+                className={styles.tree}
+                ref={(e) => this.elmRoot = e}
+                tabIndex={0}
+                onKeyDown={e => this._onKeyDown(e)}
+                onDragStart={e => e.preventDefault()}
+                onDrop={e => e.preventDefault()}
+                onMouseUp={(e) => this.dragDropPlugin.onMouseUp(e)}
+                onMouseDown={(e) => {
+                    this._focus();
+                    this.dragDropPlugin.onMouseDown(e);
+                }}
+                onMouseMove={(e) => this.dragDropPlugin.onMouseMove(e)}
+                onMouseLeave={(e) => this.dragDropPlugin.onMouseLeave(e)}/>
+        );
     }
 
     _focus() {

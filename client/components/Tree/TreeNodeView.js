@@ -131,7 +131,7 @@ export default class TreeNodeView {
         elmParent.removeChild(this._element);
     }
 
-    setElementAsSelected() {
+    setElementAsSelected(getScrollbar) {
         let elmText = DomUtils.findById(this._element, 'text');
         if (!elmText) return;
 
@@ -140,6 +140,24 @@ export default class TreeNodeView {
         if (current.indexOf(styles.selected) < 0) {
             elmText.className = current + ' ' + styles.selected;
         }
+
+        this._scrollIntoView(getScrollbar, elmText);
+    }
+
+
+    _scrollIntoView(getScrollbar, elm) {
+        if (!getScrollbar) return;
+        getScrollbar((scrollbar) => {
+            const {bounding} = scrollbar;
+            const elmBounding = elm.getBoundingClientRect();
+            if (elmBounding.bottom > bounding.bottom) {
+                let y = Math.min(scrollbar.limit.y, scrollbar.offset.y + (elmBounding.bottom - bounding.bottom) + 3);
+                scrollbar.scrollTo(scrollbar.offset.x, y);
+            } else if (elmBounding.top < bounding.top) {
+                let y = Math.max(0, scrollbar.offset.y + (elmBounding.top - bounding.top) - 3);
+                scrollbar.scrollTo(scrollbar.offset.x, y);
+            }
+        });
     }
 
     setElementAsUnselected() {

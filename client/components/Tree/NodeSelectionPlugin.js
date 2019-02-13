@@ -1,32 +1,71 @@
 import TreeNodeView from './TreeNodeView';
 
 export default class NodeSelectionPlugin {
-    constructor(treeModel, treeViewModel, renderPlugin, onSelectListener) {
+    constructor(treeModel, treeViewModel, renderPlugin, onSelectListener, options) {
         this.treeModel = treeModel;
         this.treeViewModel = treeViewModel;
         this.renderPlugin = renderPlugin;
         this.onSelectListener = onSelectListener;
         this.nodeIdToToggle = null;
+        this.options = options;
     }
 
     onKeyDown(e) {
-        console.log(e.keyCode);
         let node = this.treeViewModel.selectedNode;
         if (!node) {
             return;
         }
 
         if (e.keyCode === 38) {
+            // up
+            this._consumeKeyEvent(e);
             this._selectPrev(node);
-        }
-        else if (e.keyCode === 40) {
+        } else if (e.keyCode === 40) {
+            // down
+            this._consumeKeyEvent(e);
             this._selectNext(node);
+        } else if (e.keyCode === 37) {
+            // left
+            this._consumeKeyEvent(e);
+            this._close(node);
+        } else if (e.keyCode === 39) {
+            // right
+            this._consumeKeyEvent(e);
+            this._open(node);
         }
-        else if (e.keyCode === 37) {
-            this._setOpen(node, false);
-        }
-        else if (e.keyCode === 39) {
+    }
+
+    _consumeKeyEvent(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    _open(node) {
+        let {treeModel} = this;
+        if (treeModel.isOpen(node)) {
+            let childrenIds = treeModel.getChildrenIds(node);
+            if (childrenIds && childrenIds.length > 0) {
+                let child = treeModel.findById(childrenIds[0]);
+                if (child) {
+                    this.selectNode(child);
+                } else {
+                    console.log('First child is orphan');
+                }
+            }
+        } else {
             this._setOpen(node, true);
+        }
+    }
+
+    _close(node) {
+        let {treeModel} = this;
+        if (treeModel.isOpen(node)) {
+            this._setOpen(node, false);
+        } else {
+            let parent = treeModel.getParentNode(treeModel.getId(node));
+            if (parent) {
+                this.selectNode(parent);
+            }
         }
     }
 
@@ -43,14 +82,21 @@ export default class NodeSelectionPlugin {
             return;
         }
         let childPos = treeModel.getChildPosition(parent, node);
-        if (childPos === 0) {
-            this.selectNode(parent);
+        let childrenIds = treeModel.getChildrenIds(parent);
+        let prevSibling;
+
+        for (childPos -= 1; childPos >= 0 && !prevSibling; childPos -= 1) {
+            // sometimes, there are orphan node (due to bug duplicate of node)
+            // just skip those orphan nodes
+            let prevSiblingId = childrenIds[childPos];
+            prevSibling = treeModel.findById(prevSiblingId);
+        }
+        if (prevSibling) {
+            let prev = this._findLastOpenNode(prevSibling);
+            this.selectNode(prev);
         } else {
-            childPos -= 1;
-            let nextId = treeModel.getChildrenIds(parent)[childPos];
-            let next = treeModel.findById(nextId);
-            next = this._findLastOpenNode(next);
-            this.selectNode(next);
+            // no sibling, just select parent
+            this.selectNode(parent);
         }
     }
 
@@ -71,9 +117,9 @@ export default class NodeSelectionPlugin {
 
     _selectNext(node) {
         let {treeModel} = this;
-        let id = treeModel.getId(node);
         let childrenIds = treeModel.getChildrenIds(node);
         if (childrenIds && childrenIds.length > 0 && treeModel.isOpen(node)) {
+            // if node is open, select his first child
             let next = treeModel.findById(childrenIds[0]);
             this.selectNode(next);
         } else {
@@ -86,11 +132,18 @@ export default class NodeSelectionPlugin {
 
     _getNextSibling(treeModel, node) {
         let parent = treeModel.getParentNode(treeModel.getId(node));
+        if (!parent) return null;
         let childrenIds = treeModel.getChildrenIds(parent);
         let childPos = treeModel.getChildPosition(parent, node);
-        if (childPos < childrenIds.length - 1) {
-            let nextId = childrenIds[childPos + 1];
-            return treeModel.findById(nextId);
+
+        for (childPos += 1; childPos < childrenIds.length; childPos += 1) {
+            // sometimes nodes are duplicated (not sure the reason), after delete there is orphan nodes
+            // just skip those
+            let nextId = childrenIds[childPos];
+            let next = treeModel.findById(nextId);
+            if (next) {
+                return next;
+            }
         }
 
         return this._getNextSibling(treeModel, parent);
@@ -176,7 +229,7 @@ export default class NodeSelectionPlugin {
 
         this.treeViewModel.selectedNode = node;
         this.treeViewModel.selectedNodeView = TreeNodeView.findByNodeId(node.id);
-        this.treeViewModel.selectedNodeView.setElementAsSelected();
+        this.treeViewModel.selectedNodeView.setElementAsSelected(this.options.getScrollbar);
         this.onSelectListener(node);
         return this.treeViewModel.selectedNodeView;
     }
