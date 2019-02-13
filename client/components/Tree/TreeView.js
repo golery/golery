@@ -84,6 +84,8 @@ export default class TreeView extends React.Component {
 
         this.treeModel.delete(selectedNode.id);
         selectedNodeView.deleteElement();
+
+        // TODO: select new node
     }
 
     _renderNodeView(nodeView, node) {

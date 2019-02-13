@@ -143,7 +143,11 @@ export default class PencilPage extends React.Component {
 
         let listeners = {onSelect: this.onSelect};
         return (
-            <div className={styles.leftPaneHolder} onContextMenu={e => this._onContextMenuOnTree(e)}>
+            <div
+                className={styles.leftPaneHolder}
+                onContextMenu={e => this._onContextMenuOnTree(e)}
+                onKeyDown={e => this._onKeyDownOnTree(e)}
+            >
                 <Scrollbar className={styles.treeViewHolder}>
                     <TreeView
                         treeModel={this.treeModel}
@@ -160,6 +164,19 @@ export default class PencilPage extends React.Component {
         );
     }
 
+    _onKeyDownOnTree(e) {
+        if (e.keyCode === 46) {
+            // delete
+            this._onDeleteNode();
+        } else if (e.keyCode === 13) {
+            // enter
+            let asSibling = true;
+            if (e.shiftKey) {
+                asSibling = false;
+            }
+            this._onAddNode(asSibling);
+        }
+    }
 
     _buildContentElm() {
         let {editingNode, contentMode, showTree} = this.state;
