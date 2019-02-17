@@ -47,9 +47,9 @@
     bottom: 0;
   }
 
-  & .leftPaneHolder {
+  /*& .leftPaneHolder {
     display: none;
-  }
+  }*/
 }
 
 .leftPaneHolder {
@@ -110,11 +110,11 @@
     display: none;
   }
 
-  .editing {
+  /*.editing {
     & .leftPaneHolder {
       display: initial;
     }
-  }
+  }*/
 
   .treeToolTipHolder {
     display: block;
