@@ -23,7 +23,6 @@ export default class HtmlEditor extends React.Component {
                     value={value}
                     onChange={onChange}
                     readOnly={false}
-                    autoFocus
                     {...rest}
                     ref={this.goleryEditor}
                 />

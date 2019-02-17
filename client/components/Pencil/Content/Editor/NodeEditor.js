@@ -45,11 +45,11 @@ export default class NodeEditor extends React.Component {
         this.elmToolbar = null;
 
         let {node} = this.props;
-        let html = node.html || "";
+        let html = node.html || ' ';
         let value = htmlSerializer.deserialize(html);
         if (value.texts.size === 0) {
             // This is a bug in slate: if the text is empty. There is exception
-            value = htmlSerializer.deserialize(" ");
+            value = htmlSerializer.deserialize(' ');
         }
 
         this.state = {showToolbar: false, slateValue: value};
@@ -160,6 +160,8 @@ export default class NodeEditor extends React.Component {
         let {node} = this.props;
         if (!node.title) {
             this.titleRef.current.focus();
+        } else {
+            this.htmlEditorRef.current.focus();
         }
     }
 
