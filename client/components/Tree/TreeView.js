@@ -7,6 +7,7 @@ import DragDropPlugin from './DragDropPlugin';
 import RenderPlugin from './RenderPlugin';
 import NodeSelectionPlugin from './NodeSelectionPlugin';
 import PropTypes from "prop-types";
+import TreeConstants, {SelectContext} from "./TreeConstants";
 
 /** React component for Tree */
 export default class TreeView extends React.Component {
@@ -74,7 +75,7 @@ export default class TreeView extends React.Component {
         parentNodeView.addChildAtPosition(newNodeView, position);
 
         // update selected node
-        this.nodeSelectionPlugin.selectNode(newNode);
+        this.nodeSelectionPlugin.selectNode(newNode, SelectContext.ADD_NODE);
         return {parentNode, position, nodeView: newNodeView};
     }
 

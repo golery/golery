@@ -1,5 +1,6 @@
 import TreeNodeView from './TreeNodeView';
 import DelayTaskScheduler from './DelayTaskScheduler';
+import {SelectContext} from './TreeConstants';
 
 export default class NodeSelectionPlugin {
     constructor(treeModel, treeViewModel, renderPlugin, onSelectListener, options) {
@@ -95,10 +96,10 @@ export default class NodeSelectionPlugin {
         }
         if (prevSibling) {
             let prev = this._findLastOpenNode(prevSibling);
-            this.selectNode(prev);
+            this.selectNode(prev, SelectContext.SELECT_BY_KEY);
         } else {
             // no sibling, just select parent
-            this.selectNode(parent);
+            this.selectNode(parent, SelectContext.SELECT_BY_KEY);
         }
     }
 
@@ -123,11 +124,11 @@ export default class NodeSelectionPlugin {
         if (childrenIds && childrenIds.length > 0 && treeModel.isOpen(node)) {
             // if node is open, select his first child
             let next = treeModel.findById(childrenIds[0]);
-            this.selectNode(next);
+            this.selectNode(next, SelectContext.SELECT_BY_KEY);
         } else {
             let sibling = this._getNextSibling(treeModel, node);
             if (sibling) {
-                this.selectNode(sibling);
+                this.selectNode(sibling, SelectContext.SELECT_BY_KEY);
             }
         }
     }
@@ -223,7 +224,7 @@ export default class NodeSelectionPlugin {
         nodeView.replaceRender(newNodeView);
     }
 
-    selectNode(node) {
+    selectNode(node, selectContext) {
         let currentSelection = this.treeViewModel.selectedNodeView;
         if (currentSelection) {
             currentSelection.setElementAsUnselected();
@@ -232,10 +233,22 @@ export default class NodeSelectionPlugin {
         this.treeViewModel.selectedNode = node;
         this.treeViewModel.selectedNodeView = TreeNodeView.findByNodeId(node.id);
         this.treeViewModel.selectedNodeView.setElementAsSelected(this.options.getScrollbar);
-        this.selectNodeScheduler.schedule(200, () => {
-            // Don't select and render the node content immediately
-            this.onSelectListener(node);
-        });
+
+        this._callSelectListener(selectContext, node);
+
         return this.treeViewModel.selectedNodeView;
+    }
+
+    _callSelectListener(selectContext, node) {
+        if (selectContext === SelectContext.SELECT_BY_KEY) {
+            console.log('Delay select node');
+            this.selectNodeScheduler.schedule(200, () => {
+                // Don't select and render the node content immediately
+                // because user can use keyboard to quickly navigate the node list
+                this.onSelectListener(node, selectContext);
+            });
+        } else {
+            this.onSelectListener(node, selectContext);
+        }
     }
 }

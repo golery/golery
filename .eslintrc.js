@@ -14,6 +14,7 @@ module.exports = {
 
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
 
+        'no-console': "off",
         'comma-dangle': "off",
         "object-curly-spacing": "off",
         "prefer-const": "off",

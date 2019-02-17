@@ -23,6 +23,7 @@ import AppMenu from './AppMenu';
 import ModalDialog from '../Core/Dialog/ModalDialog';
 import Scrollbar from './Scrollbar';
 import AppBar from './AppBar';
+import {SelectContext} from "../Tree/TreeConstants";
 
 // = true: do not save the node data to database (use for dev)
 const DISABLE_SAVE = false;
@@ -273,8 +274,12 @@ export default class PencilPage extends React.Component {
             .then(() => this.syncTracker.stopTask(taskId));
     }
 
-    onSelect(node) {
-        this.setState({editingNode: node, contentMode: CONTENT_MODE_VIEW});
+    onSelect(node, context) {
+        let contentMode = CONTENT_MODE_VIEW;
+        if (context === SelectContext.ADD_NODE) {
+            contentMode = CONTENT_MODE_EDIT;
+        }
+        this.setState({editingNode: node, contentMode});
     }
 
     _onAddNode(asNextSibling) {
