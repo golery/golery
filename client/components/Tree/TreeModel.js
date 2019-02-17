@@ -207,11 +207,12 @@ export default class TreeModel {
     }
 
     /** After create node, replace temporary nodeId by new one from server side */
-    updateNodeId(node, parentNode, newId) {
+    updateNodeId(node, parentNode, newId, newId62) {
         let oldId = node.id;
         let index = parentNode.children.indexOf(oldId);
         parentNode.children[index] = newId;
         node.id = newId;
+        node.id62 = newId62;
 
         // update index
         this.map[newId] = node;

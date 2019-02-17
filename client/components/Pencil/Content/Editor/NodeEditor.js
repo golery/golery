@@ -60,6 +60,7 @@ export default class NodeEditor extends React.Component {
         this.controller = new GoleryController();
 
         this.editorToolbarOptions = this.controller.getToolbarOptions();
+        this.titleRef = React.createRef();
     }
 
     render() {
@@ -88,6 +89,7 @@ export default class NodeEditor extends React.Component {
                         placeHolder="<page-title>"
                         contentEditableClassName="nodeTitle"
                         onChange={html => this._onChangeTitle(html)}
+                        ref = {this.titleRef}
                     />
 
                     <HtmlEditor
@@ -149,7 +151,10 @@ export default class NodeEditor extends React.Component {
     }
 
     focus() {
-        // this.elmHtmlEditor.focus();
+        let {node} = this.props;
+        if (!node.title) {
+            this.titleRef.current.focus();
+        }
     }
 
     _onClickShare() {

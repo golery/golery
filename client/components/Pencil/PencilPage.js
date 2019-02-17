@@ -298,7 +298,7 @@ export default class PencilPage extends React.Component {
             let newId = createdNode.id;
             console.log('Create new node successfully at server side ', newId);
             console.log('Replace nodeId ', newNode.id, ' by ', newId);
-            this.treeModel.updateNodeId(newNode, parentNode, newId);
+            this.treeModel.updateNodeId(newNode, parentNode, newId, createdNode.id62);
             nodeView.changeNodeId(newId);
         });
     }
