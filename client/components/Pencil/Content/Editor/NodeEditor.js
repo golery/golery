@@ -41,7 +41,6 @@ class GoleryController extends EditorController {
 export default class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.elmHtmlEditor = null;
         this.elmTopToolbarHolder = null;
         this.elmToolbar = null;
 
@@ -61,6 +60,7 @@ export default class NodeEditor extends React.Component {
 
         this.editorToolbarOptions = this.controller.getToolbarOptions();
         this.titleRef = React.createRef();
+        this.htmlEditorRef = React.createRef();
     }
 
     render() {
@@ -78,35 +78,41 @@ export default class NodeEditor extends React.Component {
         }
 
         const classNameContentPadding = leftRightPadding ? styles.contentPaddingLeftRightPadding : styles.contentPadding;
-        return <div className={[styles.component, "pencilTheme"].join(' ')}>
-            <div>
-                {elmToolbar}
-            </div>
-            <div className={styles.contentHolder}>
-                <div className={classNameContentPadding}>
-                    <TitleEditor
-                        html={node.title}
-                        placeHolder="<page-title>"
-                        contentEditableClassName="nodeTitle"
-                        onChange={html => this._onChangeTitle(html)}
-                        ref = {this.titleRef}
-                    />
+        return (
+            <div className={[styles.component, "pencilTheme"].join(' ')}>
+                <div>
+                    {elmToolbar}
+                </div>
+                <div className={styles.contentHolder}>
+                    <div className={classNameContentPadding}>
+                        <TitleEditor
+                            html={node.title}
+                            placeHolder="<page-title>"
+                            contentEditableClassName="nodeTitle"
+                            onChange={html => this._onChangeTitle(html)}
+                            ref={this.titleRef}
+                            listeners={{onFinishEditing: () => this._onFinishEditTitle()}}
+                        />
 
-                    <HtmlEditor
-                        value={slateValue}
-                        contentEditableClassName="nodeHtml pencilTheme"
-                        onChange={onChange}
-                        addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
-                        controller={this.controller}
-                        ref={ref => {
-                            this.elmHtmlEditor = ref;
-                        }}/>
+                        <HtmlEditor
+                            value={slateValue}
+                            contentEditableClassName="nodeHtml pencilTheme"
+                            onChange={onChange}
+                            addToolbar={(toolbarElm) => this._addToolbar(toolbarElm)}
+                            controller={this.controller}
+                            ref={this.htmlEditorRef}
+                        />
+                    </div>
+                </div>
+                <div className={styles.toggleToolbarButton} onClick={() => this._toggleToolbar()}>
+                    <i className={toggleToolbarButton} />
                 </div>
             </div>
-            <div className={styles.toggleToolbarButton} onClick={() => this._toggleToolbar()}>
-                <i className={toggleToolbarButton}></i>
-            </div>
-        </div>;
+        );
+    }
+
+    _onFinishEditTitle() {
+        this.htmlEditorRef.current.focus();
     }
 
     _toggleToolbar() {

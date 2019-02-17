@@ -17,7 +17,6 @@ export default class HtmlEditor extends React.Component {
 
     render() {
         let {value, onChange, contentEditableClassName, ...rest} = this.props;
-        console.log('HtmlEditor.Value=', value, this.controller);
         return (
             <div className={contentEditableClassName}>
                 <GoleryEditor
@@ -32,21 +31,8 @@ export default class HtmlEditor extends React.Component {
         );
     }
 
-    _onChange(change) {
-        let value = change.value;
-        let innerHtml = serializer.serialize(value);
-        console.log('OnChange', innerHtml);
-
-        this.setState({value: value});
-
-        this.hasContent = innerHtml !== "";
-        if (this.props.onChange) {
-            this.props.onChange(innerHtml, this.props.editingContext);
-        }
-    }
-
     focus() {
-        // this.goleryEditor.current.focus();
+        this.goleryEditor.current.editor.focus();
     }
 
 }

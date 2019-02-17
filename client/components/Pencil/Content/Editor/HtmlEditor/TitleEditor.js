@@ -38,15 +38,37 @@ export default class TitleEditor extends React.Component {
         html = this.hasContent ? DOMPurify.sanitize(html) : this.placeHolder;
 
         let contentEditableClassNames = this._getContentEditableClassName();
-        return <div className={styles.component}>
-            <div contentEditable
-                 className={contentEditableClassNames}
-                 dangerouslySetInnerHTML={{__html: html}}
-                 onInput={() => this._onChange()}
-                 onPaste={(e) => this._onPaste(e)}
-                 ref={elmEdit => this.elmEdit = elmEdit}/>
-        </div>;
+        return (
+            <div className={styles.component}>
+                <div
+                    contentEditable
+                    className={contentEditableClassNames}
+                    dangerouslySetInnerHTML={{__html: html}}
+                    onInput={() => this._onChange()}
+                    onPaste={(e) => this._onPaste(e)}
+                    ref={elmEdit => this.elmEdit = elmEdit}
+                    onKeyDown={(e) => this._onKeyDown(e)}
+                />
+            </div>
+        );
     }
+
+    _onKeyDown(e) {
+        let {key} = e;
+        if (key === 'Enter' || key === 'Tab') {
+            this._consumeKeyEvent(e);
+            let {listeners} = this.props;
+            if (listeners && listeners.onFinishEditing) {
+                listeners.onFinishEditing();
+            }
+        }
+    }
+
+    _consumeKeyEvent(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
 
     /** Paste only plain text */
     _onPaste(e) {
@@ -95,5 +117,6 @@ export default class TitleEditor extends React.Component {
 TitleEditor.propTypes = {
     html: PropTypes.string,
     contentEditableClassName: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    listeners: PropTypes.object
 };
