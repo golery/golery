@@ -127,7 +127,7 @@ export default class PencilPage extends React.Component {
 
         return (
             <div className={[styles.component, styleEditing].join(' ')}>
-                <AppBar/>
+                <AppBar onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()} />
                 <div className={styles.body}>
                     {this._buildTreeElm()}
                     {this._buildContentElm()}
