@@ -159,16 +159,26 @@ export default class UploadImageDialog extends React.Component {
         }
     }
 
+    // _onClickUploadImgur() {
+    //     //let dataUrl = this.canvas.toDataURL('image/jpeg');
+    //     let blob = this.canvas.toBlob()
+    //     this.setState({spinner: true});
+    //     this._uploadImgur(dataUrl).then((url) => {
+    //         this.props.resolve(url);
+    //     }).catch((e) => {
+    //         this.props.reject(e);
+    //     });
+    // }
     _onClickUploadImgur() {
-        let dataUrl = this.canvas.toDataURL('image/jpeg');
         this.setState({spinner: true});
-        this._uploadImgur(dataUrl).then((url) => {
-            this.props.resolve(url);
-        }).catch((e) => {
-            this.props.reject(e);
+        this.canvas.toBlob((blob) => {
+            this._uploadImgur(blob).then((response) => {
+                this.props.resolve(response.link);
+            }).catch((e) => {
+                this.props.reject(e);
+            });
         });
     }
-
 
     _pasteListener(e) {
         e.stopPropagation();
@@ -226,22 +236,17 @@ export default class UploadImageDialog extends React.Component {
         return {width: w, height: h};
     }
 
-    _uploadImgur(imageSrc) {
-        let imageBase64 = imageSrc.substring('data:image/png;base64,'.length);
-        let url = "https://api.imgur.com/3/upload";
-
+    _uploadImgur(blob) {
         let config = {
             headers: {
-                'Authorization': "Client-ID 4b49385f955770a",
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-Type': 'application/octet-stream'
             },
         };
 
-        return Axios.post(url, imageBase64, config).then(function (response) {
-            let data = response.data;
-            let imgurUrl = data.data.link;
-            console.log('Upladed to imgur. Url:', imgurUrl, 'Json:', data);
-            return imgurUrl;
+        let url = 'api/secure/pencil/image/imgur';
+        return Axios.post(url, blob, config).then((response) => {
+            console.log('Uploaded to imgur', response.data);
+            return response.data;
         });
     }
 

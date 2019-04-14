@@ -24,7 +24,13 @@ function proxyToGoApi(req, res) {
     if (method !== 'GET') {
         // TODO PERFORMANCE expressjs convert to json then here we convert back to text. Double conversion for nothing
         // But it's for Post body only, so it does not cost much
-        options.body = JSON.stringify(req.body);
+        if (contentType === 'application/octet-stream') {
+            // ex: post image
+            console.log('xxxx2', req.body);
+            options.body = req.body;
+        } else {
+            options.body = JSON.stringify(req.body);
+        }
     }
     console.log('=> Proxy to GoAPI: ', url, options);
     fetch(url, options)
