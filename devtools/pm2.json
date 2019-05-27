@@ -8,6 +8,7 @@
     "env": {
       "NODE_ENV": "development"
     },
-    "source_map_support": true
+    "source_map_support": true,
+    "node_args": ["--inspect"]
   }]
 }
