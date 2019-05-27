@@ -20,5 +20,4 @@ class NodeService {
         return GoApi.querySpace(userId, code);
     }
 }
-
 export default new NodeService();
