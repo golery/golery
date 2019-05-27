@@ -2,10 +2,8 @@
 import Axios from "axios";
 
 class NodeRepo {
-    constructor() {
-        this.nodes = null;
-        this.rootNode = null;
-    }
+    nodes = null;
+    rootNode = null;
 
     _findNode(nodes, id) {
         for (let node of nodes) {
