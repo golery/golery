@@ -16,16 +16,16 @@ function getPageOptions() {
     };
 }
 
-function renderPage(req, res, rootId, node) {
+function renderPage(req, res, rootId, node, space) {
     let options = getPageOptions();
-    options.serverState = {initialNode: node, rootId: rootId};
+    options.serverState = {initialNode: node, rootId, space};
 
     let mainHtml = ReactDOM.renderToString(<PencilPage serverState={options.serverState}/>);
 
     if (node && node.name) {
         options.title = node.name;
-        options.metaDescription = " " + node.name;
-        options.metaKeywords += " " + node.name;
+        options.metaDescription = ` ${node.name}`;
+        options.metaKeywords += ` ${node.name}`;
     }
     page(req, res, mainHtml, 'PencilPage', options);
 }
@@ -39,25 +39,32 @@ export default function (req, res) {
     // Ref. PageRouter for url patterns
     let {rootId, nodeId} = req.params;
 
-    console.log('xxxxx');
-    if (!nodeId) {
-        if (req.user) {
-            console.log("User in req.user=", req.user._id);
-            renderPage(req, res, null, null);
-        } else {
-            pencilLandingPage(req, res);
-        }
-        return;
+    console.log('-----', req.user);
+    if (nodeId === 'pub') {
+        nodeService.querySpace(req.user && req.user.id, nodeId).then(({nodes}) => {
+            if (nodes === null || !nodes[0]) {
+                res.json("Page was moved");
+                return;
+            }
+
+            let root = nodes[0];
+            console.log("Render page ", root.id);
+            renderPage(req, res, 'pub', root, 'pub');
+        });
+    } else if (nodeId) {
+        nodeService.findById(req.user && req.user.id, nodeId).then((nodes) => {
+            if (nodes === null || !nodes[0]) {
+                res.json("Page was moved");
+                return;
+            }
+
+            console.log("Render page ", nodeId);
+            renderPage(req, res, rootId, nodes[0]);
+        });
+    } else if (req.user) {
+        console.log("User in req.user=", req.user._id);
+        renderPage(req, res, null, null);
+    } else {
+        pencilLandingPage(req, res);
     }
-
-    console.log('yyyy');
-    nodeService.findById(req.user && req.user.id, nodeId).then(nodes => {
-        if (nodes === null || !nodes[0]) {
-            res.json("Page was moved");
-            return;
-        }
-
-        console.log("Render page ", nodeId);
-        renderPage(req, res, rootId, nodes[0]);
-    });
 }

@@ -12,9 +12,9 @@ function proxyToGoApi(req, res) {
     let contentType = headers['content-type'] || 'application/json';
     let method = req.method;
     let options = {
-        method: method,
+        method,
         headers: {
-            "accept": headers.accept,
+            accept: headers.accept,
             'content-type': contentType
         }
     };
@@ -34,15 +34,15 @@ function proxyToGoApi(req, res) {
     }
     console.log('=> Proxy to GoAPI: ', url, options);
     fetch(url, options)
-        .then(apiRes => {
+        .then((apiRes) => {
             let status = apiRes.status;
             let contentType = apiRes.headers.get('content-type');
             res.status(status).type(contentType);
             console.log('Response: ', status, '/', contentType);
             return apiRes.text();
-        }).then(text => {
-        res.send(text);
-    }).catch(err => console.log(err));
+        }).then((text) => {
+            res.send(text);
+        }).catch(err => console.log(err));
 }
 
 class GoApiProxy {
@@ -64,7 +64,16 @@ class GoApiProxy {
 
     /** @return promise of array of nodes */
     query(user, rootId62, tree) {
-            return this._call(user, "/api/public/pencil/query?rootId=" + rootId62 + "&tree=" + tree);
+        if (rootId62 === 'pub') {
+            // query space, rootId62 is space code
+            return this._call(user, `/api/secure/pencil/query/${rootId62}`).then(o => o.nodes);
+        }
+        return this._call(user, `/api/public/pencil/query?rootId=${rootId62}&tree=${tree}`);
+    }
+
+    querySpace(user, code) {
+        console.log('User:', user);
+        return this._call(user, `/api/secure/pencil/query/space/${code}`);
     }
 
     findNodeId62ForSiteMap() {
@@ -75,7 +84,7 @@ class GoApiProxy {
         let options = {
             method: (opts && opts.method) || "GET",
             headers: Object.assign({
-                "accept": "application/json",
+                accept: "application/json",
                 'content-type': "application/json"
             }, opts && opts.headers)
         };
@@ -83,7 +92,7 @@ class GoApiProxy {
             options.headers.user = user;
         }
         console.log("Call API ", url, options);
-        return fetch(goApiServiceHost + url, options).then(res => res.json()).catch(err => {
+        return fetch(goApiServiceHost + url, options).then(res => res.json()).catch((err) => {
             console.log(err);
             throw err;
         });

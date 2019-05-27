@@ -15,6 +15,10 @@ class NodeService {
     findById(userId, nodeId62) {
         return GoApi.query(userId, nodeId62, false);
     }
+
+    querySpace(userId, code) {
+        return GoApi.querySpace(userId, code);
+    }
 }
 
 export default new NodeService();

@@ -61,7 +61,7 @@ export default class PencilPage extends React.Component {
         super(props);
 
         // sererState is passed by ssr and also injected (with the same data) during client side rendering
-        let {initialNode} = this.props.serverState;
+        let {initialNode, space} = this.props.serverState;
         initialNode = initialNode || null;
 
         this.state = {
@@ -70,8 +70,9 @@ export default class PencilPage extends React.Component {
             contentMode: CONTENT_MODE_VIEW,
             // editingId: nodeId,
             editor: EDITOR_HTML,
-            editingNode: initialNode || null,
+                editingNode: initialNode || null,
             showTree: initialNode === null,
+            space
         };
 
         this.contextMenuView = null;
@@ -107,11 +108,16 @@ export default class PencilPage extends React.Component {
 
     componentDidMount() {
         let {id62} = this.state.editingNode || {id62: null};
+        let {space} = this.state;
         // delay loading to test loading wheel
         // setTimeout(() => {
         //     this._load(id62);
         // }, 2000);
-        this._load(id62);
+        if (space === 'pub') {
+            this.loadSpace(space);
+        } else {
+            this._load(id62);
+        }
     }
 
     render() {
@@ -255,8 +261,22 @@ export default class PencilPage extends React.Component {
         this.setState({contentMode: CONTENT_MODE_VIEW});
     }
 
+    // private
+    loadSpace(space) {
+        if (typeof window === 'undefined') return null;
+        return NodeRepo.load(space).then(({nodes, rootNode}) => {
+            this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
+                onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
+            });
+            this.treeViewModel = new TreeViewModel();
+
+            let state = {nodes, rootId: rootNode.id};
+            this.setState(state);
+        });
+    }
+
     _load(rootId) {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') return null;
         return NodeRepo.load(rootId).then(({nodes, rootNode}) => {
             this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
                 onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
