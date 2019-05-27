@@ -42,18 +42,19 @@ class NodeRepo {
             console.log('Reuse node repo. Do not fetch');
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
-        if (rootId === 'pub') {
-            return Axios.get(`/api/secure/pencil/query/space/pub`).then((response) => {
-                let nodes = response.data.nodes;
-                console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
-                return {nodes: nodes, rootNode: nodes[0]};
-            });
-        }
-        let rootParam = rootId ? "&rootId="+rootId : "";
+        let rootParam = rootId ? "&rootId=" + rootId : "";
         let secure = rootId ? "public" : "secure";
         return Axios.get(`/api/${secure}/pencil/query?tree=true${rootParam}`).then((response) => {
             let nodes = response.data;
             console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
+            return {nodes: nodes, rootNode: nodes[0]};
+        });
+    }
+
+    async loadSpace(spaceId) {
+        return Axios.get(`/api/secure/pencil/query/space/`+spaceId).then((response) => {
+            let nodes = response.data.nodes;
+            console.log(`Load ${nodes.length} nodes from space ${spaceId}`);
             return {nodes: nodes, rootNode: nodes[0]};
         });
     }

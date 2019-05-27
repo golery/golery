@@ -107,13 +107,11 @@ export default class PencilPage extends React.Component {
     }
 
     componentDidMount() {
+        if (typeof window === 'undefined') return null;
+
         let {id62} = this.state.editingNode || {id62: null};
         let {space} = this.state;
-        // delay loading to test loading wheel
-        // setTimeout(() => {
-        //     this._load(id62);
-        // }, 2000);
-        if (space === 'pub') {
+        if (space) {
             this.loadSpace(space);
         } else {
             this._load(id62);
@@ -262,21 +260,18 @@ export default class PencilPage extends React.Component {
     }
 
     // private
-    loadSpace(space) {
-        if (typeof window === 'undefined') return null;
-        return NodeRepo.load(space).then(({nodes, rootNode}) => {
-            this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
-                onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
-            });
-            this.treeViewModel = new TreeViewModel();
-
-            let state = {nodes, rootId: rootNode.id, showTree: true};
-            this.setState(state);
+    async loadSpace(space) {
+        let {nodes, rootNode} = await NodeRepo.loadSpace(space);
+        this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
+            onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
         });
+        this.treeViewModel = new TreeViewModel();
+
+        let state = {nodes, rootId: rootNode.id, showTree: true};
+        this.setState(state);
     }
 
     _load(rootId) {
-        if (typeof window === 'undefined') return null;
         return NodeRepo.load(rootId).then(({nodes, rootNode}) => {
             this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
                 onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
