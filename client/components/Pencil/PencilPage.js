@@ -261,7 +261,9 @@ export default class PencilPage extends React.Component {
 
     // private
     async loadSpace(space) {
-        let {nodes, rootNode} = await NodeRepo.loadSpace(space);
+        let {nodes} = await NodeRepo.loadSpace(space);
+        let rootNode = nodes[0];
+
         this.treeModel = new PencilTreeModel(nodes, rootNode.id, {
             onMoveNode: (nodeId, newParentId, newPosition) => this._onMoveNode(nodeId, newParentId, newPosition)
         });
