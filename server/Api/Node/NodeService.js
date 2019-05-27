@@ -1,4 +1,5 @@
-import GoApi from '../GoApiProxy';
+import GoApiProxy from '../GoApiProxy';
+import GoApi from '../GoApi/GoApi';
 
 class NodeService {
     /** @mode - node.access : 0 private, 1 public */
@@ -9,14 +10,15 @@ class NodeService {
     }
 
     findAllPublicNodeId() {
-        return GoApi.findNodeId62ForSiteMap();
+        return GoApiProxy.findNodeId62ForSiteMap();
     }
 
     findById(userId, nodeId62) {
-        return GoApi.query(userId, nodeId62, false);
+        return GoApiProxy.query(userId, nodeId62, false);
     }
 
     querySpace(userId, code) {
+        console.log(GoApi);
         return GoApi.querySpace(userId, code);
     }
 }

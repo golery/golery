@@ -24,7 +24,16 @@ function buildApiRouter() {
         }
     });
 
+    apiRouter.use('/', _buildProxyRouter(apiRouter));
+
     return apiRouter;
+}
+
+function _buildProxyRouter(router) {
+    router.use(passport.session());
+    // enforce user
+    GoApiProxy.setupAutoRoute(router);
+    return router;
 }
 
 function configGetUser(apiSecure) {
@@ -61,6 +70,5 @@ function _buildApiSecureRouter() {
 }
 
 export default function (router) {
-    // http://localhost:3001/www2/api/node
     router.use('/api', buildApiRouter());
 }

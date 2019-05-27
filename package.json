@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "server.pm2": "export NODE_ENV=development; pm2 start devtools/pm2.json --no-daemon",
-    "server.watch": "babel server -d build/dev/server --copy-files -w --presets=@babel/env --source-maps",
+    "server.watch": "babel server -d build/dev/server --copy-files -w  --extensions '.ts,.tsx,.js,.jsx' --source-maps",
     "client.watch": "webpack --mode development --progress --colors --config devtools/webpack/webpack.config.client.all.js --watch",
     "build": "./devtools/build-prod.sh"
   },

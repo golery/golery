@@ -50,7 +50,7 @@ class NodeRepo {
     }
 
     async loadSpace(spaceId) {
-        let response = await Axios.get(`/api/secure/pencil/query/space/${spaceId}`);
+        let response = await Axios.get(`/api/pencil/query/space/${spaceId}`);
         let {nodes} = response.data;
         console.log(`Load ${nodes.length} nodes from space ${spaceId}`);
         return {nodes};

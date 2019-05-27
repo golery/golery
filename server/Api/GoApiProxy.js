@@ -3,14 +3,11 @@ import Config from "../config";
 
 const goApiServiceHost = Config.goApiHost;
 
-// TODO PERFORMANCE This proxy add 100ms (at dev local env)
-/** Forward requests to API service */
-function proxyToGoApi(req, res) {
-    let user = req.user && req.user.id;
-    let headers = req.headers;
-    let url = goApiServiceHost + req.originalUrl;
+// // TODO PERFORMANCE This proxy add 100ms (at dev local env)
+async function doProxyToGoApi(req, res, user, url)
+{
+    let {headers, method} = req;
     let contentType = headers['content-type'] || 'application/json';
-    let method = req.method;
     let options = {
         method,
         headers: {
@@ -33,19 +30,50 @@ function proxyToGoApi(req, res) {
         }
     }
     console.log('=> Proxy to GoAPI: ', url, options);
-    fetch(url, options)
-        .then((apiRes) => {
-            let status = apiRes.status;
-            let contentType = apiRes.headers.get('content-type');
-            res.status(status).type(contentType);
-            console.log('Response: ', status, '/', contentType);
-            return apiRes.text();
-        }).then((text) => {
-            res.send(text);
-        }).catch(err => console.log(err));
+    try {
+        let apiRes = await fetch(url, options);
+
+        let {status} = apiRes;
+        let responseContentType = apiRes.headers.get('content-type');
+        res.status(status).type(responseContentType);
+        console.log('Response: ', status, '/', responseContentType);
+        let text = await apiRes.text();
+        // console.log('Response body: ', text);
+        res.send(text);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+/**
+ * Forward requests to API service.
+ * Url is mapped from /api/bla to /api/secure/bla or /api/public/bla depending authentication
+ * */
+function smartProxyToGoApi(req, res) {
+    let user = req.user && req.user.id;
+    let url;
+    if (user) {
+        url = goApiServiceHost + req.originalUrl.replace("/api/", "/api/secure/");
+    } else {
+        url = goApiServiceHost + req.originalUrl.replace("/api/", "/api/public/");
+    }
+    doProxyToGoApi(req, res, user, url);
+}
+
+/**
+ * Forward requests to API service  as it is.
+ * @Deprecated */
+function proxyToGoApi(req, res) {
+    let user = req.user && req.user.id;
+    let url = goApiServiceHost + req.originalUrl;
+    doProxyToGoApi(req, res, user, url);
 }
 
 class GoApiProxy {
+    setupAutoRoute(route) {
+        route.all('/pencil/*', (req, res) => smartProxyToGoApi(req, res));
+    }
+
     /** Available at /api/pubic/... */
     setupPublicRoute(route) {
         route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
@@ -71,11 +99,6 @@ class GoApiProxy {
         return this._call(user, `/api/public/pencil/query?rootId=${rootId62}&tree=${tree}`);
     }
 
-    querySpace(user, code) {
-        console.log('User:', user);
-        return this._call(user, `/api/secure/pencil/query/space/${code}`);
-    }
-
     findNodeId62ForSiteMap() {
         return this._call(null, "/api/public/pencil/sitemap/nodeId62");
     }
@@ -92,6 +115,7 @@ class GoApiProxy {
             options.headers.user = user;
         }
         console.log("Call API ", url, options);
+        // don't use fetch, use axios better to handle exception
         return fetch(goApiServiceHost + url, options).then(res => res.json()).catch((err) => {
             console.log(err);
             throw err;
