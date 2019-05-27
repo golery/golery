@@ -270,7 +270,7 @@ export default class PencilPage extends React.Component {
             });
             this.treeViewModel = new TreeViewModel();
 
-            let state = {nodes, rootId: rootNode.id};
+            let state = {nodes, rootId: rootNode.id, showTree: true};
             this.setState(state);
         });
     }
