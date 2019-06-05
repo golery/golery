@@ -31,7 +31,6 @@ function buildApiRouter() {
 
 function _buildProxyRouter(router) {
     router.use(passport.session());
-    // enforce user
     GoApiProxy.setupAutoRoute(router);
     return router;
 }

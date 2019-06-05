@@ -23,7 +23,6 @@ async function doProxyToGoApi(req, res, user, url)
         // But it's for Post body only, so it does not cost much
         if (contentType === 'application/octet-stream') {
             // ex: post image
-            console.log('xxxx2', req.body);
             options.body = req.body;
         } else {
             options.body = JSON.stringify(req.body);
@@ -31,7 +30,10 @@ async function doProxyToGoApi(req, res, user, url)
     }
     console.log('=> Proxy to GoAPI: ', url, options);
     try {
+        let hrstart = process.hrtime();
         let apiRes = await fetch(url, options);
+        let hrend = process.hrtime(hrstart);
+        console.info('GoAPI roundtrip time (hr): %ds %dms', hrend[0], hrend[1] / 1000000);
 
         let {status} = apiRes;
         let responseContentType = apiRes.headers.get('content-type');
@@ -96,7 +98,7 @@ class GoApiProxy {
             // query space, rootId62 is space code
             return this._call(user, `/api/secure/pencil/query/${rootId62}`).then(o => o.nodes);
         }
-        return this._call(user, `/api/public/pencil/query?rootId=${rootId62}&tree=${tree}`);
+        return this._call(user, `/api/pencil/query?rootId=${rootId62}&tree=${tree}`);
     }
 
     findNodeId62ForSiteMap() {

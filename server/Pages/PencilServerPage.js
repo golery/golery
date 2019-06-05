@@ -35,36 +35,38 @@ export function pencilLandingPage(req, res) {
     page(req, res, mainHtml, 'PencilLandingPage', getPageOptions());
 }
 
-export default function (req, res) {
+export default async function (req, res) {
     // Ref. PageRouter for url patterns
     let {rootId, nodeId} = req.params;
 
-    console.log('-----', req.user);
-    if (nodeId === 'pub') {
-        nodeService.querySpace(req.user && req.user.id, nodeId).then(({nodes}) => {
-            if (nodes === null || !nodes[0]) {
-                res.json("Page was moved");
+    try {
+        if (nodeId === 'pub') {
+            let {node} = await nodeService.querySpace(req.user && req.user.id, nodeId);
+            if (!node) {
+                res.json(`Space not found or moved ${nodeId}`);
                 return;
             }
 
-            let root = nodes[0];
-            console.log("Render page ", root.id);
-            renderPage(req, res, 'pub', root, 'pub');
-        });
-    } else if (nodeId) {
-        nodeService.findById(req.user && req.user.id, nodeId).then((nodes) => {
-            if (nodes === null || !nodes[0]) {
-                res.json("Page was moved");
-                return;
-            }
+            console.log("Render page %s in space %s", node.id, nodeId);
+            renderPage(req, res, null, node, 'pub');
+        } else if (nodeId) {
+            nodeService.findById(req.user && req.user.id, nodeId).then((nodes) => {
+                if (nodes === null || !nodes[0]) {
+                    res.json("Page was moved");
+                    return;
+                }
 
-            console.log("Render page ", nodeId);
-            renderPage(req, res, rootId, nodes[0]);
-        });
-    } else if (req.user) {
-        console.log("User in req.user=", req.user._id);
-        renderPage(req, res, null, null);
-    } else {
-        pencilLandingPage(req, res);
+                console.log("Render page ", nodeId);
+                renderPage(req, res, rootId, nodes[0]);
+            });
+        } else if (req.user) {
+            console.log("User in req.user=", req.user._id);
+            renderPage(req, res, null, null);
+        } else {
+            pencilLandingPage(req, res);
+        }
+    } catch (e) {
+        console.log('PencilServerPage.Fail to load page. Return 500', e);
+        res.status(500).send('Error');
     }
 }

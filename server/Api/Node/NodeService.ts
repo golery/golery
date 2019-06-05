@@ -1,12 +1,13 @@
 import GoApiProxy from '../GoApiProxy';
 import GoApi from '../GoApi/GoApi';
+import {QueryResposne} from '../../Models/GoApi';
 
 class NodeService {
     /** @mode - node.access : 0 private, 1 public */
     setAccess(userId, nodeId, access) {
-        return NodeModel.update({user: userId, _id: nodeId}, {access: access}).then(o => {
-            return "Updated " + nodeId + ":" + access;
-        });
+        // return NodeModel.update({user: userId, _id: nodeId}, {access: access}).then(o => {
+        //     return "Updated " + nodeId + ":" + access;
+        // });
     }
 
     findAllPublicNodeId() {
@@ -17,9 +18,8 @@ class NodeService {
         return GoApiProxy.query(userId, nodeId62, false);
     }
 
-    querySpace(userId, code) {
-        console.log(GoApi);
-        return GoApi.querySpace(userId, code);
+    async querySpace(userId: string, spaceCode: string): Promise<QueryResposne> {
+        return GoApi.querySpace(userId, spaceCode, false);
     }
 }
 export default new NodeService();

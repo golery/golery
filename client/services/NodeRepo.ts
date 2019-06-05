@@ -42,15 +42,15 @@ class NodeRepo {
         }
         let rootParam = rootId ? "&rootId=" + rootId : "";
         let secure = rootId ? "public" : "secure";
-        return Axios.get(`/api/${secure}/pencil/query?tree=true${rootParam}`).then((response) => {
+        return Axios.get(`/api/pencil/query?tree=true${rootParam}`).then((response) => {
             let nodes = response.data;
             console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
             return {nodes: nodes, rootNode: nodes[0]};
         });
     }
 
-    async loadSpace(spaceId) {
-        let response = await Axios.get(`/api/pencil/query/space/${spaceId}`);
+    async querySpace(spaceId) {
+        let response = await Axios.get(`/api/pencil/query/space/${spaceId}?allNodes=true`);
         let {nodes} = response.data;
         console.log(`Load ${nodes.length} nodes from space ${spaceId}`);
         return {nodes};
