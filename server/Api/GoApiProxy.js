@@ -4,8 +4,7 @@ import Config from "../config";
 const goApiServiceHost = Config.goApiHost;
 
 // // TODO PERFORMANCE This proxy add 100ms (at dev local env)
-async function doProxyToGoApi(req, res, user, url)
-{
+async function doProxyToGoApi(req, res, user, url) {
     let {headers, method} = req;
     let contentType = headers['content-type'] || 'application/json';
     let options = {
@@ -73,19 +72,14 @@ function proxyToGoApi(req, res) {
 
 class GoApiProxy {
     setupAutoRoute(route) {
-        route.all('/pencil/*', (req, res) => smartProxyToGoApi(req, res));
+         route.all('/pencil/*', (req, res) => smartProxyToGoApi(req, res));
+         return route;
     }
 
     /** Available at /api/pubic/... */
     setupPublicRoute(route) {
-        route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
         route.all('/login', (req, res) => proxyToGoApi(req, res));
         route.all('/signup', (req, res) => proxyToGoApi(req, res));
-    }
-
-    /** Available at /api/secure/... */
-    setupSecureRoute(route) {
-        route.all('/pencil/*', (req, res) => proxyToGoApi(req, res));
     }
 
     constructor(userId) {

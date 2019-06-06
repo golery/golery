@@ -10,30 +10,28 @@ function buildApiRouter() {
     let apiRouter = new Router();
 
     // /api/secure/ require authentication and needs req.user object
-    apiRouter.use('/secure', _buildApiSecureRouter(apiRouter));
-    apiRouter.use('/public', _buildApiPublicRouter(apiRouter));
+    apiRouter.use('/secure', _buildApiSecureRouter());
+    apiRouter.use('/public', _buildApiPublicRouter());
 
     // /api/session
     // Get current userId or 401 if not login
     apiRouter.use('/session', passport.session());
     apiRouter.get('/session', function (req, res) {
         if (req.user) {
+            console.log('Username:', req.user.username);
             res.json({username: req.user.username});
         } else {
+            console.log('401 No login');
             res.status(401).send('401 - No login');
         }
     });
 
-    apiRouter.use('/', _buildProxyRouter(apiRouter));
+    apiRouter.use(passport.session());
+    GoApiProxy.setupAutoRoute(apiRouter);
 
     return apiRouter;
 }
 
-function _buildProxyRouter(router) {
-    router.use(passport.session());
-    GoApiProxy.setupAutoRoute(router);
-    return router;
-}
 
 function configGetUser(apiSecure) {
     apiSecure.use(passport.session());
@@ -52,7 +50,6 @@ function _buildApiPublicRouter() {
     let route = new Router();
     ApiGoEvent.setupRoute(route);
     ApiAuth.setupPublicRoute(route);
-    GoApiProxy.setupPublicRoute(route);
     return route;
 }
 
@@ -63,7 +60,6 @@ function _buildApiSecureRouter() {
 
     ApiFile.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
-    GoApiProxy.setupSecureRoute(route);
 
     return route;
 }
