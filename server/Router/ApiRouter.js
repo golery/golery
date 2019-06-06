@@ -6,27 +6,25 @@ import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
 import GoApiProxy from "../Api/GoApiProxy";
 
+function sessionMiddleware(req, res) {
+    if (req.user) {
+        console.log('Username:', req.user.username);
+        res.json({username: req.user.username});
+    } else {
+        console.log('401 No login');
+        res.status(401).send('401 - No login');
+    }
+}
+
+/** Get router for /api/* */
 function buildApiRouter() {
     let apiRouter = new Router();
+    apiRouter.use(passport.session());
 
-    // /api/secure/ require authentication and needs req.user object
+    apiRouter.get('/session', sessionMiddleware);
     apiRouter.use('/secure', _buildApiSecureRouter());
     apiRouter.use('/public', _buildApiPublicRouter());
 
-    // /api/session
-    // Get current userId or 401 if not login
-    apiRouter.use('/session', passport.session());
-    apiRouter.get('/session', function (req, res) {
-        if (req.user) {
-            console.log('Username:', req.user.username);
-            res.json({username: req.user.username});
-        } else {
-            console.log('401 No login');
-            res.status(401).send('401 - No login');
-        }
-    });
-
-    apiRouter.use(passport.session());
     GoApiProxy.setupAutoRoute(apiRouter);
 
     return apiRouter;
