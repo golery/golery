@@ -4,7 +4,7 @@ import passport from "passport";
 import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
-import {proxyToGoApi} from "../Api/GoApiProxy";
+import proxyToGoApi from "../Api/GoApiProxy";
 
 function sessionMiddleware(req, res) {
     if (req.user) {

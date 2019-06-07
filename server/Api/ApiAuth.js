@@ -70,8 +70,7 @@ class ApiAuth {
     }
 
     setupSecureRoute(route) {
-        route.post('/logout',
-            (req, res) => this._logout(req, res));
+        route.post('/logout', (req, res) => this._logout(req, res));
     }
 
 
