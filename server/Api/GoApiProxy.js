@@ -4,8 +4,10 @@ import Config from "../config";
 const goApiServiceHost = Config.goApiHost;
 
 // // TODO PERFORMANCE This proxy add 100ms (at dev local env)
-async function doProxyToGoApi(req, res, user, url) {
+async function proxyToGoApi(req, res) {
     let {headers, method} = req;
+    let user = req.user && req.user.id;
+    let url = goApiServiceHost + req.originalUrl;
     let contentType = headers['content-type'] || 'application/json';
     let options = {
         method,
@@ -46,36 +48,7 @@ async function doProxyToGoApi(req, res, user, url) {
     }
 }
 
-/**
- * Forward requests to API service.
- * Url is mapped from /api/bla to /api/secure/bla or /api/public/bla depending authentication
- * */
-function smartProxyToGoApi(req, res) {
-    let user = req.user && req.user.id;
-    let url;
-    if (user) {
-        url = goApiServiceHost + req.originalUrl.replace("/api/", "/api/secure/");
-    } else {
-        url = goApiServiceHost + req.originalUrl.replace("/api/", "/api/public/");
-    }
-    doProxyToGoApi(req, res, user, url);
-}
-
-/**
- * Forward requests to API service  as it is.
- * @Deprecated */
-function proxyToGoApi(req, res) {
-    let user = req.user && req.user.id;
-    let url = goApiServiceHost + req.originalUrl;
-    doProxyToGoApi(req, res, user, url);
-}
-
 class GoApiProxy {
-    setupAutoRoute(route) {
-         route.all('/pencil/*', (req, res) => smartProxyToGoApi(req, res));
-         return route;
-    }
-
     /** Available at /api/pubic/... */
     setupPublicRoute(route) {
         route.all('/login', (req, res) => proxyToGoApi(req, res));
@@ -120,4 +93,5 @@ class GoApiProxy {
 }
 
 
+export {proxyToGoApi};
 export default new GoApiProxy();

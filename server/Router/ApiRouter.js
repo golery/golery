@@ -4,7 +4,7 @@ import passport from "passport";
 import ApiGoEvent from "../Api/ApiGoEvent";
 import ApiFile from "../Api/ApiFile";
 import ApiAuth from "../Api/ApiAuth";
-import GoApiProxy from "../Api/GoApiProxy";
+import {proxyToGoApi} from "../Api/GoApiProxy";
 
 function sessionMiddleware(req, res) {
     if (req.user) {
@@ -25,23 +25,10 @@ function buildApiRouter() {
     apiRouter.use('/secure', _buildApiSecureRouter());
     apiRouter.use('/public', _buildApiPublicRouter());
 
-    GoApiProxy.setupAutoRoute(apiRouter);
-
+    apiRouter.all('/pencil/*', proxyToGoApi);
     return apiRouter;
 }
 
-
-function configGetUser(apiSecure) {
-    apiSecure.use(passport.session());
-    // enforce user
-    apiSecure.use(function (req, res, next) {
-        if (!req.user) {
-            res.status(401).send('401 - User not found. /www2/api/secure is protected');
-        } else {
-            next();
-        }
-    });
-}
 
 // All requess are accesible via /api/public/... are secured (required authentication)
 function _buildApiPublicRouter() {
@@ -54,7 +41,13 @@ function _buildApiPublicRouter() {
 // All requess are accesible via /api/secure/... are secured (required authentication)
 function _buildApiSecureRouter() {
     let route = new Router();
-    configGetUser(route);
+    route.use((req, res, next) => {
+        if (!req.user) {
+            res.status(401).send('401 - User not found. /www2/api/secure is protected');
+        } else {
+            next();
+        }
+    });
 
     ApiFile.setupRoute(route);
     ApiAuth.setupSecureRoute(route);
