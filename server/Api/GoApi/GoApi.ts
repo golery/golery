@@ -17,12 +17,7 @@ class GoApi {
     }
 
     async querySpace(user: string, spaceId: string, allNodes:boolean): Promise<QueryResposne> {
-        let url: string;
-        if (user) {
-            url = `/api/secure/pencil/query/space/${spaceId}?allNodes=${allNodes}`;
-        } else {
-            url = `/api/public/pencil/query/space/${spaceId}?allNodes=${allNodes}`;
-        }
+        let url = `/api/pencil/query/space/${spaceId}?allNodes=${allNodes}`;
         return await this.call(url, user);
     }
 
