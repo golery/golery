@@ -21,6 +21,10 @@ class GoApi {
         return await this.call(url, user);
     }
 
+    async findNodeId62ForSiteMap() {
+        return await this.call("/api/public/pencil/sitemap/nodeId62", undefined);
+    }
+
     private handlingErrors(error): void {
         if (error.response) {
             // The request was made and the server responded with a status code

@@ -11,7 +11,7 @@ class NodeService {
     }
 
     findAllPublicNodeId() {
-        return GoApiProxy.findNodeId62ForSiteMap();
+        return GoApi.findNodeId62ForSiteMap();
     }
 
     findById(userId, nodeId62) {
