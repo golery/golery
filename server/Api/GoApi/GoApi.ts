@@ -22,7 +22,12 @@ class GoApi {
     }
 
     async findNodeId62ForSiteMap() {
-        return await this.call("/api/public/pencil/sitemap/nodeId62", undefined);
+        return await this.call("/api/pencil/sitemap/nodeId62", undefined);
+    }
+
+    /** @return promise of array of nodes */
+    async findNode(user, rootId62, tree) {
+        return await this.call("/api/pencil/query?rootId=" + rootId62 + "&tree=" + tree, user);
     }
 
     private handlingErrors(error): void {

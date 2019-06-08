@@ -1,4 +1,3 @@
-import GoApiProxy from '../GoApiProxy';
 import GoApi from '../GoApi/GoApi';
 import {QueryResposne} from '../../Models/GoApi';
 
@@ -15,7 +14,7 @@ class NodeService {
     }
 
     findById(userId, nodeId62) {
-        return GoApiProxy.query(userId, nodeId62, false);
+        return GoApi.findNode(userId, nodeId62, false);
     }
 
     async querySpace(userId: string, spaceCode: string): Promise<QueryResposne> {
