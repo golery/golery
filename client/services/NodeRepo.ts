@@ -5,34 +5,34 @@ class NodeRepo {
     nodes = null;
     rootNode = null;
 
-    _findNode(nodes, id) {
-        for (let node of nodes) {
-            if (node.id === id) {
-                return node;
-            }
-        }
-        return null;
-    }
+    // _findNode(nodes, id) {
+    //     for (let node of nodes) {
+    //         if (node.id === id) {
+    //             return node;
+    //         }
+    //     }
+    //     return null;
+    // }
 
-    _filter(nodes, rootNode) {
-        if (!rootNode) {
-            return [];
-        }
-
-        let filter = [rootNode];
-        if (!rootNode.children) {
-            return filter;
-        }
-
-        for (let childId of rootNode.children) {
-            let childNode = this._findNode(nodes, childId);
-            if (childNode) {
-                filter.push(childNode);
-                filter = filter.concat(this._filter(nodes, childNode));
-            }
-        }
-        return filter;
-    }
+    // _filter(nodes, rootNode) {
+    //     if (!rootNode) {
+    //         return [];
+    //     }
+    //
+    //     let filter = [rootNode];
+    //     if (!rootNode.children) {
+    //         return filter;
+    //     }
+    //
+    //     for (let childId of rootNode.children) {
+    //         let childNode = this._findNode(nodes, childId);
+    //         if (childNode) {
+    //             filter.push(childNode);
+    //             filter = filter.concat(this._filter(nodes, childNode));
+    //         }
+    //     }
+    //     return filter;
+    // }
 
     // example rootId. 57550b912c8eede6f1fc5fce
     load(rootId) {
@@ -41,7 +41,6 @@ class NodeRepo {
             return Promise.resolve({nodes: this.nodes, rootNode: this.rootNode});
         }
         let rootParam = rootId ? "&rootId=" + rootId : "";
-        let secure = rootId ? "public" : "secure";
         return Axios.get(`/api/pencil/query?tree=true${rootParam}`).then((response) => {
             let nodes = response.data;
             console.log(`Load ${nodes.length} nodes from subtree ${rootId}`);
@@ -82,13 +81,13 @@ class NodeRepo {
             html: node.html,
             title: node.title
         };
-        return Axios.put('/api/secure/pencil/update', data).then(result => {
+        return Axios.put('/api/pencil/update', data).then(result => {
             console.log('DONE save.', result);
         });
     }
 
     create(parentId, position) {
-        return Axios.post("/api/secure/pencil/add/" + parentId + "?position=" + position).then(o => {
+        return Axios.post("/api/pencil/add/" + parentId + "?position=" + position).then(o => {
             let node = o.data;
             console.log("Created node ", node);
             if (!node.id) {
@@ -99,7 +98,7 @@ class NodeRepo {
     }
 
     delete(nodeId) {
-        return Axios.put("/api/secure/pencil/delete/" + nodeId).then(o => {
+        return Axios.put("/api/pencil/delete/" + nodeId).then(o => {
             let body = o.data;
             console.log("Deleted node ", o.data.deleted);
             if (!body.parent.id) {
@@ -109,7 +108,7 @@ class NodeRepo {
     }
 
     moveNode(nodeId, newParentId, newPosition) {
-        return Axios.put("/api/secure/pencil/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
+        return Axios.put("/api/pencil/move/" + nodeId + '/' + newParentId + '/' + newPosition).then(o => {
             console.log("Move node", o.data);
         });
     }
@@ -117,8 +116,8 @@ class NodeRepo {
     /**
      * @param access - 0: private 1: public  */
     setAccess(nodeId, access) {
-        return Axios.put("/api/secure/node/access/" + nodeId + "/" + access).then(o => {
-            console.log("Set acess", o.data);
+        return Axios.put("/api/node/access/" + nodeId + "/" + access).then(o => {
+            console.log("Set access", o.data);
             return o.data;
         });
     }
