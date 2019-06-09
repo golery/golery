@@ -243,7 +243,7 @@ export default class UploadImageDialog extends React.Component {
             },
         };
 
-        let url = 'api/secure/pencil/image/imgur';
+        let url = '/api/pencil/image/imgur';
         return Axios.post(url, blob, config).then((response) => {
             console.log('Uploaded to imgur', response.data);
             return response.data;
