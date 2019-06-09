@@ -159,16 +159,6 @@ export default class UploadImageDialog extends React.Component {
         }
     }
 
-    // _onClickUploadImgur() {
-    //     //let dataUrl = this.canvas.toDataURL('image/jpeg');
-    //     let blob = this.canvas.toBlob()
-    //     this.setState({spinner: true});
-    //     this._uploadImgur(dataUrl).then((url) => {
-    //         this.props.resolve(url);
-    //     }).catch((e) => {
-    //         this.props.reject(e);
-    //     });
-    // }
     _onClickUploadImgur() {
         this.setState({spinner: true});
         this.canvas.toBlob((blob) => {
@@ -215,7 +205,7 @@ export default class UploadImageDialog extends React.Component {
         let ctx = this.canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, image.width, image.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     }
 
     _adjustImageSize(width, height) {
