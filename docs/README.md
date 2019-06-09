@@ -1,6 +1,10 @@
 # Develop guidelines
 
-
+## Setup AWS
+1. clone /data/app-data; /data/app-config from gitlab
+2. In ec2-user:
+   git config credential.helper store to save password as plain text 
+   git pull and input password
 			
 ## BUILD
 1. In 
