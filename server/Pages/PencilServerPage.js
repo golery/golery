@@ -16,7 +16,7 @@ function getPageOptions() {
     };
 }
 
-function renderPage(req, res, rootId, node, space) {
+function renderPage(req, res, {rootId, node, space, showTree}) {
     let options = getPageOptions();
     options.serverState = {initialNode: node, rootId, space};
 
@@ -48,7 +48,7 @@ export default async function (req, res) {
             }
 
             console.log("Render page %s in space %s", node.id, nodeId);
-            renderPage(req, res, null, node, 'pub');
+            renderPage(req, res, {rootId: null, node, space:'pub'});
         } else if (nodeId) {
             let nodes = await nodeService.findById(req.user && req.user.id, nodeId);
             if (nodes === null || !nodes[0]) {
@@ -57,10 +57,10 @@ export default async function (req, res) {
             }
 
             console.log("Render page ", nodeId);
-            renderPage(req, res, rootId, nodes[0]);
+            renderPage(req, res, {rootId, node: nodes[0]});
         } else if (req.user) {
             console.log("User in req.user=", req.user._id);
-            renderPage(req, res, null, null);
+            renderPage(req, res, {rootId: null, node:null});
         } else {
             pencilLandingPage(req, res);
         }

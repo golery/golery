@@ -61,7 +61,7 @@ export default class PencilPage extends React.Component {
         super(props);
 
         // sererState is passed by ssr and also injected (with the same data) during client side rendering
-        let {initialNode, space} = this.props.serverState;
+        let {initialNode, space, showTree} = this.props.serverState;
         initialNode = initialNode || null;
 
         this.state = {
@@ -71,7 +71,7 @@ export default class PencilPage extends React.Component {
             // editingId: nodeId,
             editor: EDITOR_HTML,
                 editingNode: initialNode || null,
-            showTree: initialNode === null,
+            showTree,
             space
         };
 
@@ -265,7 +265,7 @@ export default class PencilPage extends React.Component {
         });
         this.treeViewModel = new TreeViewModel();
 
-        let state = {nodes, rootId, showTree: true};
+        let state = {nodes, rootId, showTree: nodes && nodes.length > 1};
         this.setState(state);
     }
 
