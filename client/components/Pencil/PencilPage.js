@@ -11,7 +11,6 @@ import TreeModel from '../Tree/TreeModel';
 import TreeViewModel from '../Tree/TreeViewModel';
 import HeadLineParser from './HeadLineParser';
 import Toolbar from './Toolbar';
-import TreeActionButtons from './TreeActionButtons';
 import Action from './Action';
 import LoadingPage from './LoadingPage';
 import SyncTracker from './SyncTracker';
@@ -19,7 +18,6 @@ import NodeView from './Content/View/NodeView';
 import ShortcutHandler from './ShortcutHandler';
 import ContextMenuView from './ContextMenuView';
 import TermsView from './TermsView';
-import AppMenu from './AppMenu';
 import ModalDialog from '../Core/Dialog/ModalDialog';
 import Scrollbar from './Scrollbar';
 import AppBar from './AppBar';
@@ -120,6 +118,7 @@ export default class PencilPage extends React.Component {
 
     render() {
         let currentNode = this.state.editingNode;
+        let {user} = this.props.serverState;
 
         if (!currentNode && !this.treeModel) {
             console.log('Render Loading....');
@@ -131,7 +130,7 @@ export default class PencilPage extends React.Component {
 
         return (
             <div className={[styles.component, styleEditing].join(' ')}>
-                <AppBar onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()} />
+                <AppBar user={user} onLogout={() => this._onLogout()} onShowTerms={() => this._onShowTerms()} />
                 <div className={styles.body}>
                     {this._buildTreeElm()}
                     {this._buildContentElm()}

@@ -39,3 +39,15 @@
 .menuItem:hover {
     background-color: lightgray;
 }
+
+.loginButton {
+    background: #74546A;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-weight: bold;
+}
+
+.loginButton:hover {
+    background: #843B62;
+    cursor: pointer;
+}

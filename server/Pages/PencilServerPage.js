@@ -18,7 +18,7 @@ function getPageOptions() {
 
 function renderPage(req, res, {rootId, node, space, showTree}) {
     let options = getPageOptions();
-    options.serverState = {initialNode: node, rootId, space};
+    options.serverState = {initialNode: node, rootId, space, user: req.user};
 
     let mainHtml = ReactDOM.renderToString(<PencilPage serverState={options.serverState}/>);
 

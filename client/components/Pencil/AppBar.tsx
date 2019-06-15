@@ -1,16 +1,21 @@
-import React from 'react';
+import * as React from 'react';
 
 import styles from './AppBar.scss';
 import AppMenu from './AppMenu';
 
-export default class AppBar extends React.Component {
+interface Props {
+    user: any
+    onLogout: any
+    onShowTerms: any
+}
+
+export default class AppBar extends React.Component<Props, {}> {
     render() {
-        const {onLogout, onShowTerms} = this.props;
         return (
             <div className={styles.component}>
                 <div className={styles.left}>P E N C I L</div>
                 <div className={styles.right}>
-                    <AppMenu onLogout={() => onLogout()} onShowTerms={() => onShowTerms()} />
+                    <AppMenu {...this.props} />
                 </div>
             </div>
         );
