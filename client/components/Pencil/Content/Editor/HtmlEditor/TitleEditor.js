@@ -1,17 +1,7 @@
 import React from 'react';
-// import ReactDOM from "react-dom";
 import DOMPurify from 'dompurify';
 
 import styles from './TitleEditor.css';
-
-// import Toolbar from '../../../Toolbar';
-// import ModalDialog from '../../../../Core/Dialog/ModalDialog';
-// import UploadImageDialog from './UploadImageDialog';
-// import TextSelection from './Utils/TextSelection';
-// import pastHtmlProcessor from './PasteHtmlProcessor';
-// import ClipboardUtils from './Utils/ClipboardUtils';
-// import CodeEditor from '../CodeEditor/CodeEditor';
-// import CodeView from '../../View/CodeView';
 import PropTypes from 'prop-types';
 
 /**
