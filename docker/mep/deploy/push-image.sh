@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker push greensuisse/www:latest
+docker push golery/www:latest
