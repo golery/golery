@@ -203,7 +203,6 @@ export default class UploadImageDialog extends React.Component {
         canvas.height = height * ratio;
         console.log('Resize. Ratio=', ratio, canvas.width, canvas.height);
         let ctx = this.canvas.getContext('2d');
-        ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     }
