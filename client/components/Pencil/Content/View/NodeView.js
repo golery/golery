@@ -30,14 +30,10 @@ export default class NodeView extends React.Component {
         return null;
     }
 
-    componentDidMount() {
-        this.state.isClient = true;
-    }
-
     render() {
         let editor;
         let {showTree} = this.props;
-        if (typeof(window) === "undefined" || !this.state.isClient) {
+        if (typeof(window) === "undefined") {
             // server side render html
             // This cause mismatch the html tag, potentially cause problem.
             // Later, we can update the golery editor to generate exact match html tags
