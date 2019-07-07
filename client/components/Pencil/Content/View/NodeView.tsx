@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 
 import styles from './NodeView.css';
 import HtmlView from './Html/HtmlView';
@@ -7,13 +6,18 @@ import GoleryEditorLib from "golery-editor";
 
 let {GoleryEditor, EditorController, htmlSerializer} = GoleryEditorLib;
 
+interface Props {
+    node: any
+}
 
-export default class NodeView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.editorController = new EditorController();
-        this.state = {html: null};
-    }
+interface State {
+    value?: any
+    html?: any
+}
+
+export default class NodeView extends React.Component<Props, State> {
+    editorController = new EditorController();
+    state: State = {html: null};
 
     static getDerivedStateFromProps(props, state) {
         let {node} = props;
@@ -57,7 +61,3 @@ export default class NodeView extends React.Component {
             </div>);
     }
 }
-
-NodeView.propTypes = {
-    node: PropTypes.object
-};
