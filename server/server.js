@@ -89,8 +89,8 @@ function startServer() {
 
     try {
         let sslOptions = {
-            key: fs.readFileSync('/data/ssl-certs/key.pem'),
-            cert: fs.readFileSync('/data/ssl-certs/fullchain.cert.pem')
+            key: fs.readFileSync('/data/app-configs/www/ssl-certs/live/www.golery.com/privkey.pem'),
+            cert: fs.readFileSync('/data/app-configs/www/ssl-certs/live/www.golery.com/fullchain.pem')
         };
 
         https.createServer(sslOptions, app).listen(Config.httpsPort, function () {

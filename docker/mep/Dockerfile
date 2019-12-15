@@ -1,4 +1,4 @@
-FROM greensuisse/dev
+FROM golery/dev
 RUN apt-get update
 # install docker
 RUN apt-get install docker.io -y

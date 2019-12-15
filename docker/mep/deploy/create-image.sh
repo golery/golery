@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_IMAGE=greensuisse/nodejs
+BASE_IMAGE=golery/nodejs
 #BASE_IMAGE=greensuisse/www:latest
 #If the base image does not exist, use any image with nodejs greensuisse/nodejs
 #If we use the www:lastest, the sync of node module will be faster

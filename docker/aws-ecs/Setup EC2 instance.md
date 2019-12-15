@@ -35,12 +35,13 @@ Create new Task definition
 Go to ECS > Task definitions.
 1. Type: EC2 (not Fargate)
 2. Task name: www
-3. Network mode: bridge
+3. Network mode: host (in order to connect to goapi)
 4. Role: create role (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
    Choose: Trusted Entity : AWS, Service: Elastic Container Service > Elastic Container Service Task
    Choose role: AmazonECSTaskExecutionRolePolicy. Allow task to auth with Amazon ECS service on Golery behalf
    If created correctly, the role is visible for selecting
 5. Task size: Don't need to specify as we are no using Fargate
+6. Create volume. Name=data path=/data
 5. Create Container: 
    - Name: www (whatever)
    - Image: golery/www
@@ -50,7 +51,7 @@ Go to ECS > Task definitions.
    - Memory limit: Hard limit: 300MB  (t2.micro memory = 1G)
    - Entry point: none
    - Command: ./start-server.sh
-   - Mount: /data => data
+   - Mount: /data => data value (defined in task)
 6. Run task
    - There is error: Cannot pull container error    
   
@@ -97,9 +98,10 @@ Setup EC2 instance by ssh to instance
 2. Create a data folder for www.
    These folder are not used by goapi and not stored in github.
     - sudo mkdir /data 
-    - sudo mkdir /data/upload
-    - sudo mkdir /data/ssl-certs
-    - sudo chmod 777 -R /data 
+    - sudo chmod 777 -R /data
+3. Run  
+   git clone https://gitlab.com/greensuisse/app-configs.git
+
 
 Generate SSL ceritificate
 -------------------------
@@ -129,3 +131,13 @@ Shutdown
 Setup GOAPI
 -----------
 See Readme.md in goapi repo
+
+To Renew certificate
+--------------------
+1. Connect to www docker
+2. apt-get update
+   apt-get install certbot
+3. pm2 stop all
+4. certbot --config-dir /data/app-configs/www/ssl-certs renew --dry-run
+   This will create certificate in /data/app-configs which is a git repository (shared with EC2 instance)
+   

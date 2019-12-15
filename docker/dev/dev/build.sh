@@ -1,1 +1,1 @@
-docker build --tag greensuisse/dev .
+docker build --tag golery/dev .
