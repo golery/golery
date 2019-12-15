@@ -124,7 +124,10 @@ Setup Billing budget monitor: 10$ with 0.1, 0.5, 1$ amount alert
 Shutdown 
 --------
 1. Check there is budget monitoring
-2. Delete elastic IP. Delete Ec2 instance. Delete Ecs cluster
+2. Delete elastic IP.  
+3. Delete Ecs cluster
+4. Delete Ec2 instance.
+5. Delete RDS
 3. Make payment
 4. Close account
 
@@ -141,3 +144,8 @@ To Renew certificate
 4. certbot --config-dir /data/app-configs/www/ssl-certs renew --dry-run
    This will create certificate in /data/app-configs which is a git repository (shared with EC2 instance)
    
+Setup RDS (for inventory)
+-------------------------
+1. Don't choose Aurora. It's not free.
+   Choose Postgres, choose Free Tier
+2. Choose publicly accessible
