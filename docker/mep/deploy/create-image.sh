@@ -11,8 +11,8 @@ CONTAINER=$(docker run -itPd -v /work:/work -w '/softwares/golery/' $BASE_IMAGE 
 docker exec $CONTAINER /work/golery/docker/provision/provision.sh
 docker stop $CONTAINER
 echo ">> Created and provision container id= $CONTAINER"
-docker commit $CONTAINER greensuisse/www
-echo ">> Commit container $CONTAINER to greensuisse/www"
+docker commit $CONTAINER golery/www
+echo ">> Commit container $CONTAINER to golery/www"
 echo "For testing: ./run-image.sh and access http://localhost:80"
 echo "Push: ./push-image.sh"
 echo "Restart: Launch task with Amazone ECS website"
