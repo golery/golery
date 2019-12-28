@@ -74,33 +74,7 @@ Setup EC2 instance from browser
 
 Setup EC2 instance by ssh to instance
 --------------------------------------
-1. Connect to EC2 instance and update
-   /work/www.credential/amazon/ssh.sh
-   sudo yum install nano git  (Yum is package manager by redhat)
-2. Allow EC2 instance to connect to dockerhub private repository
-    1. Generate auth hash:
-       docker login
-       This generate ~/.docker/config.json
-       with authentication. However, it's used for command line only.
-       The ecs agent does not use it.
-    2. Add dockerhub authentication to ecs-agent /etc/ecs/ecs.config
-       https://docs.aws.amazon.com/AmazonECS/latest/developerguide/private-auth-container-instances.html
-       - sudo nano /etc/ecs/ecs.config
-       
-         ECS_ENGINE_AUTH_TYPE=dockercfg
-         ECS_ENGINE_AUTH_DATA={"https://index.docker.io/v1/":{"auth":"<auth>","email":"greensuisse@gmail.com"}}
-         ECS_CONTAINER_STOP_TIMEOUT=3s
-         with <auth> copy from ~/.docker/config.json
-       - Restart ecs agent
-         sudo stop ecs 
-         sudo start ecs
-         curl http://localhost:51678/v1/metadata
-2. Create a data folder for www.
-   These folder are not used by goapi and not stored in github.
-    - sudo mkdir /data 
-    - sudo chmod 777 -R /data
-3. Run  
-   git clone https://gitlab.com/greensuisse/app-configs.git
+Read readme.md in repo aws
 
 
 Generate SSL ceritificate
