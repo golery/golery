@@ -109,14 +109,6 @@ Setup GOAPI
 -----------
 See Readme.md in goapi repo
 
-To Renew certificate
---------------------
-1. Connect to www docker
-2. apt-get update
-   apt-get install certbot
-3. pm2 stop all
-4. certbot --config-dir /data/app-configs/www/ssl-certs renew --dry-run
-   This will create certificate in /data/app-configs which is a git repository (shared with EC2 instance)
    
 Setup RDS (for inventory)
 -------------------------
