@@ -29,28 +29,3 @@
    pm2 kill
    cd /softwares/GS/www
    node server/server.js
-   
-## MONGO DB
-1. mongolab.
-2. Connection for admin
-   cat /work/www.credentials/env.sh
-   - ds045054.mlab.com:45054
-   - user: backup
-   - database: prod
-   - password: ....
-     auth mechanism: SCRAM-SHA-1
-3. Preset users
-   - 000000000000000000000000:  admin (password same as hly): sample data
-   - 000000000000000000000001:  hly
-   - 000000000000000000000002:  golery: publish article to attract traffics
-   - 000000000000000000000003:  test: user
-   Create special userID:
-   doc = db.users.findOne({_id: ObjectId("000000000000000000000001")})
-   doc._id = ObjectId("000000000000000000000000");
-   db.users.insert(doc);
-## Note
-- Diagram in this folder can be edit with https://www.draw.io (open .png file directly)
-## Renew certificate
-- Login to amazon ecs
-- docker exec -it container
-- /softwares/golery/acme/cron-renew.sh
